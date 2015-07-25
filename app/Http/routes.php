@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/test', function() {
+   return response()->json(['test1', 'test2', 'test3']);
+});
