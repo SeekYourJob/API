@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => App\User::class,
+        'model'  => CVS\User::class,
         'key'    => '',
         'secret' => '',
     ],
