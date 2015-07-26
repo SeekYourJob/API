@@ -8,7 +8,7 @@ before_script:
   - mysql -e 'CREATE DATABASE cvs_test'
   - composer install --prefer-source --no-interaction --dev
   - php artisan migrate --force
-  - php artisan db:seed
+  - php artisan db:seed --force
 script: vendor/bin/phpunit
 matrix:
   allow_failures:
