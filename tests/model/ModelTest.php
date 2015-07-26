@@ -95,4 +95,54 @@ class ModelTest extends TestCase
 	{
 		$this->assertInstanceOf(CVS\Slot::class, factory(CVS\Slot::class)->create());
 	}
+
+	/**
+	 * Create an Interview
+	 */
+	public function testCreateInterviewsFree($withCandidate = false)
+	{
+		// Create the Company
+		$company = factory(CVS\Company::class)->create();
+
+		// Create the Recruiter (and its related User)
+		$userRecruiter = factory(CVS\User::class)->create();
+		$recruiter = factory(CVS\Recruiter::class)->create([
+			'company_id' => $company->id
+		]);
+		$recruiter->user()->save($userRecruiter);
+
+		// Create the Slot
+		$slot = factory(CVS\Slot::class)->create();
+
+		// The end is near: create the Interview
+		$interview = new \CVS\Interview();
+		$interview->company()->associate($company);
+		$interview->slot()->associate($slot);
+		$interview->recruiter()->associate($recruiter);
+
+		if ($withCandidate)
+		{
+			// Create the Candidate (and its related User)
+			$userCandidate = factory(CVS\User::class)->create();
+			$candidate = factory(CVS\Candidate::class)->create();
+			$candidate->user()->save($userCandidate);
+
+			$interview->candidate()->associate($candidate);
+		}
+
+		$interview->save();
+
+		// Testing Interview itself, then its components...
+		$this->assertInstanceOf(CVS\Interview::class, $interview);
+		$this->assertNotEmpty($interview->id);
+
+		$this->assertInstanceOf(CVS\Slot::class, $interview->slot);
+		$this->assertNotEmpty($interview->slot->id);
+
+		$this->assertInstanceOf(CVS\Company::class, $interview->company);
+		$this->assertNotEmpty($interview->company->id);
+
+		$this->assertInstanceOf(CVS\Recruiter::class, $interview->recruiter);
+		$this->assertNotEmpty($interview->recruiter()->id);
+	}
 }

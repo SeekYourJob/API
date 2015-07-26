@@ -144,6 +144,11 @@ return [
         CVS\Providers\EventServiceProvider::class,
         CVS\Providers\RouteServiceProvider::class,
 
+        /*
+         * From Composer...
+         */
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+
     ],
 
     /*
