@@ -31,3 +31,10 @@ $factory->define(CVS\Candidate::class, function ($faker) {
         'printing_option' => $faker->boolean(),
     ];
 });
+
+$factory->define(CVS\Recruiter::class, function ($faker) {
+    return [
+        'parking_option' => $faker->boolean,
+        'lunch_option' => $faker->boolean,
+    ];
+});
