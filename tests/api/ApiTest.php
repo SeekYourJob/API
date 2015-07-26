@@ -14,6 +14,7 @@ class ApiTest extends TestCase
 	public function testGetTest()
 	{
 		$this->get('/test')
+//			->dump()
 			->seeStatusCode(200);
 	}
 }
