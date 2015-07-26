@@ -50,3 +50,10 @@ $factory->define(CVS\Location::class, function ($faker) {
         'name' => $faker->sentence(3),
     ];
 });
+
+$factory->define(CVS\Slot::class, function ($faker) {
+    return [
+        'begins_at' => $faker->dateTime,
+        'ends_at' => $faker->dateTime,
+    ];
+});
