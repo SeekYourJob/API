@@ -29,5 +29,6 @@ class Kernel extends HttpKernel
         'auth' => \CVS\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \CVS\Http\Middleware\RedirectIfAuthenticated::class,
+        'organizer' => \CVS\Http\Middleware\IsOrganizer::class,
     ];
 }

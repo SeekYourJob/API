@@ -18,3 +18,7 @@ Route::get('/', function () {
 Route::get('/test', function() {
    return response()->json(['test1', 'test2', 'test3']);
 });
+
+Route::group(['prefix' => 'api'], function () {
+    Route::controller('users', 'UserController');
+});
