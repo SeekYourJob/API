@@ -14,7 +14,7 @@
 $factory->define(CVS\User::class, function ($faker) {
     return [
         'email' => $faker->email,
-        'password' => str_random(10),
+        'password' => bcrypt('password'),
         'firstname' => $faker->firstname,
         'lastname' => $faker->lastname,
         'phone' => $faker->phoneNumber,

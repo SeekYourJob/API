@@ -11,13 +11,14 @@ class ApiUserTest extends TestCase
 	 */
 	public function testGetUsersFromOrganizer()
 	{
-		$user = factory(\CVS\User::class)->create([
+		$user = factory(\CVS\User::class)->make([
 			'organizer' => true
 		]);
 
 		$this->actingAs($user)
 			->get('/api/users')
-			->seeStatusCode(200);
+			->seeStatusCode(200)
+			->seeJson();
 	}
 
 	/**
@@ -25,7 +26,7 @@ class ApiUserTest extends TestCase
 	 */
 	public function testGetUsersFromConnectedAccount()
 	{
-		$user = factory(\CVS\User::class)->create([
+		$user = factory(\CVS\User::class)->make([
 			'organizer' => false
 		]);
 

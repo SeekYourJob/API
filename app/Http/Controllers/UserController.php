@@ -9,16 +9,28 @@
 namespace CVS\Http\Controllers;
 
 
+use Auth;
+use CVS\User;
+
 class UserController extends Controller
 {
 	public function __construct()
 	{
 		$this->middleware('auth');
-		$this->middleware('organizer', ['only' => ['getIndex']]);
+		$this->middleware('organizer', ['only' => ['getUsers']]);
 	}
 
-	public function getIndex()
+	public function getUsers()
 	{
-		return response()->json('successfull response from controller');
+		return User::all();
+	}
+
+	public function getUser(User $user)
+	{
+		if (Auth::user()->id === $user->id || Auth::user()->organizer === true) {
+			return $user;
+		}
+
+		abort(401);
 	}
 }

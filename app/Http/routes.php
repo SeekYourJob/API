@@ -20,5 +20,6 @@ Route::get('/test', function() {
 });
 
 Route::group(['prefix' => 'api'], function () {
-    Route::controller('users', 'UserController');
+    Route::get('users', 'UserController@getUsers');
+    Route::get('users/{user}', 'UserController@getUser');
 });

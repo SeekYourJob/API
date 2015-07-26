@@ -2,6 +2,7 @@
 
 namespace CVS\Providers;
 
+use CVS\User;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -24,7 +25,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        //
+        $router->model('user', User::class);
 
         parent::boot($router);
     }
