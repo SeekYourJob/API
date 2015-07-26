@@ -16,7 +16,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $guarded = ['id'];
     protected $hidden = ['password', 'remember_token'];
 
-    public function profilable()
+    public function profile()
     {
         return $this->morphTo();
     }

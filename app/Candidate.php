@@ -12,6 +12,6 @@ class Candidate extends Model
 
 	public function user()
 	{
-		return $this->morphOne('CVS\User', 'profilable');
+		return $this->morphOne('CVS\User', 'profile');
 	}
 }

@@ -13,9 +13,21 @@
 
 $factory->define(CVS\User::class, function ($faker) {
     return [
-        'name' => $faker->name,
         'email' => $faker->email,
         'password' => str_random(10),
+        'firstname' => $faker->firstname,
+        'lastname' => $faker->lastname,
+        'phone' => $faker->phoneNumber,
+        'email_notifications' => $faker->boolean,
+        'sms_notifications' => $faker->boolean,
+        'organizer' => $faker->boolean,
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(CVS\Candidate::class, function ($faker) {
+    return [
+        'grade' => $faker->randomElement(['L3', 'M1', 'M2']),
+        'printing_option' => $faker->boolean(),
     ];
 });
