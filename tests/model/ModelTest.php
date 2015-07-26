@@ -97,7 +97,7 @@ class ModelTest extends TestCase
 	}
 
 	/**
-	 * Create an Interview
+	 * Create a free Interview
 	 */
 	public function testCreateInterviewsFree($withCandidate = false)
 	{
@@ -143,6 +143,20 @@ class ModelTest extends TestCase
 		$this->assertNotEmpty($interview->company->id);
 
 		$this->assertInstanceOf(CVS\Recruiter::class, $interview->recruiter);
-		$this->assertNotEmpty($interview->recruiter()->id);
+		$this->assertNotEmpty($interview->recruiter->id);
+
+		if ($withCandidate)
+		{
+			$this->assertInstanceOf(CVS\Candidate::class, $interview->candidate);
+			$this->assertNotEmpty($interview->candidate->id);
+		}
+	}
+
+	/**
+	 * Create a taken Interview
+	 */
+	public function testCreateInterviewsTaken()
+	{
+		$this->testCreateInterviewsFree(true);
 	}
 }
