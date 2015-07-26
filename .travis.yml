@@ -5,7 +5,9 @@ php:
   - hhvm
   - nightly
 before_script:
+  - mysql -e 'CREATE DATABASE cvs_test'
   - composer install --prefer-source --no-interaction --dev
+  - php artisan migrate
 script: vendor/bin/phpunit
 matrix:
   allow_failures:
