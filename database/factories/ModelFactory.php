@@ -44,3 +44,9 @@ $factory->define(CVS\Company::class, function ($faker) {
         'name' => $faker->company,
     ];
 });
+
+$factory->define(CVS\Location::class, function ($faker) {
+    return [
+        'name' => $faker->sentence(3),
+    ];
+});

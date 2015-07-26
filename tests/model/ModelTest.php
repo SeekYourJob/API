@@ -79,4 +79,12 @@ class ModelTest extends TestCase
 	{
 		$this->assertInstanceOf(CVS\Company::class, factory(CVS\Company::class)->create());
 	}
+
+	/**
+	 * Create a Location
+	 */
+	public function testCreateLocation()
+	{
+		$this->assertInstanceOf(CVS\Location::class, factory(CVS\Location::class)->create());
+	}
 }
