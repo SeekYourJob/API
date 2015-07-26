@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ApiUserTest extends TestCase
 {
+	use DatabaseTransactions;
+
 	/**
 	 * Getting all Users from an Organizer account (should send 200)
 	 */
@@ -80,7 +82,7 @@ class ApiUserTest extends TestCase
 	public function testGetUserFromAnotherOne()
 	{
 		$userWhoLooks = \CVS\User::find(rand(1, 5));
-		$userLooked = \CVS\User::find(rand(5, 10));
+		$userLooked = \CVS\User::find(rand(6, 10));
 
 		$this->actingAs($userWhoLooks)
 			->get('/api/users/' . $userLooked->id)
@@ -95,6 +97,47 @@ class ApiUserTest extends TestCase
 		$user = \CVS\User::find(rand(1, 10));
 
 		$this->get('/api/users/' . $user->id)
+			->seeStatusCode(401);
+	}
+
+	/**
+	 * Deleting a User from Organizer (should send 200)
+	 */
+	public function testDeleteUserFromOrganizer()
+	{
+		$organizer = factory(\CVS\User::class)->make([
+			'organizer' => true
+		]);
+
+		$user = \CVS\User::where('organizer', false)->first();
+
+		$this->actingAs($organizer)
+			->delete('/api/users/' . $user->id)
+			->seeStatusCode(200);
+	}
+
+	public function testDeleteOrganizerFromOrganizer()
+	{
+		$organizer = factory(\CVS\User::class)->make([
+			'organizer' => true
+		]);
+
+		$user = \CVS\User::where('organizer', true)->first();
+
+		$this->actingAs($organizer)
+			->delete('/api/users/' . $user->id)
+			->seeStatusCode(401);
+	}
+
+	/**
+	 * Deleting an User from another one (should sent 400)
+	 */
+	public function testDeleteUserFromUser()
+	{
+		$user = \CVS\User::find(rand(1, 10));
+
+		$this->actingAs($user)
+			->delete('/api/users/' . rand(1, 10))
 			->seeStatusCode(401);
 	}
 }

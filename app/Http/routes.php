@@ -15,11 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', function() {
-   return response()->json(['test1', 'test2', 'test3']);
-});
-
 Route::group(['prefix' => 'api'], function () {
     Route::get('users', 'UserController@getUsers');
     Route::get('users/{user}', 'UserController@getUser');
+
+    Route::delete('users/{user}', 'UserController@deleteUser');
 });

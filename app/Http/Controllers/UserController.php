@@ -17,7 +17,7 @@ class UserController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth');
-		$this->middleware('organizer', ['only' => ['getUsers']]);
+		$this->middleware('organizer', ['only' => ['getUsers', 'deleteUser']]);
 	}
 
 	public function getUsers()
@@ -29,6 +29,15 @@ class UserController extends Controller
 	{
 		if (Auth::user()->id === $user->id || Auth::user()->organizer === true) {
 			return $user;
+		}
+
+		abort(401);
+	}
+
+	public function deleteUser(User $user)
+	{
+		if ( ! $user->organizer && $user->delete()) {
+			return response()->json('User deleted.', 200);
 		}
 
 		abort(401);

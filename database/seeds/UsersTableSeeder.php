@@ -11,6 +11,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->truncate();
+
         // Creating 5 candidates
         factory(\CVS\User::class, 5)->create()
             ->each(function($user) {
