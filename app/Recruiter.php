@@ -12,6 +12,11 @@ class Recruiter extends Model
 
 	public function user()
 	{
-		return $this->morphOne('CVS\User', 'profile');
+		return $this->morphOne(User::class, 'profile');
+	}
+
+	public function company()
+	{
+		return $this->belongsTo(Company::class);
 	}
 }

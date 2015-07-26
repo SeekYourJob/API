@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRecruitersTable extends Migration
+class CreateCompaniesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,12 @@ class CreateRecruitersTable extends Migration
      */
     public function up()
     {
-        Schema::create('recruiters', function (Blueprint $table) {
+        Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('company_id')->unsigned();
-            $table->foreign('company_id')->references('id')->on('companies');
-
-            $table->boolean('parking_option')->default(false);
-            $table->boolean('lunch_option')->default(false);
+            $table->string('name', 255);
+            $table->string('website', 255)->nullable();
+            $table->string('logo_path', 255)->nullable();
 
             $table->timestamps();
         });
@@ -32,6 +30,6 @@ class CreateRecruitersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('recruiters');
+        Schema::drop('companies');
     }
 }
