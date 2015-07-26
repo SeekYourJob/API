@@ -38,3 +38,9 @@ $factory->define(CVS\Recruiter::class, function ($faker) {
         'lunch_option' => $faker->boolean,
     ];
 });
+
+$factory->define(CVS\Company::class, function ($faker) {
+    return [
+        'name' => $faker->company,
+    ];
+});
