@@ -4,18 +4,23 @@ namespace CVS\Http\Controllers;
 
 use Auth;
 use CVS\User;
+use JWTAuth;
 
 class UserController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('auth');
-		$this->middleware('organizer', ['only' => ['getUsers', 'deleteUser']]);
+		$this->middleware('jwt.auth');
 	}
 
 	public function getUsers()
 	{
-		return User::all();
+		if (JWTAuth::parseToken()->toUser()->organizer) {
+			return User::all();
+		}
+
+		abort(401);
+//		return response()->json(['error' => 'unauthorized'], 401);
 	}
 
 	public function getUser(User $user)

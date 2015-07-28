@@ -39,6 +39,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        return response()->json(['error' => ($e->getMessage() == '' && $e->getStatusCode() == 401) ? 'unauthorized' : $e->getMessage()], $e->getStatusCode());
+//        return parent::render($request, $e);
     }
 }

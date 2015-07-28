@@ -18,10 +18,10 @@ class AuthenticateController extends Controller
 
 		try {
 			if ( ! $token = JWTAuth::attempt($credentials)) {
-				return response()->json('Invalid credentials.', 401);
+				return response()->json(['error' => 'invalid_credentials'], 401);
 			}
 		} catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-			return response()->json('Could not create token', 500);
+			return response()->json(['error' => 'could_not_create_token'], 500);
 		}
 
 		return response()->json(compact('token'));
@@ -31,14 +31,14 @@ class AuthenticateController extends Controller
 	{
 		try {
 			if ( ! $user = JWTAuth::parseToken()->authenticate()) {
-				return response()->json('User not found', 404);
+				return response()->json(['error' => 'user_not_found'], 404);
 			}
 		} catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-			return response()->json('Token expired.', $e->getStatusCode());
+			return response()->json(['error' => 'expired_token'], $e->getStatusCode());
 		} catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-			return response()->json('Token invalid.', $e->getStatusCode());
+			return response()->json(['error' => 'invalid_token'], $e->getStatusCode());
 		} catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-			return response()->json('Token missing.', $e->getStatusCode());
+			return response()->json(['error' => 'missing_token'], $e->getStatusCode());
 		}
 
 		return response()->json(compact('user'));
