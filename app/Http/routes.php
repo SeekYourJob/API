@@ -16,8 +16,10 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'api'], function () {
+    Route::post('authenticate', 'AuthenticateController@authenticate');
+    Route::get('authenticate/test', 'AuthenticateController@test');
+
     Route::get('users', 'UserController@getUsers');
     Route::get('users/{user}', 'UserController@getUser');
-
     Route::delete('users/{user}', 'UserController@deleteUser');
 });

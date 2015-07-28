@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Valentin
- * Date: 26/07/2015
- * Time: 17:35
- */
 
 namespace CVS\Http\Controllers;
-
 
 use Auth;
 use CVS\User;
