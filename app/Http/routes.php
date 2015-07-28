@@ -11,15 +11,17 @@
 |
 */
 
+use Illuminate\Routing\Router;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'api'], function () {
-    Route::post('authenticate', 'AuthenticateController@authenticate');
-    Route::get('authenticate/test', 'AuthenticateController@test');
+Route::group(['prefix' => 'api', 'middleware' => 'cors'], function (Router $router) {
+    $router->get('me', 'AuthenticateController@me');
+    $router->post('authenticate', 'AuthenticateController@authenticate');
 
-    Route::get('users', 'UserController@getUsers');
-    Route::get('users/{user}', 'UserController@getUser');
-    Route::delete('users/{user}', 'UserController@deleteUser');
+    $router->get('users', 'UserController@getUsers');
+    $router->get('users/{user}', 'UserController@getUser');
+    $router->delete('users/{user}', 'UserController@deleteUser');
 });
