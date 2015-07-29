@@ -3,6 +3,7 @@
 namespace CVS\Exceptions;
 
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -39,6 +40,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if ($e instanceof ModelNotFoundException) {
+            return response()->json(['error' => 'not_found'], 404);
+        }
+
         return response()->json(['error' => ($e->getMessage() == '' && $e->getStatusCode() == 401) ? 'unauthorized' : $e->getMessage()], $e->getStatusCode());
 //        return parent::render($request, $e);
     }

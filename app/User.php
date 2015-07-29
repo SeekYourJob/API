@@ -16,6 +16,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $guarded = ['id'];
     protected $hidden = ['password', 'remember_token'];
 
+    public function getRouteKey()
+    {
+        return app('Optimus')->encode($this->getKey());
+    }
+
     public function profile()
     {
         return $this->morphTo();

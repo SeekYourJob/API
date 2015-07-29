@@ -1,5 +1,7 @@
 <?php
 
+require_once('bindings.php');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -15,6 +17,10 @@ use Illuminate\Routing\Router;
 
 Route::get('/', function() {
     return response()->json('Welcome to the CVS API!');
+});
+
+Route::get('optimus/{id}', function($id) {
+    return app('Optimus')->encode($id);
 });
 
 Route::get('me', 'AuthenticateController@me');
