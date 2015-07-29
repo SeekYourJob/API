@@ -4,13 +4,9 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ApiUserTest extends TestCase
+class UserTest extends TestCase
 {
 	use DatabaseTransactions;
-
-	public $organizer;
-	public $candidate;
-	public $recruiter;
 
 	/**
 	 * Getting all Users from an Organizer account (should send 200)

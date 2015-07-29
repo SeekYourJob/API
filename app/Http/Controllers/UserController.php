@@ -23,8 +23,6 @@ class UserController extends Controller
 
 	public function getUser(User $user)
 	{
-		print_r($user->id . ' VS. ' . Auth::user()->id);
-
 		if (Auth::user()->id == $user->id || Auth::user()->organizer == true) {
 			return $user;
 		}
