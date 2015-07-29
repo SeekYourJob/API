@@ -9,7 +9,7 @@ class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['only' => ['test']]);
+		$this->middleware('jwt.auth', ['except' => ['authenticate']]);
 	}
 
 	public function authenticate(Request $request)

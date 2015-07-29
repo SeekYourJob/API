@@ -25,7 +25,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        $router->model('user', User::class);
+        $router->bind('user', function($value, $route) {
+            return User::findOrFail(app('Optimus')->decode($value));
+        });
 
         parent::boot($router);
     }
