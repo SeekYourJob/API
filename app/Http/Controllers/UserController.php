@@ -2,9 +2,8 @@
 
 namespace CVS\Http\Controllers;
 
-use Auth;
 use CVS\User;
-use JWTAuth;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -15,17 +14,18 @@ class UserController extends Controller
 
 	public function getUsers()
 	{
-		if (JWTAuth::parseToken()->toUser()->organizer) {
+		if (Auth::user()->organizer) {
 			return User::all();
 		}
 
 		abort(401);
-//		return response()->json(['error' => 'unauthorized'], 401);
 	}
 
 	public function getUser(User $user)
 	{
-		if (Auth::user()->id === $user->id || Auth::user()->organizer === true) {
+		print_r($user->id . ' VS. ' . Auth::user()->id);
+
+		if (Auth::user()->id == $user->id || Auth::user()->organizer == true) {
 			return $user;
 		}
 
@@ -34,7 +34,7 @@ class UserController extends Controller
 
 	public function deleteUser(User $user)
 	{
-		if ( ! $user->organizer && $user->delete()) {
+		if (Auth::user()->organizer && !$user->organizer && $user->delete()) {
 			return response()->json('User deleted.', 200);
 		}
 
