@@ -23,6 +23,7 @@ Route::get('optimus/{id}', function($id) {
 
 Route::get('me', 'AuthenticateController@me');
 Route::post('authenticate', 'AuthenticateController@authenticate');
+Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 
 Route::get('users', 'UserController@getUsers');
 Route::get('users/{user}', 'UserController@getUser');
