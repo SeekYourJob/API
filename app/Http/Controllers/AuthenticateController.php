@@ -34,8 +34,6 @@ class AuthenticateController extends Controller
 	{
 		Log::info('/authenticate/refresh: Token refresh requested');
 
-		abort(404);
-
 		return response()->json(['token' => JWTAuth::refresh($request->get('oldToken'))]);
 	}
 
@@ -54,6 +52,7 @@ class AuthenticateController extends Controller
 		}
 
 		return response()->json(['user' => [
+			'ido' => app('Optimus')->encode($user->id),
 			'profile' => $user->profile_type,
 			'firstname' => $user->firstname,
 			'lastname' => $user->lastname,
