@@ -15,6 +15,11 @@ class Recruiter extends Model
 		return $this->morphOne(User::class, 'profile');
 	}
 
+	public function documents()
+	{
+		return $this->morphMany(Document::class, 'profile');
+	}
+
 	public function company()
 	{
 		return $this->belongsTo(Company::class);

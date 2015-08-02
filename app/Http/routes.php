@@ -11,8 +11,6 @@
 |
 */
 
-use Illuminate\Routing\Router;
-
 Route::get('/', function() {
     return response()->json('Welcome to the CVS API!');
 });
@@ -22,9 +20,14 @@ Route::get('optimus/{id}', function($id) {
 });
 
 Route::get('me', 'AuthenticateController@me');
+
 Route::post('authenticate', 'AuthenticateController@authenticate');
 Route::post('authenticate/refresh', 'AuthenticateController@refresh');
+Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
+Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
 
 Route::get('users', 'UserController@getUsers');
 Route::get('users/{user}', 'UserController@getUser');
 Route::delete('users/{user}', 'UserController@deleteUser');
+
+Route::post('documents', 'DocumentsController@create');

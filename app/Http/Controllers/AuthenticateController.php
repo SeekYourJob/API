@@ -2,6 +2,8 @@
 
 namespace CVS\Http\Controllers;
 
+use CVS\Http\Requests\RegisterRecruiterRequest;
+use CVS\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -10,7 +12,26 @@ class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['except' => ['authenticate', 'refresh']]);
+		$this->middleware('jwt.auth', ['only' => ['me']]);
+	}
+
+	public function checkEmail(Request $request)
+	{
+		if (User::where('email', $request->get('email'))->count()) {
+			return response()->json(['error' => 'email_already_taken'], 409);
+		}
+
+		return response('');
+	}
+
+	public function registerRecruiter(RegisterRecruiterRequest $request)
+	{
+		return response()->json($request->all());
+	}
+
+	public function registerCandidate()
+	{
+
 	}
 
 	public function authenticate(Request $request)
