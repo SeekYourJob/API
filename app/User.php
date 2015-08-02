@@ -25,4 +25,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->morphTo();
     }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

@@ -29,7 +29,6 @@ class RegisterRecruiterRequest extends Request
             'user.password' => 'required',
             'user.firstname' => 'required',
             'user.lastname' => 'required',
-            'user.phone' => 'required',
             'recruiter' => 'required',
             'recruiter.company' => 'required',
             'recruiter.availability' => 'required'

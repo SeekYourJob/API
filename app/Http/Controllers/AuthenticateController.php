@@ -2,10 +2,15 @@
 
 namespace CVS\Http\Controllers;
 
+use CVS\Company;
+use CVS\Document;
 use CVS\Http\Requests\RegisterRecruiterRequest;
+use CVS\Jobs\RegisterRecruiter;
+use CVS\Recruiter;
 use CVS\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use libphonenumber\PhoneNumberUtil;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthenticateController extends Controller
@@ -26,7 +31,11 @@ class AuthenticateController extends Controller
 
 	public function registerRecruiter(RegisterRecruiterRequest $request)
 	{
-		return response()->json($request->all());
+		if ($user = $this->dispatchFrom(RegisterRecruiter::class, $request)) {
+			return response()->json($user);
+		}
+
+		abort(500, "Recruiter registration failed.");
 	}
 
 	public function registerCandidate()

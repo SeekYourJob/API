@@ -33,6 +33,8 @@ class SendDocumentToS3 extends Job implements SelfHandling, ShouldQueue
      */
     public function handle()
     {
-        Storage::disk('s3')->put('uploads/' . $this->document->name_s3 . '.' . $this->document->extension, file_get_contents($this->documentPath));
+        if (Storage::disk('s3')->put('uploads/' . $this->document->name_s3 . '.' . $this->document->extension, file_get_contents($this->documentPath))) {
+            \File::delete($this->documentPath);
+        }
     }
 }

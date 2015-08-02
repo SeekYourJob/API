@@ -15,8 +15,8 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('profile_id')->unsigned()->index()->nullable();
-            $table->string('profile_type')->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->string('name', 255);
             $table->string('name_s3', 21);

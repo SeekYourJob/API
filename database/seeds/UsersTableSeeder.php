@@ -11,6 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::statement("SET foreign_key_checks = 0");
         DB::table('users')->truncate();
 
         // Creating 5 candidates

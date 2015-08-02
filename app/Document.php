@@ -14,6 +14,11 @@ class Document extends Model
 		return $this->morphTo();
 	}
 
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
+
 	public static function getReadableFilesize($bytes, $decimals = 2)
 	{
 		$size = ['B','kB','MB','GB','TB','PB','EB','ZB','YB'];

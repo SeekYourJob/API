@@ -14,8 +14,10 @@ class CreateRecruitersTable extends Migration
     {
         Schema::create('recruiters', function (Blueprint $table) {
             $table->increments('id');
+
             $table->integer('company_id')->unsigned();
             $table->foreign('company_id')->references('id')->on('companies');
+
             $table->boolean('parking_option')->default(false);
             $table->boolean('lunch_option')->default(false);
 
