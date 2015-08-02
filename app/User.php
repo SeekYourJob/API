@@ -30,4 +30,28 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     {
         return $this->hasMany(Document::class);
     }
+
+    public static function getInternationalPhoneNumber($phoneNumber)
+    {
+        $phoneUtils = app('PhoneUtils');
+
+        try {
+            $phoneNumberProto = $phoneUtils->parse($phoneNumber, "FR");
+            return $phoneUtils->format($phoneNumberProto, \libphonenumber\PhoneNumberFormat::E164);
+        } catch (\libphonenumber\NumberParseException $e) {
+            return NULL;
+        }
+    }
+
+    public static function getNationalPhoneNumber($phoneNumber)
+    {
+        $phoneUtils = app('PhoneUtils');
+
+        try {
+            $phoneNumberProto = $phoneUtils->parse($phoneNumber, "FR");
+            return $phoneUtils->format($phoneNumberProto, \libphonenumber\PhoneNumberFormat::NATIONAL);
+        } catch (\libphonenumber\NumberParseException $e) {
+            return NULL;
+        }
+    }
 }
