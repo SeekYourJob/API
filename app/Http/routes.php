@@ -15,6 +15,10 @@ Route::get('/', function() {
     return response()->json('Welcome to the CVS API!');
 });
 
+Route::get('test', function() {
+   return view('emails.register-recruiter');
+});
+
 Route::get('optimus/{id}', function($id) {
     return app('Optimus')->encode($id);
 });

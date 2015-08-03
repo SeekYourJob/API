@@ -4,6 +4,7 @@ namespace CVS\Jobs;
 
 use CVS\Company;
 use CVS\Document;
+use CVS\Events\RecruiterWasRegistered;
 use CVS\Http\Requests\RegisterRecruiterRequest;
 use CVS\Jobs\Job;
 use CVS\Recruiter;
@@ -74,6 +75,9 @@ class RegisterRecruiter extends Job implements SelfHandling
 
                 // Registering other participants with provided data
                 $this->dispatch(new RegisterParticipantsFromRecruiterRegister($recruiter, $participantsData));
+
+                // Triggering the corresponding event
+                event(new RecruiterWasRegistered($recruiter));
 
                 return $user;
 

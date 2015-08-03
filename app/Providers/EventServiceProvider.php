@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'CVS\Events\SomeEvent' => [
-            'CVS\Listeners\EventListener',
+        'CVS\Events\RecruiterWasRegistered' => [
+            'CVS\Listeners\EmailWelcomeEmailToRecruiter',
         ],
     ];
 
