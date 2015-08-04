@@ -5,6 +5,21 @@ use Mail;
 
 class Mailer
 {
+	public function sendToEmail($email, $subject, $view, $data = [], $attachments = [])
+	{
+		Log::info($data);
+
+		Mail::queue($view, $data, function($message) use($email, $subject, $attachments) {
+			$message->from(env('MAIL_FROM'), 'L\'équipe CVS de la FGES');
+//			$message->to($email);
+			$message->to(env('MAIL_TEST'), 'Valentin Polo');
+			$message->subject($subject);
+
+			foreach($attachments as $attachment)
+				$message->attach($attachment);
+		});
+	}
+
 	public function sendToUser(\CVS\User $user, $subject, $view, $data = [], $attachments = [])
 	{
 		$allData = array_merge($data, [
@@ -13,7 +28,7 @@ class Mailer
 		]);
 
 		Mail::queue($view, $allData, function($message) use($user, $subject, $attachments) {
-			$message->from('cvs@fges.info', 'L\'équipe CVS de la FGES');
+			$message->from(env('MAIL_FROM'), 'L\'équipe CVS de la FGES');
 //			$message->to($user->email, $user->firstname . ' ' . $user->lastname);
 			$message->to(env('MAIL_TEST'), 'Valentin Polo');
 			$message->subject($subject);

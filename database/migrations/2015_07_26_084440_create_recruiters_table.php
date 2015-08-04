@@ -18,6 +18,8 @@ class CreateRecruitersTable extends Migration
             $table->integer('company_id')->unsigned();
             $table->foreign('company_id')->references('id')->on('companies');
 
+            $table->enum('availability', ['ALL', 'AM', 'PM'])->default('ALL');
+
             $table->boolean('parking_option')->default(false);
             $table->boolean('lunch_option')->default(false);
 

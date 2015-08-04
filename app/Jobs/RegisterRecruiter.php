@@ -11,6 +11,7 @@ use CVS\Recruiter;
 use CVS\User;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Queue\SerializesModels;
 use Log;
 
 class RegisterRecruiter extends Job implements SelfHandling
@@ -58,6 +59,7 @@ class RegisterRecruiter extends Job implements SelfHandling
                 // Creating the Recruiter
                 $recruiter = new Recruiter;
                 $recruiter->company()->associate($company);
+                $recruiter->availability = $recruiterInputs['availability'];
                 $recruiter->parking_option = isset($recruiterInputs['parkingOption']) ? true : false;
                 $recruiter->lunch_option = isset($recruiterInputs['lunchOption']) ? true : false;
                 $recruiter->save();
@@ -71,7 +73,7 @@ class RegisterRecruiter extends Job implements SelfHandling
                         $user->documents()->save(Document::find(app('Optimus')->decode($document['id'])));
 
                 // Inviting other participants by email
-                $this->dispatch(new InviteParticipantsFromRecruiterRegister($participantsEmails));
+                $this->dispatch(new InviteParticipantsFromRecruiterRegister($recruiter, $participantsEmails));
 
                 // Registering other participants with provided data
                 $this->dispatch(new RegisterParticipantsFromRecruiterRegister($recruiter, $participantsData));
@@ -82,6 +84,7 @@ class RegisterRecruiter extends Job implements SelfHandling
                 return $user;
 
             } catch (\Exception $e) {
+                Log::info($e->getFile() . $e->getMessage());
                 return false;
             }
 
