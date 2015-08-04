@@ -7,13 +7,30 @@ class UserMailer extends Mailer
 	public function welcomeRecruiter(Recruiter $recruiter)
 	{
 		$this->sendToUser($recruiter->user,
-			'Inscription au Jobs Dating de la filière info de la FGES',
+			'Votre inscription au Jobs Dating de la filière informatique de la FGES',
 			'emails.register-recruiter',
 			[],
 			[
 				public_path('assets/files/event.ics')
 			]
 		);
+	}
+
+	public function welcomeInvitedRecruiter(Recruiter $referral, Recruiter $recruiter, $generatedPassword)
+	{
+		\Log::info($generatedPassword);
+
+		$data = [
+			'referralFirstname' => $referral->user->firstname,
+			'referralLastname' => $referral->user->lastname,
+			'recruiterEmail' => $recruiter->user->email,
+			'generatedPassword' => $generatedPassword
+		];
+
+		$this->sendToUser($recruiter->user,
+			'Votre inscription au Jobs Dating de la filière informatique de la FGES',
+			'emails.register-invited-recruiter',
+			$data);
 	}
 
 	public function inviteParticipant(Recruiter $referral, $email)

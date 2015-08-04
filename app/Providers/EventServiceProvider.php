@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'CVS\Events\RecruiterWasRegistered' => [
             'CVS\Listeners\EmailWelcomeEmailToRecruiter',
         ],
+        'CVS\Events\InvitedRecruiterWasRegistered' => [
+            'CVS\Listeners\EmailWelcomeEmailWithPasswordToInvitedRecruiter',
+        ],
     ];
 
     /**

@@ -7,8 +7,6 @@ class Mailer
 {
 	public function sendToEmail($email, $subject, $view, $data = [], $attachments = [])
 	{
-		Log::info($data);
-
 		Mail::queue($view, $data, function($message) use($email, $subject, $attachments) {
 			$message->from(env('MAIL_FROM'), 'L\'équipe CVS de la FGES');
 //			$message->to($email);
@@ -37,6 +35,6 @@ class Mailer
 				$message->attach($attachment);
 		});
 
-		Log::info('[REAL] Sending EMAIL to ' . $user->email . ' of subject ' . $subject);
+		Log::info('Sending EMAIL to ' . $user->email . ' of subject ' . $subject);
 	}
 }

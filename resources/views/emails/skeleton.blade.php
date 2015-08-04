@@ -84,6 +84,11 @@
                                 <tr>
                                     <td style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 14px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; vertical-align: top;" valign="top">
                                         <p style="font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 14px; font-weight: normal; margin: 0 0 15px;">
+                                            @if(isset($firstname))
+                                                Bonjour {{ $firstname }},<br><br>
+                                            @else
+                                                Bonjour,<br><br>
+                                            @endif
                                             @yield('content')
                                         </p>
                                         <p style="font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 14px; font-weight: normal; margin: 0 0 15px;">

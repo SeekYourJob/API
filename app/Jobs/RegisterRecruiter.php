@@ -84,7 +84,6 @@ class RegisterRecruiter extends Job implements SelfHandling
                 return $user;
 
             } catch (\Exception $e) {
-                Log::info($e->getFile() . $e->getMessage());
                 return false;
             }
 
