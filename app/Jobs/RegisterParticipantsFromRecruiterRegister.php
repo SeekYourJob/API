@@ -36,7 +36,7 @@ class RegisterParticipantsFromRecruiterRegister extends Job implements SelfHandl
 
                     // Creating the User
                     $user = User::create([
-                        'email' => $participant['email'] . str_random(8),
+                        'email' => $participant['email'],
                         'password' => bcrypt($randomPassword),
                         'firstname' => $participant['firstname'],
                         'lastname' => $participant['lastname'],

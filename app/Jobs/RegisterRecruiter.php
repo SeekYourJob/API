@@ -44,7 +44,7 @@ class RegisterRecruiter extends Job implements SelfHandling
             try {
                 // Creating the User
                 $user = User::create([
-                    'email' => $userInputs['email'] . str_random(8),
+                    'email' => $userInputs['email'],
                     'password' => bcrypt($userInputs['password']),
                     'firstname' => $userInputs['firstname'],
                     'lastname' => $userInputs['lastname'],
