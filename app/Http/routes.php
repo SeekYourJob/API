@@ -28,6 +28,7 @@ Route::get('me', 'AuthenticateController@me');
 Route::post('authenticate', 'AuthenticateController@authenticate');
 Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
+Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganizer');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
 
 Route::get('users', 'UserController@getUsers');

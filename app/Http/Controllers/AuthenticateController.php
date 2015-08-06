@@ -17,7 +17,7 @@ class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['only' => ['me']]);
+		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer']]);
 	}
 
 	public function checkEmail(Request $request)
@@ -27,6 +27,15 @@ class AuthenticateController extends Controller
 		}
 
 		return response('');
+	}
+
+	public function checkOrganizer()
+	{
+		if ($user = JWTAuth::parseToken()->authenticate())
+			if ($user->organizer)
+				return response('');
+
+		abort(401);
 	}
 
 	public function registerRecruiter(RegisterRecruiterRequest $request)
@@ -45,8 +54,6 @@ class AuthenticateController extends Controller
 
 	public function authenticate(Request $request)
 	{
-		Log::info('/authenticate: Token requested for ' . $request->get('email'));
-
 		$credentials = $request->only('email', 'password');
 
 		try {
@@ -62,8 +69,6 @@ class AuthenticateController extends Controller
 
 	public function refresh(Request $request)
 	{
-		Log::info('/authenticate/refresh: Token refresh requested');
-
 		return response()->json(['token' => JWTAuth::refresh($request->get('oldToken'))]);
 	}
 
