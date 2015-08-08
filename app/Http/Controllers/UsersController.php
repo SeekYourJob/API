@@ -5,7 +5,7 @@ namespace CVS\Http\Controllers;
 use CVS\User;
 use Illuminate\Support\Facades\Auth;
 
-class UserController extends Controller
+class UsersController extends Controller
 {
 	public function __construct()
 	{

@@ -8,7 +8,8 @@ class Recruiter extends Model
 {
 	protected $table = 'recruiters';
 	protected $guarded = ['id'];
-	protected $hidden = [];
+	protected $hidden = ['id', 'company_id'];
+	protected $appends = ['ido'];
 
 	public function user()
 	{
@@ -18,5 +19,10 @@ class Recruiter extends Model
 	public function company()
 	{
 		return $this->belongsTo(Company::class);
+	}
+
+	public function getIdoAttribute()
+	{
+		return app('Optimus')->encode($this->id);
 	}
 }

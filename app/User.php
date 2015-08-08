@@ -14,7 +14,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     protected $table = 'users';
     protected $guarded = ['id'];
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['id', 'profile_id', 'password', 'remember_token'];
+    protected $appends = ['ido'];
 
     public function getRouteKey()
     {
@@ -29,6 +30,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function documents()
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function getIdoAttribute()
+    {
+        return app('Optimus')->encode($this->id);
     }
 
     public static function getInternationalPhoneNumber($phoneNumber)

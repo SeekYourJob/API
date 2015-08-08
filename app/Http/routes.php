@@ -31,8 +31,11 @@ Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
 Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganizer');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
 
-Route::get('users', 'UserController@getUsers');
-Route::get('users/{user}', 'UserController@getUser');
-Route::delete('users/{user}', 'UserController@deleteUser');
+Route::get('users', 'UsersController@getUsers');
+Route::get('users/{user}', 'UsersController@getUser');
+Route::delete('users/{user}', 'UsersController@deleteUser');
+
+Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters');
+Route::resource('companies', 'CompaniesController');
 
 Route::post('documents', 'DocumentsController@create');

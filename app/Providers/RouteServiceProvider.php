@@ -2,6 +2,7 @@
 
 namespace CVS\Providers;
 
+use CVS\Company;
 use CVS\User;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -27,6 +28,10 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->bind('user', function($value, $route) {
             return User::findOrFail(app('Optimus')->decode($value));
+        });
+
+        $router->bind('companies', function($value, $route) {
+            return Company::findOrFail(app('Optimus')->decode($value));
         });
 
         parent::boot($router);
