@@ -64,7 +64,7 @@ class UserTest extends TestCase
 
 		$this->get("/users/$userIdObfuscated", ['HTTP_AUTHORIZATION' => "Bearer $token"])
 			->seeStatusCode(200)
-			->seeJsonContains(['id' => $userId]);
+			->seeJsonContains(['ido' => $userIdObfuscated]);
 	}
 
 	/**
@@ -73,12 +73,13 @@ class UserTest extends TestCase
 	public function testCanGetUserFromHimself()
 	{
 		$user = \CVS\User::find(rand(1, 10));
+		$userIdObfuscated = app('Optimus')->encode($user->id);
 
 		$token = JWTAuth::fromUser($user);
 
-		$this->get('/users/' . app('Optimus')->encode($user->id),  ['HTTP_AUTHORIZATION' => "Bearer $token"])
+		$this->get("/users/$userIdObfuscated",  ['HTTP_AUTHORIZATION' => "Bearer $token"])
 			->seeStatusCode(200)
-			->seeJsonContains(['id' => $user->id]);
+			->seeJsonContains(['ido' => $userIdObfuscated]);
 	}
 
 	/**
