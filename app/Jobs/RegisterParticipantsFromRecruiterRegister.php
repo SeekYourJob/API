@@ -8,6 +8,7 @@ use CVS\Jobs\Job;
 use CVS\Recruiter;
 use CVS\User;
 use Exception;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
@@ -16,7 +17,7 @@ use Log;
 
 class RegisterParticipantsFromRecruiterRegister extends Job implements SelfHandling, ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use DispatchesJobs, InteractsWithQueue, SerializesModels;
 
     public $referral;
     public $participants = [];
@@ -58,6 +59,9 @@ class RegisterParticipantsFromRecruiterRegister extends Job implements SelfHandl
 
                     // Associating the Recruiter to the User
                     $recruiter->user()->save($user);
+
+                    // Associating interviews to the Recruiter
+                    $this->dispatch(new AddInterviewsToRecruiter($recruiter));
 
                     event(new InvitedRecruiterWasRegistered($this->referral, $recruiter, $randomPassword));
 

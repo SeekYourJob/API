@@ -16,7 +16,7 @@ class IsOrganizer
      */
     public function handle($request, Closure $next)
     {
-        if (! Auth::check() || Auth::user()->organizer !== true) {
+        if (! Auth::check() || Auth::user()->organizer != true) {
             return response()->json('Unauthorized (not authenticated or missing permissions).', 401);
         }
 

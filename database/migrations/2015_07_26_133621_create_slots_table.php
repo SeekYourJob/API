@@ -16,6 +16,7 @@ class CreateSlotsTable extends Migration
             $table->increments('id');
             $table->dateTime('begins_at');
             $table->dateTime('ends_at');
+            $table->enum('availability', ['ALL', 'AM', 'PM']);
             $table->timestamps();
         });
     }

@@ -25,7 +25,7 @@ class CompaniesController extends Controller
     public function index()
     {
         if (Auth::user()->organizer) {
-            return Company::all();
+            return Company::with('recruiters')->get();
         }
 
         abort(401);

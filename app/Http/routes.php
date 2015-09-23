@@ -16,7 +16,13 @@ Route::get('/', function() {
 });
 
 Route::get('test', function() {
-   return view('emails.register-recruiter');
+    $test = \CVS\Slot::hydrateRaw('
+        SELECT s.*, COUNT(s.id) AS total_slots, CAST(SUM(IF(i.candidate_id IS NULL, 1, 0)) AS UNSIGNED INTEGER) AS free_slots, GROUP_CONCAT(i.candidate_id) AS candidates
+        FROM slots s
+        LEFT OUTER JOIN interviews i ON s.id = i.slot_id AND i.company_id = 7
+        GROUP BY s.id');
+//    dd($test);
+    return $test;
 });
 
 Route::get('optimus/{id}', function($id) {
@@ -37,5 +43,7 @@ Route::delete('users/{user}', 'UsersController@deleteUser');
 
 Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters');
 Route::resource('companies', 'CompaniesController');
+
+Route::resource('recruiters', 'RecruitersController');
 
 Route::post('documents', 'DocumentsController@create');

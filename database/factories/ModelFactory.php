@@ -55,5 +55,6 @@ $factory->define(CVS\Slot::class, function ($faker) {
     return [
         'begins_at' => $faker->dateTime,
         'ends_at' => $faker->dateTime,
+        'availability' => $faker->randomElement(['AM', 'PM'])
     ];
 });

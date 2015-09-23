@@ -67,6 +67,9 @@ class RegisterRecruiter extends Job implements SelfHandling
                 // Associating the Recruiter to the User
                 $recruiter->user()->save($user);
 
+                // Associating interviews to the Recruiter
+                $this->dispatch(new AddInterviewsToRecruiter($recruiter));
+
                 // Associating Documents to the User
                 if (isset($recruiterInputs['documents']))
                     foreach ($recruiterInputs['documents'] as $document)
