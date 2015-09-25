@@ -72,6 +72,14 @@ class AuthenticateController extends Controller
 		return response()->json(['token' => JWTAuth::refresh($request->get('oldToken'))]);
 	}
 
+	public function logout(Request $request)
+	{
+		if (JWTAuth::parseToken()->invalidate())
+			return response('');
+
+		abort(500, "Logout failed!");
+	}
+
 	public function me()
 	{
 		try {

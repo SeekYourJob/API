@@ -36,6 +36,7 @@ Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
 Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganizer');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
+Route::get('logout', 'AuthenticateController@logout');
 
 Route::get('users', 'UsersController@getUsers');
 Route::get('users/{user}', 'UsersController@getUser');

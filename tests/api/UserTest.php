@@ -8,6 +8,17 @@ class UserTest extends TestCase
 {
 	use DatabaseTransactions;
 
+	public function testCanLogout()
+	{
+		$user = factory(\CVS\User::class)->create();
+
+		$token = JWTAuth::fromUser($user);
+		JWTAuth::invalidate($token);
+
+		$this->get('/me', ['HTTP_AUTHORIZATION' => "Bearer $token"])
+			->seeStatusCode(401);
+	}
+
 	/**
 	 * Getting all Users from an Organizer account (should send 200)
 	 */
@@ -124,6 +135,7 @@ class UserTest extends TestCase
 			->seeStatusCode(200);
 	}
 
+	/** Deleting an Organizer from another (should throws error) */
 	public function testCannotDeleteOrganizerFromOrganizer()
 	{
 		$organizer = factory(\CVS\User::class)->create([
