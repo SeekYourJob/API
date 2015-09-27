@@ -16,6 +16,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $guarded = ['id'];
     protected $hidden = ['id', 'profile_id', 'password', 'remember_token'];
     protected $appends = ['ido'];
+    protected $casts = ['organizer' => 'boolean'];
 
     public function getRouteKey()
     {
