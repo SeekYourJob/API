@@ -52,15 +52,4 @@ class RecruitersController extends Controller
         abort(401);
     }
 
-    public function generateInterviews()
-    {
-        // Removing previous Interviews
-        Interview::truncate();
-
-        $allRecruiters = Recruiter::all();
-        foreach($allRecruiters as $recruiter)
-            $this->dispatch(new AddInterviewsToRecruiter($recruiter));
-
-        return Interview::all();
-    }
 }

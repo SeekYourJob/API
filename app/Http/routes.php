@@ -44,7 +44,10 @@ Route::delete('users/{user}', 'UsersController@deleteUser');
 Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters');
 Route::resource('companies', 'CompaniesController');
 
-Route::post('recruiters/generate-interviews', 'RecruitersController@generateInterviews');
 Route::resource('recruiters', 'RecruitersController');
+
+Route::post('interviews/generate', 'InterviewsController@generate');
+Route::get('interviews/all', 'InterviewsController@getAllForAllCompanies');
+Route::get('interviews/all/{companies}', 'InterviewsController@getAllForCompany');
 
 Route::post('documents', 'DocumentsController@create');
