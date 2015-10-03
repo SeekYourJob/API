@@ -1,15 +1,8 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+use CVS\Company;
+use CVS\Enums\InterviewStatus;
+use CVS\Slot;
 
 Route::get('/', function() {
     return response()->json('Welcome to the CVS API!');
@@ -23,6 +16,12 @@ Route::get('test', function() {
         GROUP BY s.id');
 //    dd($test);
     return $test;
+});
+
+Route::get('test2', function() {
+
+    echo json_encode(\CVS\Interview::getAllForAllCompanies());
+
 });
 
 Route::get('optimus/{id}', function($id) {
@@ -45,6 +44,7 @@ Route::delete('users/{user}', 'UsersController@deleteUser');
 Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters');
 Route::resource('companies', 'CompaniesController');
 
+Route::post('recruiters/generate-interviews', 'RecruitersController@generateInterviews');
 Route::resource('recruiters', 'RecruitersController');
 
 Route::post('documents', 'DocumentsController@create');

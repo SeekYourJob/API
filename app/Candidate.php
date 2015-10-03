@@ -9,6 +9,7 @@ class Candidate extends Model
 	protected $table = 'candidates';
 	protected $guarded = ['id'];
 	protected $hidden = [];
+	protected $appends = ['ido'];
 
 	public function user()
 	{
@@ -18,5 +19,10 @@ class Candidate extends Model
 	public function documents()
 	{
 		return $this->morphMany(Document::class, 'profile');
+	}
+
+	public function getIdoAttribute()
+	{
+		return app('Optimus')->encode($this->id);
 	}
 }

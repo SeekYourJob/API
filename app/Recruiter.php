@@ -21,6 +21,11 @@ class Recruiter extends Model
 		return $this->belongsTo(Company::class);
 	}
 
+	public function interviews()
+	{
+		return $this->hasMany(Interview::class);
+	}
+
 	public function getIdoAttribute()
 	{
 		return app('Optimus')->encode($this->id);

@@ -3,6 +3,8 @@
 namespace CVS\Http\Controllers;
 
 use Auth;
+use CVS\Interview;
+use CVS\Jobs\AddInterviewsToRecruiter;
 use CVS\Recruiter;
 use Illuminate\Http\Request;
 
@@ -50,14 +52,15 @@ class RecruitersController extends Controller
         abort(401);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
+    public function generateInterviews()
     {
-        //
+        // Removing previous Interviews
+        Interview::truncate();
+
+        $allRecruiters = Recruiter::all();
+        foreach($allRecruiters as $recruiter)
+            $this->dispatch(new AddInterviewsToRecruiter($recruiter));
+
+        return Interview::all();
     }
 }
