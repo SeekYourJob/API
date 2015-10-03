@@ -8,6 +8,7 @@ use CVS\Document;
 use CVS\Interview;
 use CVS\Jobs\AddInterviewsToRecruiter;
 use CVS\Recruiter;
+use CVS\Slot;
 
 class InterviewsController extends Controller
 {
@@ -37,5 +38,10 @@ class InterviewsController extends Controller
 	public function getAllForCompany(Company $company)
 	{
 		return response()->json(Interview::getAllForCompany($company));
+	}
+
+	public function getAllSlots()
+	{
+		return Slot::all();
 	}
 }

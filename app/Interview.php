@@ -10,6 +10,12 @@ class Interview extends Model
 	protected $table = 'interviews';
 	protected $guarded = ['id'];
 	protected $hidden = [];
+	protected $append = ['ido'];
+
+	public function getIdoAttribute()
+	{
+		return app('Optimus')->encode($this->id);
+	}
 
 	public function company()
 	{
@@ -68,11 +74,12 @@ class Interview extends Model
 
 			foreach ($allSlots as $slot) {
 				// Creating a "default" UNAVAILABLE interview
+
 				$interviewToAdd = [
 					'slot' => [
 						'ido' => $slot->ido,
-						'begins_at' => $slot->begins_at,
-						'ends_at' => $slot->ends_at
+						'begins_at' => $slot->begins_at_formatted,
+						'ends_at' => $slot->ends_at_formatted
 					],
 					'status' => InterviewStatus::UNAVAILABLE
 				];
@@ -80,6 +87,7 @@ class Interview extends Model
 				foreach ($recruiter->interviews as $interview) {
 					// Check if the recruiter is available for the specified slot
 					if ($interview->slot_id === $slot->id) {
+						$interviewToAdd['ido'] = $interview->ido;
 						$interviewToAdd['status'] = InterviewStatus::FREE;
 						if (! is_null($interview->candidate)) {
 							$interviewToAdd['status'] = InterviewStatus::TAKEN;
