@@ -4,13 +4,14 @@ namespace CVS;
 
 use CVS\Enums\InterviewStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Interview extends Model
 {
 	protected $table = 'interviews';
 	protected $guarded = ['id'];
 	protected $hidden = [];
-	protected $append = ['ido'];
+	protected $appends = ['ido'];
 
 	public function getIdoAttribute()
 	{
@@ -50,7 +51,7 @@ class Interview extends Model
 		return $allInterviewsByCompany;
 	}
 
-	public static function getAllForCompany(Company $company, $allSlots = false)
+	public static function getAllForCompany(Company $company, &$allSlots = false)
 	{
 		if ( ! $allSlots) {
 			$allSlots = Slot::all();
@@ -65,51 +66,59 @@ class Interview extends Model
 		];
 
 		foreach ($company->recruiters as $recruiter) {
-			$recruiterToAdd = [
-				'ido' => $recruiter->ido,
-				'firstname' => $recruiter->user->firstname,
-				'lastname' => $recruiter->user->lastname,
-				'interviews' => []
-			];
-
-			foreach ($allSlots as $slot) {
-				// Creating a "default" UNAVAILABLE interview
-
-				$interviewToAdd = [
-					'slot' => [
-						'ido' => $slot->ido,
-						'begins_at' => $slot->begins_at_formatted,
-						'ends_at' => $slot->ends_at_formatted
-					],
-					'status' => InterviewStatus::UNAVAILABLE
-				];
-
-				foreach ($recruiter->interviews as $interview) {
-					// Check if the recruiter is available for the specified slot
-					if ($interview->slot_id === $slot->id) {
-						$interviewToAdd['ido'] = $interview->ido;
-						$interviewToAdd['status'] = InterviewStatus::FREE;
-						if (! is_null($interview->candidate)) {
-							$interviewToAdd['status'] = InterviewStatus::TAKEN;
-							$interviewToAdd['candidate'] = [
-								'ido' => $interview->candidate->ido,
-								'firstname' => $interview->candidate->user->firstname,
-								'lastname' => $interview->candidate->user->lastname,
-								'grade' => $interview->candidate->grade
-							];
-						}
-
-						$recruiter['interviews'][] = $interviewToAdd;
-						break;
-					}
-				}
-
-				$recruiterToAdd['interviews'][] = $interviewToAdd;
-			}
-
-			$interviewByCompany['recruiters'][] = $recruiterToAdd;
+			$interviewByCompany['recruiters'][] = self::getAllForRecruiter($recruiter, $allSlots);
 		}
 
 		return $interviewByCompany;
+	}
+
+	public static function getAllForRecruiter(Recruiter $recruiter, &$allSlots = false)
+	{
+		if ( ! $allSlots) {
+			$allSlots = Slot::all();
+		}
+
+		$recruiterToAdd = [
+			'ido' => $recruiter->ido,
+			'firstname' => $recruiter->user->firstname,
+			'lastname' => $recruiter->user->lastname,
+			'interviews' => []
+		];
+
+		foreach ($allSlots as $slot) {
+			// Creating a "default" UNAVAILABLE interview
+			$interviewToAdd = [
+				'slot' => [
+					'ido' => $slot->ido,
+					'begins_at' => $slot->begins_at_formatted,
+					'ends_at' => $slot->ends_at_formatted
+				],
+				'status' => InterviewStatus::UNAVAILABLE
+			];
+
+			foreach ($recruiter->interviews as $interview) {
+				// Check if the recruiter is available for the specified slot
+				if (isset($slot->id, $interview->slot_id) && $slot->id == $interview->slot_id) {
+					$interviewToAdd['ido'] = $interview->ido;
+					$interviewToAdd['status'] = InterviewStatus::FREE;
+					if (! is_null($interview->candidate)) {
+						$interviewToAdd['status'] = InterviewStatus::TAKEN;
+						$interviewToAdd['candidate'] = [
+							'ido' => $interview->candidate->ido,
+							'firstname' => $interview->candidate->user->firstname,
+							'lastname' => $interview->candidate->user->lastname,
+							'grade' => $interview->candidate->grade
+						];
+					}
+
+					$recruiter['interviews'][] = $interviewToAdd;
+					break;
+				}
+			}
+
+			$recruiterToAdd['interviews'][] = $interviewToAdd;
+		}
+
+		return $recruiterToAdd;
 	}
 }

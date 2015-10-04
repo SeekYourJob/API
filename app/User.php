@@ -15,7 +15,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $table = 'users';
     protected $guarded = ['id'];
     protected $hidden = ['id', 'profile_id', 'password', 'remember_token'];
-    protected $appends = ['ido'];
+    protected $appends = ['ido', 'phone_formatted'];
     protected $casts = ['organizer' => 'boolean'];
 
     public function getRouteKey()
@@ -36,6 +36,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getIdoAttribute()
     {
         return app('Optimus')->encode($this->id);
+    }
+
+    public function getPhoneFormattedAttribute()
+    {
+        return self::getNationalPhoneNumber($this->phone);
     }
 
     public static function getInternationalPhoneNumber($phoneNumber)

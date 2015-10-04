@@ -47,8 +47,12 @@ Route::resource('companies', 'CompaniesController');
 Route::resource('recruiters', 'RecruitersController');
 
 Route::get('interviews', 'InterviewsController@getAllForAllCompanies');
+Route::post('interviews', 'InterviewsController@createInterview');
+Route::delete('interviews/{interviews}', 'InterviewsController@deleteInterview');
+Route::post('interviews/{interviews}/free', 'InterviewsController@freeInterview');
 Route::get('interviews/slots', 'InterviewsController@getAllSlots');
 Route::get('interviews/company/{companies}', 'InterviewsController@getAllForCompany');
+Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
 Route::post('interviews/generate', 'InterviewsController@generate');
 
 Route::post('documents', 'DocumentsController@create');

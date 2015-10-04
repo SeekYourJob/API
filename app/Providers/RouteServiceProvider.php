@@ -3,7 +3,9 @@
 namespace CVS\Providers;
 
 use CVS\Company;
+use CVS\Interview;
 use CVS\Recruiter;
+use CVS\Slot;
 use CVS\User;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -37,6 +39,14 @@ class RouteServiceProvider extends ServiceProvider
 
         $router->bind('recruiters', function($value, $route) {
             return Recruiter::findOrFail(app('Optimus')->decode($value));
+        });
+
+        $router->bind('interviews', function($value, $route) {
+            return Interview::findOrFail(app('Optimus')->decode($value));
+        });
+
+        $router->bind('slots', function($value, $route) {
+            return Slot::findOrFail(app('Optimus')->decode($value));
         });
 
         parent::boot($router);

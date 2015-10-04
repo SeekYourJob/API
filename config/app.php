@@ -143,6 +143,7 @@ return [
         CVS\Providers\AppServiceProvider::class,
         CVS\Providers\EventServiceProvider::class,
         CVS\Providers\RouteServiceProvider::class,
+        CVS\Providers\ModelServiceProvider::class,
 
         /*
          * From Composer...

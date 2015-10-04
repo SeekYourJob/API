@@ -13,9 +13,10 @@ class AddInterviewsToRecruiter extends Job implements SelfHandling
 {
     public $recruiter;
 
-    public function __construct(Recruiter $recruiter)
+    public function __construct(Recruiter $recruiter, $slots = false)
     {
         $this->recruiter = $recruiter;
+        $this->slots = $slots;
     }
 
     /**
@@ -26,21 +27,27 @@ class AddInterviewsToRecruiter extends Job implements SelfHandling
     public function handle()
     {
         $slots = [];
-        if ($this->recruiter->availability == 'ALL')
-            $slots = Slot::all();
-        else
-            $slots = Slot::where('availability', $this->recruiter->availability)->get();
+
+        if ($this->slots) {
+            if (is_array($this->slots)) {
+                $slots = $this->slots;
+            } else {
+                $slots[] = $this->slots;
+            }
+        } else {
+            if ($this->recruiter->availability == 'ALL') {
+                $slots = Slot::all();
+            } else {
+                $slots = Slot::where('availability', $this->recruiter->availability)->get();
+            }
+        }
 
         foreach ($slots as $slot) {
-            Log::info('creating interview for slot');
-            Log::info($slot);
-
             Interview::create([
                 'company_id' => $this->recruiter->company_id,
                 'slot_id' => $slot->id,
                 'recruiter_id' => $this->recruiter->id
             ]);
         }
-
     }
 }
