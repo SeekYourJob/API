@@ -38,11 +38,19 @@ class RecruitersController extends Controller
     {
         if (Auth::user()->organizer) {
             try {
+                // Updating user
                 $recruiter->user->update([
                     'email' => $request->input('user.email'),
                     'firstname' => $request->input('user.firstname'),
                     'lastname' => $request->input('user.lastname'),
+                    'phone' => $request->input('user.phone')
                 ]);
+
+                // Updating recruiter
+                $recruiter->update([
+                    'company_id' => app('Optimus')->decode($request->input('company.ido'))
+                ]);
+
                 return $recruiter;
             } catch (Exception $e) {
                 abort(500);
