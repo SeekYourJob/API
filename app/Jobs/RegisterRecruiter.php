@@ -54,7 +54,10 @@ class RegisterRecruiter extends Job implements SelfHandling
                 ]);
 
                 // Getting or creating the Company
-                $company = Company::firstOrCreate(['name' => $recruiterInputs['company']]);
+                $company = Company::firstOrCreate([
+                    'name' => $recruiterInputs['company']['name'],
+                    'job_types' => $recruiterInputs['company']['jobTypes']
+               ]);
 
                 // Creating the Recruiter
                 $recruiter = new Recruiter;

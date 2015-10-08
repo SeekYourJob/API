@@ -30,7 +30,7 @@ class RegisterRecruiterRequest extends Request
             'user.firstname' => 'required',
             'user.lastname' => 'required',
             'recruiter' => 'required',
-            'recruiter.company' => 'required',
+            'recruiter.company.name' => 'required',
             'recruiter.availability' => 'required'
         ];
     }

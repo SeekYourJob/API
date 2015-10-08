@@ -16,6 +16,7 @@ class CreateCompaniesTable extends Migration
             $table->increments('id');
 
             $table->string('name', 255);
+            $table->text('job_types');
             $table->string('website', 255)->nullable();
             $table->string('logo_path', 255)->nullable();
 

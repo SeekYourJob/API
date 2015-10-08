@@ -10,6 +10,9 @@ class Company extends Model
 	protected $guarded = ['id'];
 	protected $hidden = ['id'];
 	protected $appends = ['ido'];
+	protected $casts = [
+		'job_types' => 'array',
+	];
 
 	public function recruiters()
 	{
