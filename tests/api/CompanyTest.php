@@ -150,6 +150,9 @@ class CompanyTest extends TestCase
 			->seeJson();
 	}
 
+	/**
+	 * Member of a Company can access its details
+	 */
 	public function testMemberOfCompanyCanAccessItsCompany()
 	{
 		$user = factory(\CVS\User::class)->create([
@@ -168,6 +171,9 @@ class CompanyTest extends TestCase
 			->seeJson();
 	}
 
+	/**
+	 * Member of a Company cannot access another Company's details
+	 */
 	public function testMemberOfCompanyCannotAccessAnotherCompany()
 	{
 		$user = factory(\CVS\User::class)->create([
@@ -194,6 +200,9 @@ class CompanyTest extends TestCase
 			->seeStatusCode(401);
 	}
 
+	/**
+	 * Anonymous user cannot access a Company details
+	 */
 	public function testAnonymousCannotAccessCompany()
 	{
 		$user = factory(\CVS\User::class)->create([
