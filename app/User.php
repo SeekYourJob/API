@@ -33,6 +33,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->hasMany(Document::class);
     }
 
+    public function belongsToCompany(Company $company)
+    {
+        return (isset($this->profile->company_id) && $this->profile->company_id == $company->id);
+    }
+
     public function getIdoAttribute()
     {
         return app('Optimus')->encode($this->id);

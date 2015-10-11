@@ -128,4 +128,84 @@ class CompanyTest extends TestCase
 		$this->get('/companies/', ['HTTP_AUTHORIZATION' => "Bearer $token"])
 			->seeStatusCode(401);
 	}
+
+	/**
+	 * Organizer can access details of one company
+	 */
+	public function testOrganizerCanAccessOneCompany()
+	{
+		$user = factory(\CVS\User::class)->create([
+			'organizer' => true
+		]);
+		$company = factory(\CVS\Company::class)->create();
+		$recruiter = factory(\CVS\Recruiter::class)->create([
+			'company_id' => $company->id
+		]);
+		$recruiter->user()->save($user);
+
+		$token = JWTAuth::fromUser($user);
+
+		$this->get('/companies/' . $company->ido, ['HTTP_AUTHORIZATION' => "Bearer $token"])
+			->seeStatusCode(200)
+			->seeJson();
+	}
+
+	public function testMemberOfCompanyCanAccessItsCompany()
+	{
+		$user = factory(\CVS\User::class)->create([
+			'organizer' => false
+		]);
+		$company = factory(\CVS\Company::class)->create();
+		$recruiter = factory(\CVS\Recruiter::class)->create([
+			'company_id' => $company->id
+		]);
+		$recruiter->user()->save($user);
+
+		$token = JWTAuth::fromUser($user);
+
+		$this->get('/companies/' . $company->ido, ['HTTP_AUTHORIZATION' => "Bearer $token"])
+			->seeStatusCode(200)
+			->seeJson();
+	}
+
+	public function testMemberOfCompanyCannotAccessAnotherCompany()
+	{
+		$user = factory(\CVS\User::class)->create([
+			'organizer' => false
+		]);
+		$company = factory(\CVS\Company::class)->create();
+		$recruiter = factory(\CVS\Recruiter::class)->create([
+			'company_id' => $company->id
+		]);
+		$recruiter->user()->save($user);
+
+		$user1 = factory(\CVS\User::class)->create([
+			'organizer' => false
+		]);
+		$company1 = factory(\CVS\Company::class)->create();
+		$recruiter1 = factory(\CVS\Recruiter::class)->create([
+			'company_id' => $company1->id
+		]);
+		$recruiter->user()->save($user1);
+
+		$token = JWTAuth::fromUser($user);
+
+		$this->get('/companies/' . $company1->ido, ['HTTP_AUTHORIZATION' => "Bearer $token"])
+			->seeStatusCode(401);
+	}
+
+	public function testAnonymousCannotAccessCompany()
+	{
+		$user = factory(\CVS\User::class)->create([
+			'organizer' => false
+		]);
+		$company = factory(\CVS\Company::class)->create();
+		$recruiter = factory(\CVS\Recruiter::class)->create([
+			'company_id' => $company->id
+		]);
+		$recruiter->user()->save($user);
+
+		$this->get('/companies/' . $company->ido)
+			->seeStatusCode(400);
+	}
 }
