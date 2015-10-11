@@ -6,6 +6,7 @@ use CVS\Company;
 use CVS\Document;
 use CVS\Http\Requests\RegisterRecruiterRequest;
 use CVS\Jobs\RegisterRecruiter;
+use CVS\Jobs\SendTextToPhoneNumber;
 use CVS\Recruiter;
 use CVS\User;
 use Illuminate\Http\Request;
@@ -18,6 +19,11 @@ class AuthenticateController extends Controller
 	public function __construct()
 	{
 		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer']]);
+	}
+
+	public function test2()
+	{
+		$this->dispatch(new SendTextToPhoneNumber("+33123456789", "This is going to be awesome!"));
 	}
 
 	public function checkEmail(Request $request)

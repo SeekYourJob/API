@@ -1,7 +1,6 @@
 <?php
 
 use CVS\Company;
-use CVS\Enums\InterviewStatus;
 use CVS\Slot;
 
 Route::get('/', function() {
@@ -18,8 +17,9 @@ Route::get('test', function() {
     return $test;
 });
 
-Route::get('me', 'AuthenticateController@me');
+Route::get('test2', 'AuthenticateController@test2');
 
+Route::get('me', 'AuthenticateController@me');
 Route::post('authenticate', 'AuthenticateController@authenticate');
 Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
