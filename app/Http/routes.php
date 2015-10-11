@@ -5,7 +5,7 @@ use CVS\Enums\InterviewStatus;
 use CVS\Slot;
 
 Route::get('/', function() {
-    return response()->json('Welcome to the CVS API!');
+    return response()->json('Welcome to the SeekYourJob API!');
 });
 
 Route::get('test', function() {
@@ -16,16 +16,6 @@ Route::get('test', function() {
         GROUP BY s.id');
 //    dd($test);
     return $test;
-});
-
-Route::get('test2', function() {
-
-    echo json_encode(\CVS\Interview::getAllForAllCompanies());
-
-});
-
-Route::get('optimus/{id}', function($id) {
-    return app('Optimus')->encode($id);
 });
 
 Route::get('me', 'AuthenticateController@me');
@@ -41,7 +31,7 @@ Route::get('users', 'UsersController@getUsers');
 Route::get('users/{user}', 'UsersController@getUser');
 Route::delete('users/{user}', 'UsersController@deleteUser');
 
-Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters');
+Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters'); // TOK
 Route::resource('companies', 'CompaniesController');
 
 Route::resource('recruiters', 'RecruitersController');

@@ -70,9 +70,7 @@
                     <table style="box-sizing: border-box; border-collapse: separate !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -premailer-width: 100%;" width="100%">
                         <tr>
                             <td class="align-center" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 14px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; vertical-align: top; text-align: center;" align="center" valign="top">
-                                <a href="http://www.google.fr" style="box-sizing: border-box; color: #348eda; text-decoration: underline;">
-                                    <img src="{{ $message->embed(public_path('assets/images/logo-xsmall.png')) }}">
-                                </a>
+                                <img src="{{ $message->embed(public_path('assets/images/logo-small.png')) }}">
                             </td>
                         </tr>
                     </table>
@@ -93,7 +91,7 @@
                                         </p>
                                         <p style="font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 14px; font-weight: normal; margin: 0 0 15px;">
                                             Bien cordialement,<br>
-                                            L'équipe CVS.
+                                            L'équipe SeekYourJob de la FGES.
                                         </p>
                                     </td>
                                 </tr>
@@ -105,7 +103,7 @@
                     <table style="box-sizing: border-box; border-collapse: separate !important; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -premailer-width: 100%; color: #999; font-size: 12px;" width="100%">
                         <tr style="color: #999; font-size: 12px;">
                             <td class="align-center" style="box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 12px; mso-table-lspace: 0pt; mso-table-rspace: 0pt; vertical-align: top; color: #999; text-align: center; padding: 20px 0;" align="center" valign="top">
-                                <p style="color: #999; font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-weight: normal; margin: 0 0 15px;"><a href="#" style="box-sizing: border-box; color: #999; font-size: 12px; text-decoration: underline;">CVS.FGES.INFO</a></p>
+                                <p style="color: #999; font-size: 12px; font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-weight: normal; margin: 0 0 15px;"><a href="#" style="box-sizing: border-box; color: #999; font-size: 12px; text-decoration: underline;">SEEKYOURJOB.FGES.INFO</a></p>
                             </td>
                         </tr>
                     </table>

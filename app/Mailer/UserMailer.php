@@ -28,7 +28,7 @@ class UserMailer extends Mailer
 		];
 
 		$this->sendToUser($recruiter->user,
-			'Votre inscription au Jobs Dating de la filière informatique de la FGES',
+			'Votre inscription au Job Forum SeekYourJob de la FGES',
 			'emails.register-invited-recruiter',
 			$data);
 	}
@@ -43,7 +43,7 @@ class UserMailer extends Mailer
 		];
 
 		$this->sendToEmail($email,
-			$referral->user->firstname . ' ' . $referral->user->lastname . ' vous invite au Jobs Dating de la FGES',
+			$referral->user->firstname . ' ' . $referral->user->lastname . ' vous invite au Job Forum SeekYourJob de la FGES',
 			'emails.invite-recruiter',
 			$data);
 	}

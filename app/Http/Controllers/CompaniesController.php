@@ -37,7 +37,9 @@ class CompaniesController extends Controller
 
     public function showRecruiters(Company $company)
     {
-        if (Auth::user()->organizer) {
+        if (Auth::user()->organizer ||
+            (isset(Auth::user()->profile->company_id) && Auth::user()->profile->company_id == $company->id)
+        ) {
             $companyRecruiters = $company::with('recruiters.user')
                 ->where('id', $company->id)
                 ->first();

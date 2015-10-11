@@ -8,7 +8,10 @@ class UserTest extends TestCase
 {
 	use DatabaseTransactions;
 
-	public function testCanLogout()
+	/**
+	 * A User should be able to logout
+	 */
+	public function testUserCanLogout()
 	{
 		$user = factory(\CVS\User::class)->create();
 
