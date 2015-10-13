@@ -8,3 +8,4 @@ Homestead.yaml
 _ide_helper.php
 _ide_helper_models.php
 storage/waiting_s3
+storage/documents
