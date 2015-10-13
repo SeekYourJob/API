@@ -1,5 +1,6 @@
 <?php namespace CVS\Texter;
 
+use CVS\HistoryText;
 use CVS\User;
 use Log;
 
@@ -12,7 +13,7 @@ class Texter
 		$this->guzzleClient = new \GuzzleHttp\Client;
 	}
 
-	public function sendToPhoneNumber($phoneNumber, $message)
+	public function sendToPhoneNumber($phoneNumber, $message, $saveInHistory = true)
 	{
 		if (env('TEXT_MESSAGES') == 'DISABLED') {
 			\Log::warning('[TEXT] Text messages disabled. Sending aborted to ' . $phoneNumber);
@@ -24,6 +25,7 @@ class Texter
 			return;
 		}
 
+		// The magic happens here... (almost!)
 		$this->guzzleClient->post('https://api.allmysms.com/http/9.0/', [
 			'form_params' => [
 				'login' => env('ALLMYSMS_LOGIN'),
@@ -33,6 +35,10 @@ class Texter
 				'mobile' => $phoneNumber
 			]
 		]);
+
+		// Saving in history...
+		if ($saveInHistory)
+			HistoryText::create(['phone' => $phoneNumber, 'message' => $message]);
 
 		\Log::info('[TEXT] Text message sent to ' . $phoneNumber . ' with content ' . $message);
 	}
@@ -54,16 +60,10 @@ class Texter
 			return;
 		}
 
-		$this->guzzleClient->post('https://api.allmysms.com/http/9.0/', [
-			'form_params' => [
-				'login' => env('ALLMYSMS_LOGIN'),
-				'apiKey' => env('ALLMYSMS_API_KEY'),
-				'lowcost' => true,
-				'message' => $message,
-				'mobile' => $user->phone
-			]
-		]);
+		// Sending email...
+		 $this->sendToPhoneNumber($user->phone, $message, false);
 
-		\Log::info('[TEXT] Text message sent to ' . $user->phone . ' with content ' . $message);
+		// Saving in history...
+		HistoryText::create(['user_id' => $user->id, 'message' => $message]);
 	}
 }

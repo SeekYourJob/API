@@ -28,11 +28,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $this->morphTo();
     }
 
+    public function sentTexts()
+    {
+        return $this->hasMany(HistoryText::class, 'user_id');
+    }
+
+    public function sentEmails()
+    {
+        return $this->hasMany(HistoryEmail::class, 'user_id');
+    }
+
     public function documents()
     {
         return $this->hasMany(Document::class);
     }
 
+    /**
+     * @param Company $company
+     * Check if the User belongs to the specified Company
+     * @return bool
+     */
     public function belongsToCompany(Company $company)
     {
         return (isset($this->profile->company_id) && $this->profile->company_id == $company->id);
