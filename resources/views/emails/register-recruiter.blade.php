@@ -1,6 +1,6 @@
 @extends('emails.skeleton')
 
 @section('content')
-    Nous vous confirmons votre inscription à la journée de Jobs Dating organisée par l'équipe CVS de la FGES !<br><br>
-    Pour rappel, cet évènement se tiendra toute la journée du 14 février prochain, votre disponibilité ayant été étant établie lors de l'inscription.
+    Nous vous confirmons votre inscription au Job Forum de la FGES organisé par l'équipe SeekYourJob et qui se tiendra le vendredi 12 février prochain.<br><br>
+    Nous restons à votre disposition pour toute demande et vous remercions à nouveau pour votre participation.
 @endsection
