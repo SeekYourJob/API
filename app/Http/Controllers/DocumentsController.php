@@ -3,11 +3,7 @@
 namespace CVS\Http\Controllers;
 
 use CVS\Document;
-use CVS\Jobs\SendDocumentToS3;
-use File;
 use Illuminate\Http\Request;
-use Storage;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class DocumentsController extends Controller
 {
@@ -28,10 +24,11 @@ class DocumentsController extends Controller
 			'size_readable' => Document::getReadableFilesize($document->getClientSize())
 		]);
 
-		$tmpFilename = storage_path('waiting_s3/' . $document->getFilename());
-		$document->move(storage_path('waiting_s3'));
+//		$tmpFilename = storage_path('waiting_s3/' . $document->getFilename());
+		// Moving file to internal folder instead of S3
+		$document->move(storage_path('documents/' . $document->getClientOriginalName()));
 
-		$this->dispatch(new SendDocumentToS3($documentObject, $tmpFilename));
+//		$this->dispatch(new SendDocumentToS3($documentObject, $tmpFilename));
 
 		if ($documentObject) {
 			return response()->json(['id' => app('Optimus')->encode($documentObject->id), 'name' => $documentObject->name]);
