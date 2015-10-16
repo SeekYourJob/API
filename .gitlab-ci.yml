@@ -1,8 +1,12 @@
 before_script:
-    - composer install --prefer-dist > /dev/null
-    - export APP_ENV=dev
+    - composer self-update
+    - composer install --prefer-dist --no-interaction --dev  > /dev/null
+    - export APP_ENV=local
+    - php artisan key:generate
+    - php artisan migrate --force
+    - php artisan db:seed --force
+    - php artisan jwt:generate
 
 unitTesting:
     script:
-        - echo "Running PHP Unit tet"
-        - php vendor/bin/phpunit --colors --debug  --coverage-text
+        - php vendor/bin/phpunit --colors --debug
