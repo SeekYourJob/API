@@ -1,0 +1,8 @@
+before_script:
+    - composer install --prefer-dist > /dev/null
+    - export APP_ENV=dev
+
+unitTesting:
+    script:
+        - echo "Running PHP Unit tet"
+        - php vendor/bin/phpunit --colors --debug  --coverage-text
