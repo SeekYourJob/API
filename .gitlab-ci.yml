@@ -1,6 +1,7 @@
 before_script:
-    - composer install --prefer-dist --no-interaction --dev  > /dev/null
+    - composer install --prefer-dist --no-interaction  > /dev/null
     - export APP_ENV=local
+    - cp .env.example .env
     - php artisan key:generate
     - php artisan migrate:refresh --force
     - php artisan db:seed --force
