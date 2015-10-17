@@ -16,7 +16,7 @@ class CompaniesController extends Controller
     }
 
     /**
-     * Return all Companies
+     * Returns all Companies
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function index()
@@ -29,7 +29,7 @@ class CompaniesController extends Controller
 
     /**
      * @param Company $company
-     * Return the specified Company
+     * Returns the specified Company
      * @return Company
      */
     public function show(Company $company)
@@ -41,7 +41,7 @@ class CompaniesController extends Controller
 
     /**
      * @param Company $company
-     * Return the Recruiters of the specified Company
+     * Returns the Recruiters of the specified Company
      * @return \Illuminate\Http\JsonResponse
      */
     public function showRecruiters(Company $company)
@@ -58,7 +58,7 @@ class CompaniesController extends Controller
     /**
      * @param Request $request
      * @param Company $company
-     * Update a Company
+     * Updates a Company
      * @return Company
      */
     public function update(Request $request, Company $company)

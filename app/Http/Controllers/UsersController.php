@@ -12,30 +12,39 @@ class UsersController extends Controller
 		$this->middleware('jwt.auth');
 	}
 
+	/**
+	 * Returns all Users
+	 * @return \Illuminate\Database\Eloquent\Collection|static[]
+	 */
 	public function getUsers()
 	{
-		if (Auth::user()->organizer) {
-			return User::all();
-		}
+		$this->authorize('show-all-users');
 
-		abort(401);
+		return User::all();
 	}
 
+	/**
+	 * @param User $user
+	 * Return the specified User
+	 * @return User
+	 */
 	public function getUser(User $user)
 	{
-		if (Auth::user()->id == $user->id || Auth::user()->organizer == true) {
-			return $user;
-		}
+		$this->authorize('show-user', $user);
 
-		abort(401);
+		return $user;
 	}
 
+	/**
+	 * @param User $user
+	 * Delete the specified User
+	 * @return \Illuminate\Http\JsonResponse
+	 * @throws \Exception
+	 */
 	public function deleteUser(User $user)
 	{
-		if (Auth::user()->organizer && !$user->organizer && $user->delete()) {
-			return response()->json('User deleted.', 200);
-		}
+		$this->authorize('delete-user', $user);
 
-		abort(401);
+		return $user->delete() ? response()->json('User deleted.', 200) : response()->json('User NOT deleted.', 500);
 	}
 }

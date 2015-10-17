@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
@@ -41,7 +39,7 @@ class UserTest extends TestCase
 	/**
 	 * Getting all Users from an account (should send 401)
 	 */
-	public function testCannotGetUsersFromConnectedAccount()
+	public function testCannotGetUsersFromBasicUser()
 	{
 		$user = factory(\CVS\User::class)->create([
 			'organizer' => false
@@ -50,7 +48,7 @@ class UserTest extends TestCase
 		$token = JWTAuth::fromUser($user);
 
 		$this->get('/users', ['HTTP_AUTHORIZATION' => "Bearer $token"])
-			->seeStatusCode(401);
+			->seeStatusCode(403);
 	}
 
 	/**
@@ -99,7 +97,7 @@ class UserTest extends TestCase
 	/**
 	 * Getting a User from another one (should send 401)
 	 */
-	public function testCannotGetUserFromAnotherOne()
+	public function testCannotGetUserFromAnother()
 	{
 		$userWhoLooks = \CVS\User::where('organizer', false)->first();
 		$userLooked = \CVS\User::where('organizer', false)->where('id', '!=', $userWhoLooks->id)->first();
@@ -107,13 +105,13 @@ class UserTest extends TestCase
 		$token = JWTAuth::fromUser($userWhoLooks);
 
 		$this->get('/users/' . app('Optimus')->encode($userLooked->id), ['HTTP_AUTHORIZATION' => "Bearer $token"])
-			->seeStatusCode(401);
+			->seeStatusCode(403);
 	}
 
 	/**
 	 * Getting a User from anonymous (should send 401)
 	 */
-	public function testCannotGetUserFromAno()
+	public function testCannotGetUserFromAnonymous()
 	{
 		$user = \CVS\User::find(rand(1, 10));
 
@@ -150,7 +148,7 @@ class UserTest extends TestCase
 		$user = \CVS\User::where('organizer', true)->first();
 
 		$this->delete('/users/' . app('Optimus')->encode($user->id), [], ['HTTP_AUTHORIZATION' => "Bearer $token"])
-			->seeStatusCode(401);
+			->seeStatusCode(403);
 	}
 
 	/**

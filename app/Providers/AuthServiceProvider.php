@@ -29,8 +29,14 @@ class AuthServiceProvider extends ServiceProvider
 	{
 		$this->registerPolicies($gate);
 
+		// Company
 		$gate->define('show-company', 'CVS\ACLs\CompanyACL@show');
 		$gate->define('show-all-companies', 'CVS\ACLs\CompanyACL@showAll');
 		$gate->define('update-company', 'CVS\ACLs\CompanyACL@update');
+
+		// User
+		$gate->define('show-user', 'CVS\ACLs\UserACL@show');
+		$gate->define('show-all-users', 'CVS\ACLs\UserACL@showAll');
+		$gate->define('delete-user', 'CVS\ACLs\UserACL@delete');
 	}
 }
