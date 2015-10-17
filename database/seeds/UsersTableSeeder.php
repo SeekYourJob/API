@@ -14,21 +14,21 @@ class UsersTableSeeder extends Seeder
         DB::statement("SET foreign_key_checks = 0");
         DB::table('users')->truncate();
 
-        // Creating 5 candidates
-        factory(\CVS\User::class, 5)->create()
-            ->each(function($user) {
-                $candidate = factory(CVS\Candidate::class)->create();
-                $candidate->user()->save($user);
-            });
+        // Creating candidates
+        for ($i = 0; $i < 42; $i++) {
+            $user = factory(\CVS\User::class)->create(['email' => 'candidate' . rand(0, 999999) . '@test.com']);
+            $candidate = factory(CVS\Candidate::class)->create();
+            $candidate->user()->save($user);
+        }
 
-        // Creating 5 recruiters
-        factory(\CVS\User::class, 5)->create()
-            ->each(function($user) {
-                $company = factory(CVS\Company::class)->create();
-                $recruiter = factory(CVS\Recruiter::class)->create([
-                    'company_id' => $company->id
-                ]);
+        // Creating recruiters
+        for ($i = 0; $i < 15; $i++) {
+            $company = factory(CVS\Company::class)->create();
+            for ($j = 1; $j < rand(1, 4); $j++) {
+                $user = factory(\CVS\User::class)->create(['email' => 'recruiter' . rand(0, 999999) . '@test.com']);
+                $recruiter = factory(CVS\Recruiter::class)->create(['company_id' => $company->id]);
                 $recruiter->user()->save($user);
-            });
+            }
+        }
     }
 }
