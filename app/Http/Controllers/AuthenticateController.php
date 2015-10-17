@@ -2,33 +2,33 @@
 
 namespace CVS\Http\Controllers;
 
+use Auth;
 use CVS\Company;
 use CVS\Document;
 use CVS\Http\Requests\RegisterRecruiterRequest;
 use CVS\Jobs\RegisterRecruiter;
-use CVS\Jobs\SendTextToPhoneNumber;
-use CVS\Mailer\Mailer;
 use CVS\Recruiter;
 use CVS\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use libphonenumber\PhoneNumberUtil;
+use Illuminate\Support\Facades\Gate;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer']]);
+		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer', 'test2']]);
 	}
 
 	public function test2()
 	{
-		$user = User::find(1)->with(['sentTexts', 'sentEmails'])->get();
+		$companies = Company::all();
 
-		return $user;
-
-//		$this->dispatch(new SendTextToPhoneNumber("+33123456789", "This is going to be awesome!"));
+		if (Auth::user()->can('show-all-companies', $companies)) {
+			echo 'we can see all the companies!';
+		} else {
+			echo 'we CANNOT see all the companies!';
+		}
 	}
 
 	public function checkEmail(Request $request)

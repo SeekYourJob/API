@@ -2,13 +2,11 @@
 
 namespace CVS\Http\Controllers;
 
-use Auth;
 use CVS\Company;
+use Exception;
 use Illuminate\Http\Request;
 
 use CVS\Http\Requests;
-use CVS\Http\Controllers\Controller;
-use Mockery\CountValidator\Exception;
 
 class CompaniesController extends Controller
 {
@@ -17,48 +15,61 @@ class CompaniesController extends Controller
         $this->middleware('jwt.auth');
     }
 
+    /**
+     * Return all Companies
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function index()
     {
-        if (Auth::user()->organizer) {
-            return Company::with('recruiters')->get();
-        }
+        // This Policy is defined in Providers\AuthServiceProvider and uses the corresponding method in the ACLs\CompanyACL class
+        $this->authorize('show-all-companies');
 
-        abort(401);
+        return Company::with('recruiters')->get();
     }
 
+    /**
+     * @param Company $company
+     * Return the specified Company
+     * @return Company
+     */
     public function show(Company $company)
     {
-        if (Auth::user()->organizer || Auth::user()->belongsToCompany($company)){
-            return $company;
-        }
+        $this->authorize('show-company', $company);
 
-        abort(401);
+        return $company;
     }
 
+    /**
+     * @param Company $company
+     * Return the Recruiters of the specified Company
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function showRecruiters(Company $company)
     {
-        if (Auth::user()->organizer || Auth::user()->belongsToCompany($company)) {
-            $companyRecruiters = $company::with('recruiters.user')
-                ->where('id', $company->id)
-                ->first();
+        $this->authorize('show-company', $company);
 
-            return response()->json($companyRecruiters->recruiters);
-        }
+        $companyRecruiters = $company::with('recruiters.user')
+            ->where('id', $company->id)
+            ->first();
 
-        abort(401);
+        return response()->json($companyRecruiters->recruiters);
     }
 
+    /**
+     * @param Request $request
+     * @param Company $company
+     * Update a Company
+     * @return Company
+     */
     public function update(Request $request, Company $company)
     {
-        if (Auth::user()->organizer) {
-            try {
-                $company->update($request->only(['name']));
-                return $company;
-            } catch (Exception $e) {
-                abort(500);
-            }
-        }
+        $this->authorize('update-company', $company);
 
-        abort(401);
+        try {
+            $company->update($request->only(['name']));
+            return $company;
+        } catch (Exception $e) {
+            abort(500);
+        }
     }
 }

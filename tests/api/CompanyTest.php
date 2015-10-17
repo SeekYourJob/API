@@ -68,7 +68,7 @@ class CompanyTest extends TestCase
 		$token = JWTAuth::fromUser($user);
 
 		$this->get('/companies/' . $company1->ido .  '/recruiters', ['HTTP_AUTHORIZATION' => "Bearer $token"])
-			->seeStatusCode(401);
+			->seeStatusCode(403);
 	}
 
 	/**
@@ -126,7 +126,7 @@ class CompanyTest extends TestCase
 		$token = JWTAuth::fromUser($user);
 
 		$this->get('/companies/', ['HTTP_AUTHORIZATION' => "Bearer $token"])
-			->seeStatusCode(401);
+			->seeStatusCode(403);
 	}
 
 	/**
@@ -197,7 +197,7 @@ class CompanyTest extends TestCase
 		$token = JWTAuth::fromUser($user);
 
 		$this->get('/companies/' . $company1->ido, ['HTTP_AUTHORIZATION' => "Bearer $token"])
-			->seeStatusCode(401);
+			->seeStatusCode(403);
 	}
 
 	/**
