@@ -8,6 +8,7 @@ use CVS\Document;
 use CVS\Http\Requests\RegisterRecruiterRequest;
 use CVS\Jobs\RegisterRecruiter;
 use CVS\Recruiter;
+use CVS\Texter\Texter;
 use CVS\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -22,13 +23,7 @@ class AuthenticateController extends Controller
 
 	public function test2()
 	{
-		$companies = Company::all();
-
-		if (Auth::user()->can('show-all-companies', $companies)) {
-			echo 'we can see all the companies!';
-		} else {
-			echo 'we CANNOT see all the companies!';
-		}
+		//
 	}
 
 	public function checkEmail(Request $request)

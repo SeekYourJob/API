@@ -41,5 +41,8 @@ class AuthServiceProvider extends ServiceProvider
 		$gate->define('get-users-emails', 'CVS\ACLs\UserACL@getEmails');
 		$gate->define('get-users-phonenumbers', 'CVS\ACLs\UserACL@getEmails');
 		$gate->define('get-users-groups', 'CVS\ACLs\UserACL@getGroups');
+
+		// Messaging
+		$gate->define('messaging-send-emails', 'CVS\ACLs\MessagingACL@sendEmails');
 	}
 }

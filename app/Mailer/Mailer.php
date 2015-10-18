@@ -6,12 +6,11 @@ use Mail;
 
 class Mailer
 {
-	public function sendToEmail($email, $subject, $view, $data = [], $attachments = [], $saveInHistory = true)
+	public function sendToEmail($email, $identity, $subject, $view, $data = [], $attachments = [], $saveInHistory = true)
 	{
-		Mail::queue($view, $data, function($message) use($email, $subject, $attachments) {
-			$message->from(env('MAIL_FROM'), 'L\'équipe SeekYourJob de la FGES');
-//			$message->to($email);
-			$message->to(env('MAIL_TEST'), 'Valentin Polo');
+		Mail::queue($view, $data, function($message) use($email, $identity, $subject, $attachments) {
+			$message->from(env('MAIL_FROM_EMAIL'), env('MAIL_FROM_NAME'));
+			$message->to($email, $identity);
 			$message->subject($subject);
 
 			foreach($attachments as $attachment)
@@ -19,17 +18,21 @@ class Mailer
 		});
 
 		// Saving in History...
-		HistoryEmail::create([
-			'email' => $email,
-			'message' => ['subject' => $subject, 'view' => $view]
-		]);
-
-		Log::info('[MAIL] Sent to ' . $email . ' with subject ' . $subject . ' and view ' . $view);
+		if ($saveInHistory)
+			HistoryEmail::create([
+				'email' => $email,
+				'message' => [
+					'subject' => $subject,
+					'message' => (isset($data['content']) && !empty($data['content'])) ? $data['content'] : null,
+					'data' => $data,
+					'view' => $view
+				]
+			]);
 	}
 
-	public function sendToUser(\CVS\User $user, $subject, $view, $data = [], $attachments = [])
+	public function sendToUser(\CVS\User $user, $subject, $view, $data = [], $attachments = [], $forceSend = false)
 	{
-		if ( ! $user->email_notifications)
+		if (!$forceSend && !$user->email_notifications)
 			return;
 
 		$allData = array_merge($data, [
@@ -38,14 +41,17 @@ class Mailer
 		]);
 
 		// Sending email...
-		$this->sendToEmail($user->email, $subject, $view, $allData, $attachments, false);
+		$this->sendToEmail($user->email, $user->firstname . ' ' . $user->lastname, $subject, $view, $allData, $attachments, false);
 
 		// Saving in History...
 		HistoryEmail::create([
 			'user_id' => $user->id,
-			'message' => ['subject' => $subject, 'view' => $view]
+			'message' => [
+				'subject' => $subject,
+				'message' => (isset($data['content']) && !empty($data['content'])) ? $data['content'] : null,
+				'data' => $data,
+				'view' => $view
+			]
 		]);
-
-		Log::info('[MAIL] Sent to ' . $user->firstname . ' ' . $user->lastname . ' with subject ' . $subject . ' and view ' . $view);
 	}
 }

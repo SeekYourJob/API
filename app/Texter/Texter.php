@@ -1,46 +1,35 @@
 <?php namespace CVS\Texter;
 
 use CVS\HistoryText;
+use CVS\Jobs\SendTextToPhoneNumber;
 use CVS\User;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Log;
 
 class Texter
 {
-	public $guzzleClient;
-
-	public function __construct()
-	{
-		$this->guzzleClient = new \GuzzleHttp\Client;
-	}
+	use DispatchesJobs;
 
 	public function sendToPhoneNumber($phoneNumber, $message, $saveInHistory = true)
 	{
 		if (env('TEXT_MESSAGES') == 'DISABLED') {
 			\Log::warning('[TEXT] Text messages disabled. Sending aborted to ' . $phoneNumber);
+
 			return;
 		}
 
 		if (empty($phoneNumber)) {
 			\Log::warning('[TEXT] Phone number empty. Sending aborted with message ' . $message);
+
 			return;
 		}
 
 		// The magic happens here... (almost!)
-		$this->guzzleClient->post('https://api.allmysms.com/http/9.0/', [
-			'form_params' => [
-				'login' => env('ALLMYSMS_LOGIN'),
-				'apiKey' => env('ALLMYSMS_API_KEY'),
-				'lowcost' => true,
-				'message' => $message,
-				'mobile' => $phoneNumber
-			]
-		]);
+		$this->dispatch(new SendTextToPhoneNumber($phoneNumber, $message));
 
 		// Saving in history...
 		if ($saveInHistory)
 			HistoryText::create(['phone' => $phoneNumber, 'message' => $message]);
-
-		\Log::info('[TEXT] Text message sent to ' . $phoneNumber . ' with content ' . $message);
 	}
 
 	public function sendToUser(User $user, $message)
@@ -65,5 +54,20 @@ class Texter
 
 		// Saving in history...
 		HistoryText::create(['user_id' => $user->id, 'message' => $message]);
+	}
+
+	public static function doSendToPhoneNumber($phoneNumber, $message)
+	{
+		$guzzleClient = new \GuzzleHttp\Client();
+
+		$guzzleClient->post('https://api.allmysms.com/http/9.0/', [
+			'form_params' => [
+				'login' => env('ALLMYSMS_LOGIN'),
+				'apiKey' => env('ALLMYSMS_API_KEY'),
+				'lowcost' => true,
+				'message' => $message,
+				'mobile' => $phoneNumber
+			]
+		]);
 	}
 }

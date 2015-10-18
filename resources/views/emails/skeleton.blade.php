@@ -87,7 +87,12 @@
                                             @else
                                                 Bonjour,<br><br>
                                             @endif
-                                            @yield('content')
+
+                                            @if(isset($content))
+                                                {!! $content !!}
+                                            @else
+                                                @yield('content')
+                                            @endif
                                         </p>
                                         <p style="font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif; font-size: 14px; font-weight: normal; margin: 0 0 15px;">
                                             Bien cordialement,<br>
