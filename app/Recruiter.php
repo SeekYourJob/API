@@ -30,4 +30,14 @@ class Recruiter extends Model
 	{
 		return app('Optimus')->encode($this->id);
 	}
+
+	public static function getAllIdos()
+	{
+		$recruitersIdos = [];
+		$recruiters = self::with('user')->get();
+		foreach($recruiters as $recruiter)
+			$recruitersIdos[] = $recruiter->user->ido;
+
+		return $recruitersIdos;
+	}
 }

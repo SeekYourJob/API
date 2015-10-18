@@ -24,4 +24,14 @@ class UserACL
 	{
 		return $user->organizer && ! $userToDelete->organizer;
 	}
+
+	public function getEmails(User $user)
+	{
+		return $user->organizer;
+	}
+
+	public function getGroups(User $user)
+	{
+		return $user->organizer;
+	}
 }

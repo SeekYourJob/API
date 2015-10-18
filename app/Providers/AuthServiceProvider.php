@@ -38,5 +38,8 @@ class AuthServiceProvider extends ServiceProvider
 		$gate->define('show-user', 'CVS\ACLs\UserACL@show');
 		$gate->define('show-all-users', 'CVS\ACLs\UserACL@showAll');
 		$gate->define('delete-user', 'CVS\ACLs\UserACL@delete');
+		$gate->define('get-users-emails', 'CVS\ACLs\UserACL@getEmails');
+		$gate->define('get-users-phonenumbers', 'CVS\ACLs\UserACL@getEmails');
+		$gate->define('get-users-groups', 'CVS\ACLs\UserACL@getGroups');
 	}
 }

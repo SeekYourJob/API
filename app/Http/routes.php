@@ -20,14 +20,18 @@ Route::get('test', function() {
 Route::get('test2', 'AuthenticateController@test2');
 
 Route::get('me', 'AuthenticateController@me');
+Route::get('logout', 'AuthenticateController@logout');
 Route::post('authenticate', 'AuthenticateController@authenticate');
 Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
 Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganizer');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
-Route::get('logout', 'AuthenticateController@logout');
+
 
 Route::get('users', 'UsersController@getUsers');
+Route::get('users/groups', 'UsersController@getGroups');
+Route::get('users/emails', 'UsersController@getEmails');
+Route::get('users/phone-numbers', 'UsersController@getPhoneNumbers');
 Route::get('users/{user}', 'UsersController@getUser');
 Route::delete('users/{user}', 'UsersController@deleteUser');
 
@@ -44,5 +48,7 @@ Route::get('interviews/slots', 'InterviewsController@getAllSlots');
 Route::get('interviews/company/{companies}', 'InterviewsController@getAllForCompany');
 Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
 Route::post('interviews/generate', 'InterviewsController@generate');
+
+Route::post('messaging/send-email', 'MessagingController@sendEmail');
 
 Route::post('documents', 'DocumentsController@create');

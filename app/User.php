@@ -17,7 +17,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $table = 'users';
     protected $guarded = ['id'];
     protected $hidden = ['id', 'profile_id', 'password', 'remember_token'];
-    protected $appends = ['ido', 'phone_formatted'];
+    protected $appends = ['ido', 'phone_formatted', 'profile_type_str'];
     protected $casts = ['organizer' => 'boolean', 'sms_notifications' => 'boolean', 'email_notifications' => 'boolean'];
 
     public function getRouteKey()
@@ -65,6 +65,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return self::getNationalPhoneNumber($this->phone);
     }
 
+    public function getProfileTypeStrAttribute()
+    {
+        return strtolower(str_replace('CVS\\', '', $this->profile_type));
+    }
+
     public static function getInternationalPhoneNumber($phoneNumber)
     {
         $phoneUtils = app('PhoneUtils');
@@ -87,5 +92,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         } catch (\libphonenumber\NumberParseException $e) {
             return NULL;
         }
+    }
+
+    public static function getAllIdos()
+    {
+        $users = self::all();
+
+        $usersIdos = [];
+        foreach($users as $user)
+            $usersIdos[] = $user->ido;
+
+        return $usersIdos;
     }
 }

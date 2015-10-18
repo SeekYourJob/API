@@ -23,4 +23,20 @@ class Company extends Model
 	{
 		return app('Optimus')->encode($this->id);
 	}
+
+	public static function getIdosGroupedByCompanies()
+	{
+		$companies = self::with('recruiters.user')->get();
+
+		$groups = [];
+		foreach($companies as $company) {
+			$companyUsers = [];
+			foreach($company->recruiters as $recruiter)
+				$companyUsers[] = $recruiter->ido;
+			if (!empty($companyUsers))
+				$groups[$company->name] = $companyUsers;
+		}
+
+		return $groups;
+	}
 }

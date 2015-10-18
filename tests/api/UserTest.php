@@ -161,4 +161,44 @@ class UserTest extends TestCase
 		$this->delete('/users/' . app('Optimus')->encode($user->id))
 			->seeStatusCode(400);
 	}
+
+	/**
+	 * An Organizer car access Users' email addresses
+	 */
+	public function testOrganizerCanGetUsersEmailAddresses()
+	{
+		$organizer = factory(\CVS\User::class)->create([
+			'organizer' => true
+		]);
+
+		$token = JWTAuth::fromUser($organizer);
+
+		$this->get('/users/emails', ['HTTP_AUTHORIZATION' => "Bearer $token"])
+			->seeStatusCode(200)
+			->seeJson();
+	}
+
+	/**
+	 * A basic User cannot access Users' email addresses
+	 */
+	public function testUserCannotGetUsersEmailAddresses()
+	{
+		$organizer = factory(\CVS\User::class)->create([
+			'organizer' => false
+		]);
+
+		$token = JWTAuth::fromUser($organizer);
+
+		$this->get('/users/emails', ['HTTP_AUTHORIZATION' => "Bearer $token"])
+			->seeStatusCode(403);
+	}
+
+	/**
+	 * An anonymous cannot access Users' email addresses
+	 */
+	public function testAnonymousCannotGetUsersEmailAddresses()
+	{
+		$this->get('/users/emails')
+			->seeStatusCode(400);
+	}
 }
