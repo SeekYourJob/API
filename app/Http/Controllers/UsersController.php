@@ -69,7 +69,7 @@ class UsersController extends Controller
 				'email' => $recruiter->user->email,
 				'identity' => $recruiter->user->firstname . ' ' . $recruiter->user->lastname,
 				'profile' => $recruiter->company->name
-			]; ;
+			];
 
 		// Getting candidates
 		$candidates = Candidate::with('user')->get();
@@ -92,21 +92,33 @@ class UsersController extends Controller
 	{
 		$this->authorize('get-users-phonenumbers');
 
-		$emails = [];
+		$phones = [];
 
 		// Getting recruiters
 		$recruiters = Recruiter::with(['user', 'company'])->get();
 		foreach($recruiters as $recruiter)
-			$emails[$recruiter->user->phone] = $recruiter->user->firstname . ' ' . $recruiter->user->lastname . ' - ' . $recruiter->company->name;
+			if (!empty($recruiter->user->phone))
+				$phones[] = [
+					'user_ido' => $recruiter->user->ido,
+					'phone' => $recruiter->user->phone,
+					'phone_formatted' => $recruiter->user->phone_formatted,
+					'identity' => $recruiter->user->firstname . ' ' . $recruiter->user->lastname,
+					'profile' => $recruiter->company->name
+				];
 
 		// Getting candidates
 		$candidates = Candidate::with('user')->get();
 		foreach($candidates as $candidate)
-			$emails[$candidate->user->phone] = trim($candidate->user->firstname . ' ' . $candidate->user->lastname . ' - ' . $candidate->grade . ' ' . $candidate->education);
+			if (!empty($candidate->user->phone))
+				$phones[] = [
+					'user_ido' => $candidate->user->ido,
+					'phone' => $candidate->user->phone,
+					'phone_formatted' => $candidate->user->phone_formatted,
+					'identity' => $candidate->user->firstname . ' ' . $candidate->user->lastname,
+					'profile' => 'Étudiant ' . trim($candidate->grade . ' ' . $candidate->education)
+				];
 
-		asort($emails);
-
-		return response()->json($emails);
+		return response()->json($phones);
 	}
 
 	public function getGroups()
