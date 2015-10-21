@@ -70,4 +70,24 @@ class Texter
 			]
 		]);
 	}
+
+	public static function getRemainingCredits()
+	{
+		$guzzleClient = new \GuzzleHttp\Client();
+
+		$response = $guzzleClient->post('https://api.allmysms.com/http/9.0/getInfo', [
+			'form_params' => [
+				'login' => env('ALLMYSMS_LOGIN'),
+				'apiKey' => env('ALLMYSMS_API_KEY')
+			]
+		]);
+
+		$response = json_decode($response->getBody());
+
+		return [
+			'remaining_sms' => floor($response->credits / 15),
+			'remaining_credits' => (int) $response->credits,
+			'credits_per_sms' => 15
+		];
+	}
 }

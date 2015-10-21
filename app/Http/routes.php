@@ -50,5 +50,6 @@ Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForR
 Route::post('interviews/generate', 'InterviewsController@generate');
 
 Route::post('messaging/send-email', 'MessagingController@sendEmail');
+Route::get('messaging/remaining-sms-credits', 'MessagingController@getRemainingSMSCredits');
 
 Route::post('documents', 'DocumentsController@create');

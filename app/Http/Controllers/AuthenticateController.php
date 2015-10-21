@@ -18,12 +18,12 @@ class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer', 'test2']]);
+		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer']]);
 	}
 
 	public function test2()
 	{
-		//
+		print_r(Texter::getRemainingCredits());
 	}
 
 	public function checkEmail(Request $request)

@@ -9,4 +9,9 @@ class MessagingACL
 	{
 		return $user->organizer;
 	}
+
+	public function getSMSCredits(User $user)
+	{
+		return $user->organizer;
+	}
 }
