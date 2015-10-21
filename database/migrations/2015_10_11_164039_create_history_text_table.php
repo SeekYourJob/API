@@ -20,6 +20,7 @@ class CreateHistoryTextTable extends Migration
             $table->string('phone')->nullable();
 
             $table->text('message');
+            $table->mediumText('ack')->nullable();
 
             $table->timestamps();
         });

@@ -5,7 +5,12 @@ use CVS\User;
 
 class MessagingACL
 {
-	public function sendEmails(User $user)
+	public function sendEmail(User $user)
+	{
+		return $user->organizer;
+	}
+
+	public function sendSMS(User $user)
 	{
 		return $user->organizer;
 	}

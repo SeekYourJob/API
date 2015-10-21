@@ -10,26 +10,24 @@ class Texter
 {
 	use DispatchesJobs;
 
-	public function sendToPhoneNumber($phoneNumber, $message, $saveInHistory = true)
+	public function sendToPhoneNumber($phoneNumber, $message, $historyId = false)
 	{
 		if (env('TEXT_MESSAGES') == 'DISABLED') {
 			\Log::warning('[TEXT] Text messages disabled. Sending aborted to ' . $phoneNumber);
-
 			return;
 		}
 
 		if (empty($phoneNumber)) {
 			\Log::warning('[TEXT] Phone number empty. Sending aborted with message ' . $message);
-
 			return;
 		}
 
-		// The magic happens here... (almost!)
-		$this->dispatch(new SendTextToPhoneNumber($phoneNumber, $message));
-
 		// Saving in history...
-		if ($saveInHistory)
-			HistoryText::create(['phone' => $phoneNumber, 'message' => $message]);
+		if (!$historyId)
+			$historyId = HistoryText::create(['phone' => $phoneNumber, 'message' => $message])->id;
+
+		// The magic happens here... (almost!)
+		$this->dispatch(new SendTextToPhoneNumber($phoneNumber, $message, $historyId));
 	}
 
 	public function sendToUser(User $user, $message)
@@ -49,45 +47,56 @@ class Texter
 			return;
 		}
 
-		// Sending email...
-		 $this->sendToPhoneNumber($user->phone, $message, false);
-
 		// Saving in history...
-		HistoryText::create(['user_id' => $user->id, 'message' => $message]);
+		$history = HistoryText::create(['user_id' => $user->id, 'message' => $message]);
+
+		// Sending SMS...
+		 $this->sendToPhoneNumber($user->phone, $message, $history->id);
 	}
 
-	public static function doSendToPhoneNumber($phoneNumber, $message)
+	public static function doSendToPhoneNumber($phoneNumber, $message, $historyId)
 	{
 		$guzzleClient = new \GuzzleHttp\Client();
 
-		$guzzleClient->post('https://api.allmysms.com/http/9.0/', [
+		$response = $guzzleClient->post('https://api.allmysms.com/http/9.0/', [
 			'form_params' => [
 				'login' => env('ALLMYSMS_LOGIN'),
 				'apiKey' => env('ALLMYSMS_API_KEY'),
-				'lowcost' => true,
-				'message' => $message,
+				'tpoa' => 'SeekYourJob',
+				'message' => $message . "\r\n\r\nSTOP au 36180",
 				'mobile' => $phoneNumber
 			]
 		]);
+
+		$history = HistoryText::findOrFail($historyId);
+		$history->ack = $response->getBody();
+		$history->save();
 	}
 
 	public static function getRemainingCredits()
 	{
 		$guzzleClient = new \GuzzleHttp\Client();
 
-		$response = $guzzleClient->post('https://api.allmysms.com/http/9.0/getInfo', [
-			'form_params' => [
-				'login' => env('ALLMYSMS_LOGIN'),
-				'apiKey' => env('ALLMYSMS_API_KEY')
-			]
-		]);
+		try {
+			$response = $guzzleClient->post('https://api.allmysms.com/http/9.0/getInfo', [
+				'form_params' => [
+					'login' => env('ALLMYSMS_LOGIN'),
+					'apiKey' => env('ALLMYSMS_API_KEY')
+				]
+			]);
+			$response = json_decode($response->getBody());
 
-		$response = json_decode($response->getBody());
-
-		return [
-			'remaining_sms' => floor($response->credits / 15),
-			'remaining_credits' => (int) $response->credits,
-			'credits_per_sms' => 15
-		];
+			return [
+				'remaining_sms' => floor($response->credits / 15),
+				'remaining_credits' => (int) $response->credits,
+				'credits_per_sms' => 15
+			];
+		} catch (\Exception $exception) {
+			return [
+				'remaining_sms' => 0,
+				'remaining_credits' => 0,
+				'credits_per_sms' => 15
+			];
+		}
 	}
 }

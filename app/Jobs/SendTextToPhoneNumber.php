@@ -13,18 +13,19 @@ class SendTextToPhoneNumber extends Job implements SelfHandling, ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
-    public $guzzleClient;
     public $phoneNumber;
     public $message;
+    public $historyId;
 
-    public function __construct($phoneNumber, $message)
+    public function __construct($phoneNumber, $message, $historyId)
     {
         $this->phoneNumber = $phoneNumber;
         $this->message = $message;
+        $this->historyId = $historyId;
     }
 
     public function handle()
     {
-        Texter::doSendToPhoneNumber($this->phoneNumber, $this->message);
+        Texter::doSendToPhoneNumber($this->phoneNumber, $this->message, $this->historyId);
     }
 }

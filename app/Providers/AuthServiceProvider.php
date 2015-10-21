@@ -43,7 +43,8 @@ class AuthServiceProvider extends ServiceProvider
 		$gate->define('get-users-groups', 'CVS\ACLs\UserACL@getGroups');
 
 		// Messaging
-		$gate->define('messaging-send-emails', 'CVS\ACLs\MessagingACL@sendEmails');
+		$gate->define('messaging-send-email', 'CVS\ACLs\MessagingACL@sendEmail');
+		$gate->define('messaging-send-sms', 'CVS\ACLs\MessagingACL@sendSMS');
 		$gate->define('messaging-get-remaining-sms-credits', 'CVS\ACLs\MessagingACL@getSMSCredits');
 	}
 }

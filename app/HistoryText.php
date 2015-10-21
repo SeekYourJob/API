@@ -11,7 +11,7 @@ class HistoryText extends Model
 	protected $guarded = ['id'];
 	protected $hidden = ['id', 'user_id', 'phone', 'updated_at'];
 	protected $appends = ['ido'];
-	protected $casts = [];
+	protected $casts = ['ack' => 'array'];
 
 	use ObfuscatedIdTrait;
 

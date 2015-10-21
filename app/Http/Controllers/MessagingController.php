@@ -4,6 +4,7 @@ namespace CVS\Http\Controllers;
 
 use CVS\Http\Requests\MessagingSendEmailRequest;
 use CVS\Http\Requests;
+use CVS\Http\Requests\MessagingSendSMSRequest;
 use CVS\Mailer\Mailer;
 use CVS\Texter\Texter;
 use CVS\User;
@@ -24,10 +25,10 @@ class MessagingController extends Controller
 
     public function sendEmail(MessagingSendEmailRequest $request)
     {
-	    $this->authorize('messaging-send-emails');
+	    $this->authorize('messaging-send-email');
 
 	    $mailer = new Mailer();
-	    foreach($request->input('recipients') as $recipient) {
+	    foreach($request->input('recipients') as $recipient)
 		   $mailer->sendToUser(User::whereId(app('Optimus')->decode($recipient))->firstOrFail(),
 			    $request->input('message.object'),
 			    'emails.skeleton',
@@ -35,8 +36,18 @@ class MessagingController extends Controller
 			   [],
 			   true
 		    );
-	    }
 
-	    return response()->json('Mail sent');
+	    return response()->json('Mail sending queued');
     }
+
+	public function sendSMS(MessagingSendSMSRequest $request)
+	{
+		$this->authorize('messaging-send-sms');
+
+		$texter = new Texter();
+		foreach($request->input('recipients') as $recipient)
+			$texter->sendToUser(User::whereId(app('Optimus')->decode($recipient))->firstOrFail(), $request->input('message'));
+
+		return response()->json('Text message sending queued');
+	}
 }
