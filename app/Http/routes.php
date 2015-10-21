@@ -19,7 +19,7 @@ Route::get('test', function() {
 
 Route::get('test2', 'AuthenticateController@test2');
 
-Route::get('me', 'AuthenticateController@me');
+Route::get('me/{showDetails?}', 'AuthenticateController@me');
 Route::post('authenticate', 'AuthenticateController@authenticate');
 Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
