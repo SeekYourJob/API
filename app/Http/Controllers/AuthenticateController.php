@@ -92,7 +92,7 @@ class AuthenticateController extends Controller
 		abort(500, "Logout failed!");
 	}
 
-    public function me($showDetails = false)
+    public function me(Request $request)
     {
         try {
             if (!$user = JWTAuth::parseToken()->authenticate()) {
@@ -119,7 +119,7 @@ class AuthenticateController extends Controller
                 'sms' => $user->sms_notifications
             ]
         ]];
-        if ($showDetails == true) {
+        if ($request->has('showDetails')) {
             if ($user->profile_type === 'CVS\\Recruiter') {
                 $recruiter = Recruiter::whereId($user->profile_id)->first();
                 $interviews = Interview::getAllForRecruiter($recruiter);
