@@ -6,6 +6,7 @@ use Auth;
 use CVS\Company;
 use CVS\Document;
 use CVS\Http\Requests\RegisterRecruiterRequest;
+use CVS\Interview;
 use CVS\Jobs\RegisterRecruiter;
 use CVS\Recruiter;
 use CVS\Texter\Texter;
@@ -86,32 +87,43 @@ class AuthenticateController extends Controller
 		abort(500, "Logout failed!");
 	}
 
-	public function me()
-	{
-		try {
-			if ( ! $user = JWTAuth::parseToken()->authenticate()) {
-				return response()->json(['error' => 'user_not_found'], 404);
-			}
-		} catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-			return response()->json(['error' => 'expired_token'], $e->getStatusCode());
-		} catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-			return response()->json(['error' => 'invalid_token'], $e->getStatusCode());
-		} catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-			return response()->json(['error' => 'missing_token'], $e->getStatusCode());
-		}
+    public function me(Request $request)
+    {
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['error' => 'user_not_found'], 404);
+            }
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            return response()->json(['error' => 'expired_token'], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            return response()->json(['error' => 'invalid_token'], $e->getStatusCode());
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            return response()->json(['error' => 'missing_token'], $e->getStatusCode());
+        }
 
-		return response()->json(['user' => [
-			'ido' => app('Optimus')->encode($user->id),
-			'profile' => $user->profile_type,
-			'firstname' => $user->firstname,
-			'lastname' => $user->lastname,
-			'email' => $user->email,
-			'phone' => $user->phone,
-			'organizer' => $user->organizer,
-			'notifications' => [
-				'email' => $user->email_notifications,
-				'sms' => $user->sms_notifications
-			]
-		]]);
-	}
+        $profile = ['user' => [
+            'ido' => app('Optimus')->encode($user->id),
+            'profile' => $user->profile_type,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'email' => $user->email,
+            'phone' => $user->phone,
+            'organizer' => $user->organizer,
+            'notifications' => [
+                'email' => $user->email_notifications,
+                'sms' => $user->sms_notifications
+            ]
+        ]];
+        if ($request->has('showDetails')) {
+            if ($user->profile_type === 'CVS\\Recruiter') {
+                $recruiter = Recruiter::whereId($user->profile_id)->first();
+                $interviews = Interview::getAllForRecruiter($recruiter);
+                $profile['user']['recruiter'] = $interviews;
+            } elseif ($user->profile_type === 'CVS\\Candidate') {
+                //TODO
+            }
+        }
+
+        return response()->json($profile);
+    }
 }
