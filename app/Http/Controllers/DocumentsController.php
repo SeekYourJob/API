@@ -26,8 +26,16 @@ class DocumentsController extends Controller
         ]);
 
         if(array_key_exists('user',$data)) {
-            \Log::info('USER FOUND :'.$data['user']);
-            $user = User::whereId(app('Optimus')->decode($data['user']))->firstOrFail();
+          //  \Log::info('USER FOUND :'.$data['user']);
+          //  \Log::info('USER FOUND DECODED:'.app('Optimus')->decode(1646891037));
+            for($i=0; $i<=16; $i++){
+                $test = $i;
+                $encodedTest = app('Optimus')->encode($test);
+                \Log::info('TEST:'.$test.'=>'.$encodedTest.'=>'.app('Optimus')->decode($encodedTest));
+            }
+
+
+            //$user = User::whereId(app('Optimus')->decode($data['user']))->firstOrFail();
         }
 
         $file->move(storage_path('documents/' . app('Optimus')->encode($documentObject->id)));
