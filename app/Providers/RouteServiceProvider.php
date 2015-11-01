@@ -30,23 +30,23 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(Router $router)
     {
         $router->bind('user', function($value, $route) {
-            return User::findOrFail(app('Optimus')->decode($value));
+            return User::findOrFail(app('Hashids')->decode($value)[0]);
         });
 
         $router->bind('companies', function($value, $route) {
-            return Company::findOrFail(app('Optimus')->decode($value));
+            return Company::findOrFail(app('Hashids')->decode($value)[0]);
         });
 
         $router->bind('recruiters', function($value, $route) {
-            return Recruiter::findOrFail(app('Optimus')->decode($value));
+            return Recruiter::findOrFail(app('Hashids')->decode($value)[0]);
         });
 
         $router->bind('interviews', function($value, $route) {
-            return Interview::findOrFail(app('Optimus')->decode($value));
+            return Interview::findOrFail(app('Hashids')->decode($value)[0]);
         });
 
         $router->bind('slots', function($value, $route) {
-            return Slot::findOrFail(app('Optimus')->decode($value));
+            return Slot::findOrFail(app('Hashids')->decode($value)[0]);
         });
 
         parent::boot($router);

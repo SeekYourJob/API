@@ -14,6 +14,7 @@ use CVS\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Vinkla\Hashids\Facades\Hashids;
 
 class AuthenticateController extends Controller
 {
@@ -24,7 +25,7 @@ class AuthenticateController extends Controller
 
 	public function test2()
 	{
-		print_r(Texter::getRemainingCredits());
+		dd(app('Hashids')->encode(1));
 	}
 
 	public function checkEmail(Request $request)
@@ -102,7 +103,7 @@ class AuthenticateController extends Controller
         }
 
         $profile = ['user' => [
-            'ido' => app('Optimus')->encode($user->id),
+            'ido' => $user->ido,
             'profile' => $user->profile_type,
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
@@ -114,6 +115,7 @@ class AuthenticateController extends Controller
                 'sms' => $user->sms_notifications
             ]
         ]];
+
         if ($request->has('showDetails')) {
             if ($user->profile_type === 'CVS\\Recruiter') {
                 $recruiter = Recruiter::whereId($user->profile_id)->first();

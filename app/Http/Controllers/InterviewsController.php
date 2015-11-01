@@ -68,8 +68,8 @@ class InterviewsController extends Controller
 	public function createInterview(Request $request)
 	{
 		if ($request->has(['recruiter', 'slot'])) {
-			$recruiter = Recruiter::findOrFail(app('Optimus')->decode($request->get('recruiter')));
-			$slot = Slot::findOrFail(app('Optimus')->decode($request->get('slot')));
+			$recruiter = Recruiter::findOrFail(app('Hashids')->decode($request->get('recruiter'))[0]);
+			$slot = Slot::findOrFail(app('Hashids')->decode($request->get('slot'))[0]);
 
 			$this->dispatch(new AddInterviewsToRecruiter($recruiter, $slot));
 			return response()->json('Interview created.');

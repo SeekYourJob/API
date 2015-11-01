@@ -9,9 +9,10 @@ use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
 {
-    public function __construct()
-    {
-    }
+	public function __construct()
+	{
+//		$this->middleware('jws.auth', ['except' => ['create']]);
+	}
 
     public function create(Request $request)
     {
@@ -38,10 +39,10 @@ class DocumentsController extends Controller
             //$user = User::whereId(app('Optimus')->decode($data['user']))->firstOrFail();
         }
 
-        $file->move(storage_path('documents/' . app('Optimus')->encode($documentObject->id)));
+        $file->move(storage_path('documents/' . $documentObject->ido);
 
         if ($documentObject) {
-            return response()->json(['id' => app('Optimus')->encode($documentObject->id), 'name' => $documentObject->name]);
+            return response()->json(['id' => $documentObject->ido, 'name' => $documentObject->name]);
         }
 
         abort(500);
@@ -54,4 +55,3 @@ class DocumentsController extends Controller
         );
         return Response::download($file, $document->name.'.'.$document->extension, $headers);
     }
-}

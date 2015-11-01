@@ -2,6 +2,7 @@
 
 namespace CVS;
 
+use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword;
+    use Authenticatable, Authorizable, CanResetPassword, ObfuscatedIdTrait;
 
     protected $table = 'users';
     protected $guarded = ['id'];
@@ -22,7 +23,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function getRouteKey()
     {
-        return app('Optimus')->encode($this->getKey());
+        return app('Hashids')->encode(self::class . '-' . $this->id);
     }
 
     public function profile()
@@ -53,11 +54,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function belongsToCompany(Company $company)
     {
         return (isset($this->profile->company_id) && $this->profile->company_id == $company->id);
-    }
-
-    public function getIdoAttribute()
-    {
-        return app('Optimus')->encode($this->id);
     }
 
     public function getPhoneFormattedAttribute()

@@ -72,7 +72,7 @@ class UserTest extends TestCase
 		$token = JWTAuth::fromUser($organizer);
 
 		$userId = rand(1, 10);
-		$userIdObfuscated = app('Optimus')->encode($userId);
+		$userIdObfuscated = app('Hashids')->encode($userId);
 
 		$this->get("/users/$userIdObfuscated", ['HTTP_AUTHORIZATION' => "Bearer $token"])
 			->seeStatusCode(200)
@@ -85,7 +85,7 @@ class UserTest extends TestCase
 	public function testCanGetUserFromHimself()
 	{
 		$user = \CVS\User::find(rand(1, 10));
-		$userIdObfuscated = app('Optimus')->encode($user->id);
+		$userIdObfuscated = app('Hashids')->encode($user->id);
 
 		$token = JWTAuth::fromUser($user);
 
@@ -104,7 +104,7 @@ class UserTest extends TestCase
 
 		$token = JWTAuth::fromUser($userWhoLooks);
 
-		$this->get('/users/' . app('Optimus')->encode($userLooked->id), ['HTTP_AUTHORIZATION' => "Bearer $token"])
+		$this->get('/users/' . app('Hashids')->encode($userLooked->id), ['HTTP_AUTHORIZATION' => "Bearer $token"])
 			->seeStatusCode(403);
 	}
 
@@ -115,7 +115,7 @@ class UserTest extends TestCase
 	{
 		$user = \CVS\User::find(rand(1, 10));
 
-		$this->get('/users/' . app('Optimus')->encode($user->id))
+		$this->get('/users/' . app('Hashids')->encode($user->id))
 			->seeStatusCode(400);
 	}
 
@@ -132,7 +132,7 @@ class UserTest extends TestCase
 
 		$user = \CVS\User::where('organizer', false)->first();
 
-		$this->delete('/users/' . app('Optimus')->encode($user->id), [], ['HTTP_AUTHORIZATION' => "Bearer $token"])
+		$this->delete('/users/' . app('Hashids')->encode($user->id), [], ['HTTP_AUTHORIZATION' => "Bearer $token"])
 			->seeStatusCode(200);
 	}
 
@@ -147,7 +147,7 @@ class UserTest extends TestCase
 
 		$user = \CVS\User::where('organizer', true)->first();
 
-		$this->delete('/users/' . app('Optimus')->encode($user->id), [], ['HTTP_AUTHORIZATION' => "Bearer $token"])
+		$this->delete('/users/' . app('Hashids')->encode($user->id), [], ['HTTP_AUTHORIZATION' => "Bearer $token"])
 			->seeStatusCode(403);
 	}
 
@@ -158,7 +158,7 @@ class UserTest extends TestCase
 	{
 		$user = \CVS\User::orderByRaw("RAND()")->first();
 
-		$this->delete('/users/' . app('Optimus')->encode($user->id))
+		$this->delete('/users/' . app('Hashids')->encode($user->id))
 			->seeStatusCode(400);
 	}
 

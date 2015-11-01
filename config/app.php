@@ -152,6 +152,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        Vinkla\Hashids\HashidsServiceProvider::class,
 
     ],
 
@@ -203,7 +204,8 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Hashids'   => Vinkla\Hashids\Facades\Hashids::class
 
     ],
 
