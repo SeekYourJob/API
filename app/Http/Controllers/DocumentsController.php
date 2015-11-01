@@ -3,37 +3,47 @@
 namespace CVS\Http\Controllers;
 
 use CVS\Document;
+use CVS\User;
+use CVS\Recruiter;
 use Illuminate\Http\Request;
 
 class DocumentsController extends Controller
 {
-	public function __construct()
-	{
-//		$this->middleware('jws.auth', ['except' => ['create']]);
-	}
+    public function __construct()
+    {
+    }
 
-	public function create(Request $request)
-	{
-		$document = $request->file('file');
+    public function create(Request $request)
+    {
+        $file = $request->file('file');
+        $data = $request->get('data');
 
-		$documentObject = Document::create([
-			'name' => $document->getClientOriginalName(),
-			'name_s3' => strtolower(str_random(21)),
-			'extension' => $document->getClientOriginalExtension(),
-			'size' => $document->getClientSize(),
-			'size_readable' => Document::getReadableFilesize($document->getClientSize())
-		]);
+        $documentObject = Document::create([
+            'name' => $file->getClientOriginalName(),
+            'extension' => $file->getClientOriginalExtension(),
+            'size' => $file->getClientSize(),
+            'size_readable' => Document::getReadableFilesize($file->getClientSize())
+        ]);
 
-//		$tmpFilename = storage_path('waiting_s3/' . $document->getFilename());
-		// Moving file to internal folder instead of S3
-		$document->move(storage_path('documents/' . $document->getClientOriginalName()));
+        if(array_key_exists('user',$data)) {
+            \Log::info('USER FOUND :'.$data['user']);
+            $user = User::whereId(app('Optimus')->decode($data['user']))->firstOrFail();
+        }
 
-//		$this->dispatch(new SendDocumentToS3($documentObject, $tmpFilename));
+        $file->move(storage_path('documents/' . app('Optimus')->encode($documentObject->id)));
 
-		if ($documentObject) {
-			return response()->json(['id' => app('Optimus')->encode($documentObject->id), 'name' => $documentObject->name]);
-		}
+        if ($documentObject) {
+            return response()->json(['id' => app('Optimus')->encode($documentObject->id), 'name' => $documentObject->name]);
+        }
 
-		abort(500);
-	}
+        abort(500);
+    }
+
+    public function getFile(Document $document){
+        $file= storage_path('documents/' . app('Optimus')->encode($document->id));
+        $headers = array(
+            'Content-Type: application/'.$document->extension,
+        );
+        return Response::download($file, $document->name.'.'.$document->extension, $headers);
+    }
 }
