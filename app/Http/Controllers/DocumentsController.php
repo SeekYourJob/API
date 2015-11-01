@@ -24,14 +24,15 @@ class DocumentsController extends Controller
 			'size_readable' => Document::getReadableFilesize($document->getClientSize())
 		]);
 
-//		$tmpFilename = storage_path('waiting_s3/' . $document->getFilename());
+		// $tmpFilename = storage_path('waiting_s3/' . $document->getFilename());
+
 		// Moving file to internal folder instead of S3
 		$document->move(storage_path('documents/' . $document->getClientOriginalName()));
 
-//		$this->dispatch(new SendDocumentToS3($documentObject, $tmpFilename));
+		// $this->dispatch(new SendDocumentToS3($documentObject, $tmpFilename));
 
 		if ($documentObject) {
-			return response()->json(['id' => app('Optimus')->encode($documentObject->id), 'name' => $documentObject->name]);
+			return response()->json(['id' => $documentObject->ido, 'name' => $documentObject->name]); // TO TEST
 		}
 
 		abort(500);

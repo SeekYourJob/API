@@ -48,7 +48,7 @@ class RecruitersController extends Controller
 
                 // Updating recruiter
                 $recruiter->update([
-                    'company_id' => app('Optimus')->decode($request->input('company.ido'))
+                    'company_id' => app('Hashids')->decode($request->input('company.ido'))[0]
                 ]);
 
                 return $recruiter;

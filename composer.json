@@ -15,7 +15,8 @@
         "league/flysystem-aws-s3-v3": "^1.0",
         "giggsey/libphonenumber-for-php": "^7.0",
         "guzzlehttp/guzzle": "~6.0",
-        "pda/pheanstalk": "~3.0"
+        "pda/pheanstalk": "~3.0",
+        "vinkla/hashids": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

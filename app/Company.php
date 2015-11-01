@@ -2,10 +2,13 @@
 
 namespace CVS;
 
+use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+	use ObfuscatedIdTrait;
+
 	protected $table = 'companies';
 	protected $guarded = ['id'];
 	protected $hidden = ['id'];
@@ -17,11 +20,6 @@ class Company extends Model
 	public function recruiters()
 	{
 		return $this->hasMany(Recruiter::class);
-	}
-
-	public function getIdoAttribute()
-	{
-		return app('Optimus')->encode($this->id);
 	}
 
 	public static function getIdosGroupedByCompanies()

@@ -2,10 +2,13 @@
 
 namespace CVS;
 
+use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Candidate extends Model
 {
+	use ObfuscatedIdTrait;
+
 	protected $table = 'candidates';
 	protected $guarded = ['id'];
 	protected $hidden = ['id'];
@@ -19,11 +22,6 @@ class Candidate extends Model
 	public function documents()
 	{
 		return $this->morphMany(Document::class, 'profile');
-	}
-
-	public function getIdoAttribute()
-	{
-		return app('Optimus')->encode($this->id);
 	}
 
 	public static function getAllIdos()

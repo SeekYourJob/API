@@ -2,10 +2,13 @@
 
 namespace CVS;
 
+use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Slot extends Model
 {
+	use ObfuscatedIdTrait;
+
 	protected $table = 'slots';
 	protected $guarded = ['id'];
 	protected $hidden = ['id'];
@@ -14,11 +17,6 @@ class Slot extends Model
 	public function interviews()
 	{
 		return $this->hasMany(Interview::class);
-	}
-
-	public function getIdoAttribute()
-	{
-		return app('Optimus')->encode($this->id);
 	}
 
 	public function getBeginsAtFormattedAttribute()

@@ -3,20 +3,18 @@
 namespace CVS;
 
 use CVS\Enums\InterviewStatus;
+use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 class Interview extends Model
 {
+	use ObfuscatedIdTrait;
+
 	protected $table = 'interviews';
 	protected $guarded = ['id'];
 	protected $hidden = [];
 	protected $appends = ['ido'];
-
-	public function getIdoAttribute()
-	{
-		return app('Optimus')->encode($this->id);
-	}
 
 	public function company()
 	{

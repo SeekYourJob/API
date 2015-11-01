@@ -29,7 +29,7 @@ class MessagingController extends Controller
 
 	    $mailer = new Mailer();
 	    foreach($request->input('recipients') as $recipient)
-		   $mailer->sendToUser(User::whereId(app('Optimus')->decode($recipient))->firstOrFail(),
+		   $mailer->sendToUser(User::whereId(app('Hashids')->decode($recipient)[0])->firstOrFail(),
 			    $request->input('message.object'),
 			    'emails.skeleton',
 			    ['content' => nl2br($request->input('message.content'))],
@@ -46,7 +46,7 @@ class MessagingController extends Controller
 
 		$texter = new Texter();
 		foreach($request->input('recipients') as $recipient)
-			$texter->sendToUser(User::whereId(app('Optimus')->decode($recipient))->firstOrFail(), $request->input('message'));
+			$texter->sendToUser(User::whereId(app('Hashids')->decode($recipient)[0])->firstOrFail(), $request->input('message'));
 
 		return response()->json('Text message sending queued');
 	}

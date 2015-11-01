@@ -2,12 +2,16 @@
 
 namespace CVS;
 
+use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Document extends Model
 {
+	use ObfuscatedIdTrait;
+
 	protected $table = 'documents';
 	protected $guarded = ['id'];
+	protected $appends = ['ido'];
 
 	public function profile()
 	{
