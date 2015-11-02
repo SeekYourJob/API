@@ -7,6 +7,7 @@ use CVS\Interview;
 use CVS\Recruiter;
 use CVS\Slot;
 use CVS\User;
+use CVS\Document;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -47,6 +48,10 @@ class RouteServiceProvider extends ServiceProvider
 
         $router->bind('slots', function($value, $route) {
             return Slot::findOrFail(app('Hashids')->decode($value)[0]);
+        });
+
+        $router->bind('documents', function($value, $route) {
+            return Document::findOrFail(app('Hashids')->decode($value)[0]);
         });
 
         parent::boot($router);
