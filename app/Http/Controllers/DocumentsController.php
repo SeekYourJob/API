@@ -2,6 +2,7 @@
 
 namespace CVS\Http\Controllers;
 
+use Input;
 use Response;
 use CVS\Document;
 use CVS\User;
@@ -18,22 +19,22 @@ class DocumentsController extends Controller
 
     public function create(Request $request)
     {
-        $file = $request->file('file');
+        $document = Input::file('file');
         $data = $request->get('data');
 
         $documentObject = Document::create([
-            'name' => $file->getClientOriginalName(),
-            'extension' => $file->getClientOriginalExtension(),
-            'size' => $file->getClientSize(),
-            'size_readable' => Document::getReadableFilesize($file->getClientSize())
+            'name' => $document->getClientOriginalName(),
+            'extension' => $document->getClientOriginalExtension(),
+            'size' => $document->getClientSize(),
+            'size_readable' => Document::getReadableFilesize($document->getClientSize())
         ]);
 
         if (array_key_exists('user', $data)) {
             $user = User::whereId(app('Hashids')->decode($data['user'])[0])->firstOrFail();
             $user->documents()->save($documentObject);
         }
-
-        $file->move(storage_path('documents/' . $documentObject->ido));
+        \Log::alert($document->getClientOriginalName());
+        $info = $document->move(storage_path('documents/'),$documentObject->ido);
 
         if ($documentObject) {
             return response()->json(['id' => $documentObject->ido, 'name' => $documentObject->name]);
@@ -71,10 +72,10 @@ class DocumentsController extends Controller
 
     public function getFile(Document $document)
     {
-        $file = storage_path('documents\\' . $document->ido);
+        $file = storage_path('documents/'.$document->ido);
         $headers = array(
             'Content-Type: application/' . $document->extension,
         );
-        return Response::download($file, $document->name . '.' . $document->extension, $headers);
+        return Response::download($file, $document->name, $headers);
     }
 }
