@@ -2,6 +2,8 @@
 
 namespace CVS\Http\Controllers;
 
+use Auth;
+use CVS\Download;
 use Input;
 use Response;
 use CVS\Document;
@@ -14,7 +16,7 @@ class DocumentsController extends Controller
 {
     public function __construct()
     {
-		$this->middleware('jwt.auth', ['except' => ['create']]);
+		$this->middleware('jwt.auth', ['except' => ['create', 'getFile']]);
     }
 
     public function create(Request $request)
@@ -70,12 +72,32 @@ class DocumentsController extends Controller
         return response('');
     }
 
-    public function getFile(Document $document)
+    public function getRequestTokenForDocument(Document $document)
     {
-        $file = storage_path('documents/'.$document->ido);
-        $headers = array(
-            'Content-Type: application/' . $document->extension,
-        );
-        return Response::download($file, $document->name, $headers);
+        $authenticatedUser = Auth::user();
+
+        $download = Download::create([
+            'user_id' => $authenticatedUser->id,
+            'document_id' => $document->id,
+            'url' => str_random(42),
+        ]);
+
+        return response()->json(['token' => $download->url]);
+    }
+
+    public function getFile($requestToken)
+    {
+        $download = Download::whereUrl($requestToken)->first();
+
+        if ($download->viewed)
+            abort(403, "Download link expired.");
+
+        $file = storage_path('documents/' . $download->document->ido);
+        $headers = ['Content-Type: application/' . $download->document->extension,];
+
+        $download->viewed = true;
+        $download->save();
+
+        return response()->download($file, $download->document->name, $headers);
     }
 }

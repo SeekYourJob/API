@@ -55,5 +55,6 @@ Route::get('messaging/remaining-sms-credits', 'MessagingController@getRemainingS
 
 Route::post('documents', 'DocumentsController@create');
 Route::get('documents/user/{user}', 'DocumentsController@getFilesForUser');
-Route::get('documents/{documents}', 'DocumentsController@getFile');
+Route::get('documents/request-token/{documents}', 'DocumentsController@getRequestTokenForDocument');
+Route::get('documents/{requestToken}', 'DocumentsController@getFile');
 Route::delete('documents/{documents}', 'DocumentsController@deleteFile');

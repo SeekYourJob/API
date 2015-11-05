@@ -1,6 +1,7 @@
 <?php namespace CVS\ACLs;
 
 use CVS\Company;
+use CVS\Document;
 use CVS\User;
 
 class UserACL
