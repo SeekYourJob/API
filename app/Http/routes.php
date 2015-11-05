@@ -54,3 +54,6 @@ Route::post('messaging/send-sms', 'MessagingController@sendSMS');
 Route::get('messaging/remaining-sms-credits', 'MessagingController@getRemainingSMSCredits');
 
 Route::post('documents', 'DocumentsController@create');
+Route::get('documents/user/{user}', 'DocumentsController@getFilesForUser');
+Route::get('documents/{documents}', 'DocumentsController@getFile');
+Route::delete('documents/{documents}', 'DocumentsController@deleteFile');
