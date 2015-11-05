@@ -37,7 +37,7 @@ class DocumentsController extends Controller
         $info = $document->move(storage_path('documents/'),$documentObject->ido);
 
         if ($documentObject) {
-            return response()->json(['id' => $documentObject->ido, 'name' => $documentObject->name]);
+            return response()->json(['ido' => $documentObject->ido, 'name' => $documentObject->name]);
         }
 
         abort(500);
