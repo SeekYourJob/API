@@ -12,7 +12,7 @@ class Candidate extends Model
 	protected $table = 'candidates';
 	protected $guarded = ['id'];
 	protected $hidden = ['id'];
-	protected $appends = ['ido'];
+	protected $appends = ['ido', 'registered_slots'];
 
 	public function user()
 	{
@@ -22,6 +22,23 @@ class Candidate extends Model
 	public function documents()
 	{
 		return $this->morphMany(Document::class, 'profile');
+	}
+
+	public function interviews()
+	{
+		return $this->hasMany(Interview::class, 'candidate_id');
+	}
+
+	public function getRegisteredSlotsAttribute()
+	{
+		$slots = [];
+
+		foreach($this->interviews as $interview)
+			$slots[$interview->slot_id] = $interview->company->name;
+
+		asort($slots);
+
+		return ($slots);
 	}
 
 	public static function getAllIdos()

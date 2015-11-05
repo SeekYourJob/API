@@ -2,6 +2,7 @@
 
 namespace CVS\Providers;
 
+use CVS\Candidate;
 use CVS\Company;
 use CVS\Interview;
 use CVS\Recruiter;
@@ -40,6 +41,10 @@ class RouteServiceProvider extends ServiceProvider
 
         $router->bind('recruiters', function($value, $route) {
             return Recruiter::findOrFail(app('Hashids')->decode($value)[0]);
+        });
+
+        $router->bind('candidates', function($value, $route) {
+            return Candidate::findOrFail(app('Hashids')->decode($value)[0]);
         });
 
         $router->bind('interviews', function($value, $route) {

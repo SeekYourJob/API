@@ -11,7 +11,7 @@ class Slot extends Model
 
 	protected $table = 'slots';
 	protected $guarded = ['id'];
-	protected $hidden = ['id'];
+	protected $hidden = ['id', 'created_at', 'updated_at', 'availability'];
 	protected $appends = ['ido', 'begins_at_formatted', 'ends_at_formatted'];
 
 	public function interviews()

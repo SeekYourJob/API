@@ -8,13 +8,9 @@ Route::get('/', function() {
 });
 
 Route::get('test', function() {
-    $test = \CVS\Slot::hydrateRaw('
-        SELECT s.*, COUNT(s.id) AS total_slots, CAST(SUM(IF(i.candidate_id IS NULL, 1, 0)) AS UNSIGNED INTEGER) AS free_slots, GROUP_CONCAT(i.candidate_id) AS candidates
-        FROM slots s
-        LEFT OUTER JOIN interviews i ON s.id = i.slot_id AND i.company_id = 7
-        GROUP BY s.id');
-//    dd($test);
-    return $test;
+
+    return Company::getInterviewsGroupedByCompanies();
+
 });
 
 Route::get('test2', 'AuthenticateController@test2');
@@ -40,14 +36,19 @@ Route::resource('companies', 'CompaniesController');
 
 Route::resource('recruiters', 'RecruitersController');
 
-Route::get('interviews', 'InterviewsController@getAllForAllCompanies');
+Route::get('candidates/{candidates}/interviews', 'CandidatesController@getInterviewsForCandidate');
+
+Route::get('interviews', 'InterviewsController@getAll');
 Route::post('interviews', 'InterviewsController@createInterview');
+Route::get('interviews/slots', 'InterviewsController@getAllSlots');
+Route::post('interviews/generate', 'InterviewsController@generate');
+Route::post('interviews/register', 'InterviewsController@register');
 Route::delete('interviews/{interviews}', 'InterviewsController@deleteInterview');
 Route::post('interviews/{interviews}/free', 'InterviewsController@freeInterview');
-Route::get('interviews/slots', 'InterviewsController@getAllSlots');
+
 Route::get('interviews/company/{companies}', 'InterviewsController@getAllForCompany');
 Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
-Route::post('interviews/generate', 'InterviewsController@generate');
+
 
 Route::post('messaging/send-email', 'MessagingController@sendEmail');
 Route::post('messaging/send-sms', 'MessagingController@sendSMS');

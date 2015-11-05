@@ -121,8 +121,11 @@ class AuthenticateController extends Controller
                 $recruiter = Recruiter::whereId($user->profile_id)->first();
                 $interviews = Interview::getAllForRecruiter($recruiter);
                 $profile['user']['recruiter'] = $interviews;
+
             } elseif ($user->profile_type === 'CVS\\Candidate') {
-                //TODO
+//                $profile['user']['candidate'] = [
+//		            'candidate' => $user->profile
+//	            ];
             }
         }
 

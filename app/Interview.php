@@ -13,7 +13,7 @@ class Interview extends Model
 
 	protected $table = 'interviews';
 	protected $guarded = ['id'];
-	protected $hidden = [];
+	protected $hidden = ['id', 'created_at', 'updated_at'];
 	protected $appends = ['ido'];
 
 	public function company()

@@ -32,7 +32,7 @@ class InterviewsController extends Controller
 		return Interview::all();
 	}
 
-	public function getAllForAllCompanies()
+	public function getAll()
 	{
 		return response()->json(Interview::getAllForAllCompanies());
 	}
@@ -74,6 +74,15 @@ class InterviewsController extends Controller
 			$this->dispatch(new AddInterviewsToRecruiter($recruiter, $slot));
 			return response()->json('Interview created.');
 		}
+	}
+
+	public function register()
+	{
+		return response()->json([
+			'total_slots' => 1,
+			'free_slots' => 0,
+			'interview' => 'fjdslkjfkdlsjfkldsjflksd'
+		]);
 	}
 
 	public function freeInterview(Interview $interview)
