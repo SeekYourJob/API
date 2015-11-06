@@ -20,6 +20,7 @@ Route::get('logout', 'AuthenticateController@logout');
 Route::post('authenticate', 'AuthenticateController@authenticate');
 Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
+Route::post('authenticate/pusher-token', 'AuthenticateController@pusherToken');
 Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganizer');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
 
@@ -36,9 +37,8 @@ Route::resource('companies', 'CompaniesController');
 
 Route::resource('recruiters', 'RecruitersController');
 
-Route::get('candidates/{candidates}/interviews', 'CandidatesController@getInterviewsForCandidate');
-
 Route::get('interviews', 'InterviewsController@getAll');
+Route::post('interviews/cancel', 'InterviewsController@cancel');
 Route::post('interviews', 'InterviewsController@createInterview');
 Route::get('interviews/slots', 'InterviewsController@getAllSlots');
 Route::post('interviews/generate', 'InterviewsController@generate');
@@ -47,6 +47,7 @@ Route::delete('interviews/{interviews}', 'InterviewsController@deleteInterview')
 Route::post('interviews/{interviews}/free', 'InterviewsController@freeInterview');
 
 Route::get('interviews/company/{companies}', 'InterviewsController@getAllForCompany');
+Route::get('interviews/candidate/{candidates}', 'InterviewsController@getAllForCandidate');
 Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
 
 

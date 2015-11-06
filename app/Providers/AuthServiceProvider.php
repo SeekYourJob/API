@@ -47,5 +47,10 @@ class AuthServiceProvider extends ServiceProvider
 		$gate->define('messaging-send-email', 'CVS\ACLs\MessagingACL@sendEmail');
 		$gate->define('messaging-send-sms', 'CVS\ACLs\MessagingACL@sendSMS');
 		$gate->define('messaging-get-remaining-sms-credits', 'CVS\ACLs\MessagingACL@getSMSCredits');
+
+		// Interviews
+		$gate->define('interviews-required-organizer', 'CVS\ACLs\InterviewACL@requiredOrganizer');
+		$gate->define('interviews-can-register', 'CVS\ACLs\InterviewACL@canRegister');
+		$gate->define('interviews-can-cancel', 'CVS\ACLs\InterviewACL@canCancel');
 	}
 }

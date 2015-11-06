@@ -20,12 +20,12 @@ class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer']]);
+		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer', 'pusherToken']]);
 	}
 
 	public function test2()
 	{
-		dd(app('Hashids')->encode(1));
+		echo app('Pusher')->presence_auth('presence-interviews-channel', 'socket id', 42, []);
 	}
 
 	public function checkEmail(Request $request)
@@ -73,6 +73,11 @@ class AuthenticateController extends Controller
 		}
 
 		return response()->json(compact('token'));
+	}
+
+	public function pusherToken(Request $request)
+	{
+		return response(app('Pusher')->presence_auth($request->get('channel_name'), $request->get('socket_id'), Auth::user()->id, []));
 	}
 
 	public function refresh(Request $request)

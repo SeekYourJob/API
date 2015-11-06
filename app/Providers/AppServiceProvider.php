@@ -33,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
            return Hashids::connection();
         });
 
+        $this->app->singleton('Pusher', function($app) {
+            return new \Pusher(env('PUSHER_KEY'), env('PUSHER_SECRET'), env('PUSHER_APP_ID'), ['encrypted' => true]);
+        });
+
         $this->app->singleton('PhoneUtils', function($app) {
             return PhoneNumberUtil::getInstance();
         });
