@@ -108,6 +108,7 @@ class AuthenticateController extends Controller
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
             'email' => $user->email,
+	        'email_md5' => md5($user->email),
             'phone' => $user->phone,
             'organizer' => $user->organizer,
             'notifications' => [
