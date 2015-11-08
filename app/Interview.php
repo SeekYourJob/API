@@ -3,6 +3,8 @@
 namespace CVS;
 
 use CVS\Enums\InterviewStatus;
+use CVS\Events\InterviewWasCanceled;
+use CVS\Events\InterviewWasRegistered;
 use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -118,5 +120,52 @@ class Interview extends Model
 		}
 
 		return $recruiterToAdd;
+	}
+
+	public static function register(Company $company, Slot $slot, Candidate $candidate, &$error = false)
+	{
+		$interview = false;
+
+		foreach ($candidate->interviews as $interview) {
+			// Checking if the Candidate already has an Interview for the given Slot
+			if ($interview->slot_id == $slot->id) {
+				$error = 'slot_already_registered';
+				return false;
+			}
+
+			// Checking if the Candidate already has an Interview with the giver Company
+			if ($interview->company_id == $company->id) {
+				$interview->candidate_id = null;
+				$interview->save();
+			}
+		}
+
+		$freeSlotFoundAndInterviewRegistered = false;
+		foreach ($company->recruiters as $recruiter) {
+			foreach ($recruiter->interviews as $interview) {
+				if ($interview->slot_id == $slot->id && is_null($interview->candidate_id) && !$freeSlotFoundAndInterviewRegistered) {
+					$interview->candidate_id = $candidate->id;
+					$interview->save();
+
+					$freeSlotFoundAndInterviewRegistered = true;
+					break;
+				}
+			}
+
+			if ($freeSlotFoundAndInterviewRegistered)
+				break;
+		}
+
+		event(new InterviewWasRegistered($interview));
+
+		return $interview;
+	}
+
+	public function free()
+	{
+		$this->candidate_id = null;
+		$this->save();
+
+		event(new InterviewWasCanceled($this));
 	}
 }

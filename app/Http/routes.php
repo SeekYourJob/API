@@ -1,6 +1,7 @@
 <?php
 
 use CVS\Company;
+use CVS\Download;
 use CVS\Slot;
 
 Route::get('/', function() {
@@ -8,9 +9,19 @@ Route::get('/', function() {
 });
 
 Route::get('test', function() {
+    $recruiterMailer = new \CVS\Mailer\RecruiterMailer();
+    $recruiterMailer->sendMapAndParkingCode(\CVS\Recruiter::find(1));
 
-    return Company::getInterviewsGroupedByCompanies();
-
+//    $recruiter = \CVS\User::find(53);
+//    $zipArchiveName = str_random(21);
+//
+//    $filesToZip = [];
+//    foreach ($recruiter->documents as $document)
+//        $filesToZip[storage_path('documents/' . $document->ido)] = $document->name;
+//
+//    touch(storage_path("zippings/$zipArchiveName.zip"));
+//
+//    $result = Download::zipFiles($filesToZip, storage_path("zippings/$zipArchiveName.zip"), true);
 });
 
 Route::get('test2', 'AuthenticateController@test2');
@@ -53,6 +64,8 @@ Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForR
 
 Route::post('messaging/send-email', 'MessagingController@sendEmail');
 Route::post('messaging/send-sms', 'MessagingController@sendSMS');
+Route::get('messaging/predefined-emails', 'MessagingController@getPredefinedEmails');
+Route::post('messaging/send-predefined-email', 'MessagingController@sendPredefinedEmail');
 Route::get('messaging/remaining-sms-credits', 'MessagingController@getRemainingSMSCredits');
 
 Route::post('documents', 'DocumentsController@create');

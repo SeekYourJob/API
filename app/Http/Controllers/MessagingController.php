@@ -6,8 +6,10 @@ use CVS\Http\Requests\MessagingSendEmailRequest;
 use CVS\Http\Requests;
 use CVS\Http\Requests\MessagingSendSMSRequest;
 use CVS\Mailer\Mailer;
+use CVS\Mailer\RecruiterMailer;
 use CVS\Texter\Texter;
 use CVS\User;
+use Illuminate\Http\Request;
 
 class MessagingController extends Controller
 {
@@ -49,5 +51,38 @@ class MessagingController extends Controller
 			$texter->sendToUser(User::whereId(app('Hashids')->decode($recipient)[0])->firstOrFail(), $request->input('message'));
 
 		return response()->json('Text message sending queued');
+	}
+
+	public function getPredefinedEmails()
+	{
+		return response()->json([
+			[
+				'key' => 'PARKING',
+				'title' => 'Recruteurs : plan d\'accès au parking + code'
+			],
+			[
+				'key' => 'RESUME',
+				'title' => 'Recruteurs : curriculums des candidats'
+			],
+
+		]);
+	}
+
+	public function sendPredefinedEmail(Request $request)
+	{
+		if ($request->has('predefinedEmailKey')) {
+			switch($request->get('predefinedEmailKey')) {
+				case 'PARKING':
+					return (new RecruiterMailer())->sendMapAndParkingCodeToRecruiters() ? response()->json('Predefined email sent') : abort(500);
+					break;
+				case 'RESUME':
+					//TODO
+					break;
+				default:
+					abort(422, "Predefined email not found");
+			}
+		}
+
+		abort(422, "Missing predefined email key");
 	}
 }
