@@ -7,6 +7,7 @@ use CVS\Http\Requests;
 use CVS\Http\Requests\MessagingSendSMSRequest;
 use CVS\Mailer\Mailer;
 use CVS\Mailer\RecruiterMailer;
+use CVS\Texter\RecruiterTexter;
 use CVS\Texter\Texter;
 use CVS\User;
 use Illuminate\Http\Request;
@@ -68,6 +69,16 @@ class MessagingController extends Controller
 		]);
 	}
 
+	public function getPredefinedSMS()
+	{
+		return response()->json([
+			[
+					'key' => 'PARKING',
+					'title' => 'Recruteurs : code d\'accès au parking'
+			],
+		]);
+	}
+
 	public function sendPredefinedEmail(Request $request)
 	{
 		if ($request->has('predefinedEmailKey')) {
@@ -84,5 +95,20 @@ class MessagingController extends Controller
 		}
 
 		abort(422, "Missing predefined email key");
+	}
+
+	public function sendPredefinedSMS(Request $request)
+	{
+		if ($request->has('predefinedSMSKey')) {
+			switch($request->get('predefinedSMSKey')) {
+				case 'PARKING':
+					return (new RecruiterTexter())->sendParkingCodeToRecruiters()  ? response()->json('Predefined SMS sent') : abort(500);
+					break;
+				default:
+					abort(422, "Predefined SMS not found");
+			}
+		}
+
+		abort(422, "Missing predefined SMS key");
 	}
 }

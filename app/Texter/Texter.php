@@ -30,7 +30,7 @@ class Texter
 		$this->dispatch(new SendTextToPhoneNumber($phoneNumber, $message, $historyId));
 	}
 
-	public function sendToUser(User $user, $message)
+	public function sendToUser(User $user, $message, $forceSend = false)
 	{
 		if (env('TEXT_MESSAGES') == 'DISABLED') {
 			\Log::warning('[TEXT] Text messages disabled. Sending aborted to ' . $user->phone);
@@ -42,7 +42,7 @@ class Texter
 			return;
 		}
 
-		if ( ! $user->sms_notifications) {
+		if (!$forceSend && !$user->sms_notifications) {
 			\Log::warning('[TEXT] Text notifications disabled. Sending aborted to ' . $user->firstname . ' ' . $user->lastname .' with message ' . $message);
 			return;
 		}

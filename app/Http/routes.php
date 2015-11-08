@@ -62,9 +62,11 @@ Route::get('interviews/candidate/{candidates}', 'InterviewsController@getAllForC
 Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
 
 
-Route::post('messaging/send-email', 'MessagingController@sendEmail');
 Route::post('messaging/send-sms', 'MessagingController@sendSMS');
+Route::post('messaging/send-email', 'MessagingController@sendEmail');
+Route::get('messaging/predefined-sms', 'MessagingController@getPredefinedSMS');
 Route::get('messaging/predefined-emails', 'MessagingController@getPredefinedEmails');
+Route::post('messaging/send-predefined-sms', 'MessagingController@sendPredefinedSMS');
 Route::post('messaging/send-predefined-email', 'MessagingController@sendPredefinedEmail');
 Route::get('messaging/remaining-sms-credits', 'MessagingController@getRemainingSMSCredits');
 
