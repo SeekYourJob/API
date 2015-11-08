@@ -43,12 +43,16 @@ class RecruitersController extends Controller
                     'email' => $request->input('user.email'),
                     'firstname' => $request->input('user.firstname'),
                     'lastname' => $request->input('user.lastname'),
-                    'phone' => $request->input('user.phone')
+                    'phone' => $request->input('user.phone'),
+                    'sms_notifications' => $request->input('user.sms_notifications'),
+                    'email_notifications' => $request->input('user.email_notifications')
                 ]);
 
                 // Updating recruiter
                 $recruiter->update([
-                    'company_id' => app('Hashids')->decode($request->input('company.ido'))[0]
+                    'company_id' => app('Hashids')->decode($request->input('company.ido'))[0],
+                    'lunch_option' => $request->input('lunch_option'),
+                    'parking_option' => $request->input('parking_option'),
                 ]);
 
                 return $recruiter;

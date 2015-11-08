@@ -98,11 +98,16 @@ class InterviewsController extends Controller
 	{
 		$this->authorize('interviews-can-register');
 
+		// Using the authenticated candidate except if coming from organizer who add an interview
 		$candidate = Auth::user()->profile;
-		$slot = Slot::find($request->get('slot_id'));
-		$company = Company::find(app('Hashids')->decode($request->get('company_ido'))[0]);
+		if (Auth::user()->organizer && $request->has('candidate_ido'))
+			$candidate = Candidate::find(app('Hashids')->decode($request->get('candidate_ido'))[0]);
 
-		$interview = Interview::register($company, $slot, $candidate, $error);
+		$slot = Slot::find(app('Hashids')->decode($request->get('slot_ido'))[0]);
+		$company = Company::find(app('Hashids')->decode($request->get('company_ido'))[0]);
+		$recruiter = $request->has('recruiter_ido') ? Recruiter::find(app('Hashids')->decode($request->get('recruiter_ido'))[0]) : null;
+
+		$interview = Interview::register($company, $slot, $candidate, $recruiter, $error);
 
 		if ($interview)
 			return response()->json(['status' => $interview]);
@@ -117,5 +122,10 @@ class InterviewsController extends Controller
 		$interview->free();
 
 		return response()->json('Interview canceled');
+	}
+
+	public function getAvailableStudentsForGivenSlot(Slot $slot)
+	{
+		return $slot->getAvailableCandidatesForSlot();
 	}
 }

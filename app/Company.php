@@ -55,6 +55,9 @@ class Company extends Model
 		);
 
 		foreach ($slots as &$slot) {
+			// Adding the Slot ido
+			$slot->slot_ido = app('Hashids')->encode($slot->slot_id);
+
 			// Converting raw SQL candidate_ids to PHP array
 			if (!is_null($slot->candidate_ids)) {
 				$slot->candidate_ids = array_map('intval', explode(',', $slot->candidate_ids));
@@ -87,6 +90,8 @@ class Company extends Model
 			if (!isset($companyToReturn['summary']['free_slots']))
 				$companyToReturn['summary']['free_slots'] = 0;
 			$companyToReturn['summary']['free_slots'] = $companyToReturn['summary']['free_slots'] + $slot->free_slots;
+
+			unset($slot->slot_id);
 		}
 
 		$companyToReturn['interviews'] = $slots;

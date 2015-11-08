@@ -28,4 +28,29 @@ class Slot extends Model
 	{
 		return date("H:i", strtotime($this->ends_at));
 	}
+
+	public function getAvailableCandidatesForSlot()
+	{
+		$slot = $this;
+
+		$availableCandidates = [];
+		$candidates = Candidate::with(['interviews', 'user'])->get();
+
+		foreach ($candidates as $candidate) {
+			$candidateIsAvailable = true;
+
+			foreach ($candidate->interviews as $interview) {
+				if ($interview->slot_id == $this->id) {
+					$candidateIsAvailable = false;
+					break;
+				}
+			}
+
+			if ($candidateIsAvailable)
+				$availableCandidates[] = $candidate;
+		}
+
+
+		return ['slots' => self::all(), 'candidates' => $availableCandidates];
+	}
 }

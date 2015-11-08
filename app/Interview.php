@@ -15,8 +15,8 @@ class Interview extends Model
 
 	protected $table = 'interviews';
 	protected $guarded = ['id'];
-	protected $hidden = ['id', 'created_at', 'updated_at'];
-	protected $appends = ['ido'];
+	protected $hidden = ['id', 'created_at', 'updated_at', 'slot_id', 'company_id', 'recruiter_id', 'candidate_id'];
+	protected $appends = ['ido', 'slot_ido'];
 
 	public function company()
 	{
@@ -36,6 +36,11 @@ class Interview extends Model
 	public function candidate()
 	{
 		return $this->belongsTo(Candidate::class);
+	}
+
+	public function getSlotIdoAttribute()
+	{
+		return app('Hashids')->encode($this->slot_id);
 	}
 
 	public static function getAllForAllCompanies()
@@ -122,7 +127,7 @@ class Interview extends Model
 		return $recruiterToAdd;
 	}
 
-	public static function register(Company $company, Slot $slot, Candidate $candidate, &$error = false)
+	public static function register(Company $company, Slot $slot, Candidate $candidate, Recruiter $recruiter = null, &$error = false)
 	{
 		$interview = false;
 
@@ -140,8 +145,15 @@ class Interview extends Model
 			}
 		}
 
+		$recruiters = [];
+		if (!is_null($recruiter)) {
+			$recruiters[] = $recruiter;
+		} else {
+			$recruiters = $company->recruiters;
+		}
+
 		$freeSlotFoundAndInterviewRegistered = false;
-		foreach ($company->recruiters as $recruiter) {
+		foreach ($recruiters as $recruiter) {
 			foreach ($recruiter->interviews as $interview) {
 				if ($interview->slot_id == $slot->id && is_null($interview->candidate_id) && !$freeSlotFoundAndInterviewRegistered) {
 					$interview->candidate_id = $candidate->id;
@@ -152,8 +164,9 @@ class Interview extends Model
 				}
 			}
 
-			if ($freeSlotFoundAndInterviewRegistered)
+			if ($freeSlotFoundAndInterviewRegistered) {
 				break;
+			}
 		}
 
 		event(new InterviewWasRegistered($interview));

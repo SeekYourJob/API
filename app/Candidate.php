@@ -12,7 +12,7 @@ class Candidate extends Model
 	protected $table = 'candidates';
 	protected $guarded = ['id'];
 	protected $hidden = ['id'];
-	protected $appends = ['ido', 'registered_slots'];
+	protected $appends = ['ido', 'registered_slots', 'registered_slots_obfuscated'];
 
 	public function user()
 	{
@@ -37,6 +37,16 @@ class Candidate extends Model
 			$slots[$interview->slot_id] = $interview->company->name;
 
 		asort($slots);
+
+		return ($slots);
+	}
+
+	public function getRegisteredSlotsObfuscatedAttribute()
+	{
+		$slots = [];
+
+		foreach ($this->registered_slots as $slot_id => $company_name)
+			$slots[app('Hashids')->encode($slot_id)] = $company_name;
 
 		return ($slots);
 	}
