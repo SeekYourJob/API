@@ -56,6 +56,8 @@ class MessagingController extends Controller
 
 	public function getPredefinedEmails()
 	{
+		$this->authorize('messaging-send-email');
+
 		return response()->json([
 			[
 				'key' => 'PARKING',
@@ -71,6 +73,8 @@ class MessagingController extends Controller
 
 	public function getPredefinedSMS()
 	{
+		$this->authorize('messaging-send-sms');
+
 		return response()->json([
 			[
 					'key' => 'PARKING',
@@ -81,6 +85,8 @@ class MessagingController extends Controller
 
 	public function sendPredefinedEmail(Request $request)
 	{
+		$this->authorize('messaging-send-email');
+
 		if ($request->has('predefinedEmailKey')) {
 			switch($request->get('predefinedEmailKey')) {
 				case 'PARKING':
@@ -99,6 +105,8 @@ class MessagingController extends Controller
 
 	public function sendPredefinedSMS(Request $request)
 	{
+		$this->authorize('messaging-send-sms');
+
 		if ($request->has('predefinedSMSKey')) {
 			switch($request->get('predefinedSMSKey')) {
 				case 'PARKING':
