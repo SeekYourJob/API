@@ -24,7 +24,7 @@ class UsersTableSeeder extends Seeder
         // Creating recruiters
         for ($i = 0; $i < 15; $i++) {
             $company = factory(CVS\Company::class)->create();
-            for ($j = 1; $j < rand(1, 4); $j++) {
+            for ($j = 0; $j < rand(1, 4); $j++) {
                 $user = factory(\CVS\User::class)->create(['email' => 'recruiter' . rand(0, 999999) . '@test.com']);
                 $recruiter = factory(CVS\Recruiter::class)->create(['company_id' => $company->id]);
                 $recruiter->user()->save($user);
