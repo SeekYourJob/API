@@ -33,8 +33,9 @@ Route::post('authenticate/refresh', 'AuthenticateController@refresh');
 Route::get('authenticate/check-email', 'AuthenticateController@checkEmail');
 Route::post('authenticate/pusher-token', 'AuthenticateController@pusherToken');
 Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganizer');
+Route::post('authenticate/do-reset-password', 'AuthenticateController@doResetPassword');
+Route::post('authenticate/ask-reset-password', 'AuthenticateController@askResetPassword');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
-
 
 Route::get('users', 'UsersController@getUsers');
 Route::get('users/groups', 'UsersController@getGroups');

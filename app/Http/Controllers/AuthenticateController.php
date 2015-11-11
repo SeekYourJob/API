@@ -8,11 +8,17 @@ use CVS\Document;
 use CVS\Http\Requests\RegisterRecruiterRequest;
 use CVS\Interview;
 use CVS\Jobs\RegisterRecruiter;
+use CVS\Mailer\RecruiterMailer;
+use CVS\Mailer\UserMailer;
 use CVS\Recruiter;
 use CVS\Texter\Texter;
 use CVS\User;
+use Exception;
+use Hash;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Password;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -137,4 +143,43 @@ class AuthenticateController extends Controller
 
         return response()->json($profile);
     }
+
+	public function doResetPassword(Request $request)
+	{
+		$this->validate($request, [
+			'password' => 'required',
+			'confirmation' => 'required|same:password',
+			'token' => 'required|exists:users,reset_password_token'
+		]);
+
+		try {
+			$user = User::whereResetPasswordToken($request->get('token'))->firstOrFail();
+			$user->password = Hash::make($request->get('password'));
+			$user->reset_password_token = null;
+			$user->save();
+
+			return response()->json('Password changed');
+
+		} catch (Exception $e) {
+			abort(500, 'Could not change password');
+		}
+
+
+
+		return $user;
+	}
+
+	public function askResetPassword(Request $request, UserMailer $userMailer)
+	{
+		$this->validate($request, ['email' => 'required|email']);
+
+		if ($user = User::whereEmail($request->get('email'))->firstOrFail()) {
+			$user->reset_password_token = str_random(42);
+			$user->save();
+
+			$userMailer->sendResetPassword($user);
+
+			return $user;
+		}
+	}
 }

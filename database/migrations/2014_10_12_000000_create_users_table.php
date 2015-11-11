@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->boolean('email_notifications')->default(true);
             $table->boolean('sms_notifications')->default(false);
             $table->boolean('organizer')->default(false);
+            $table->string('reset_password_token', 42)->nullable();
 
             $table->rememberToken();
             $table->timestamps();
