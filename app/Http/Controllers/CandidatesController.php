@@ -15,6 +15,11 @@ class CandidatesController extends Controller
 		$this->middleware('jwt.auth');
 	}
 
+    public function index()
+    {
+        return Candidate::with(['user'])->get();
+    }
+
     public function getInterviewsForCandidate(Candidate $candidate)
     {
 		return Company::getInterviewsGroupedByCompaniesForCandidate($candidate);

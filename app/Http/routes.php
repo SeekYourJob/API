@@ -49,6 +49,8 @@ Route::resource('companies', 'CompaniesController');
 
 Route::resource('recruiters', 'RecruitersController');
 
+Route::resource('candidates', 'CandidatesController');
+
 Route::get('interviews', 'InterviewsController@getAll');
 Route::post('interviews/cancel', 'InterviewsController@cancel');
 Route::post('interviews', 'InterviewsController@createInterview');
