@@ -3,6 +3,7 @@
 Homestead.yaml
 .env
 .DS_Store
+composer.lock
 
 .idea
 _ide_helper.php
