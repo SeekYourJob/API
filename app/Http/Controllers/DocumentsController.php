@@ -31,11 +31,19 @@ class DocumentsController extends Controller
             'size_readable' => Document::getReadableFilesize($document->getClientSize())
         ]);
 
-        if (array_key_exists('user', $data)) {
+        if (is_array($data) && array_key_exists('user', $data)) {
             $user = User::whereId(app('Hashids')->decode($data['user'])[0])->firstOrFail();
+
+            if($user->profile_type == 'CVS\Candidate') {
+                foreach ($user->documents as $document) {
+                    $document->dissociate();
+                    $document->save();
+                }
+            }
+
             $user->documents()->save($documentObject);
         }
-        \Log::alert($document->getClientOriginalName());
+
         $info = $document->move(storage_path('documents/'),$documentObject->ido);
 
         if ($documentObject) {
@@ -52,7 +60,8 @@ class DocumentsController extends Controller
         foreach ($user->documents as $document) {
             $response[] = [
                 'ido' => $document->ido,
-                'name' => $document->name
+                'name' => $document->name,
+                'status' => $document->status
             ];
         }
 

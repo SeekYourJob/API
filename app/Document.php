@@ -30,4 +30,9 @@ class Document extends Model
 
 		return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . @$size[$factor];
 	}
+
+    public function dissociate()
+    {
+        return $this->user()->dissociate();
+    }
 }
