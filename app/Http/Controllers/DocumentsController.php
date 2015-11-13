@@ -71,7 +71,58 @@ class DocumentsController extends Controller
         }
 
         return  response()->json($response);
+    }
 
+    public function getAllFilesForCandidates()
+    {
+        \Log::alert('olel 1');
+        $this->authorize('show-all-users');
+        \Log::alert('olel 2');
+        $documents = Document::with('user')->whereHas('user',function($query) {
+                      $query->where('profile_type', 'CVS\Candidate');
+                    })->where('status', 'PENDING')->whereNotNull('user_id')->get();
+        \Log::alert('olel 3');
+        $response = [];
+        foreach ($documents as $document)
+        {
+            \Log::alert('olel 3.5');
+            $user = $document->user;
+            \Log::alert($document);
+           $response[] = [
+                    'ido' => $document->ido,
+                    'name' => $document->name,
+                    'status' => $document->status,
+                    'user' => [
+                        'ido' => $user->ido,
+                        'firstname' => $user->firstname,
+                        'lastname' => $user->lastname
+                ]
+           ];
+        }
+        \Log::alert('olel 4');
+        return  response()->json($response);
+    }
+
+    public function acceptDocument(Document $document) {
+
+        $this->authorize('show-all-users');
+
+        $document->status = 'ACCEPTED';
+        $document->save();
+
+        return response('');
+    }
+
+    public function refuseDocument(Document $document) {
+
+        $this->authorize('show-all-users');
+
+        $document->status = 'REFUSED';
+        $document->save();
+
+        //TODO MAILER
+
+        return response('');
     }
 
     public function deleteFile(Document $document)

@@ -74,7 +74,10 @@ Route::post('messaging/send-predefined-email', 'MessagingController@sendPredefin
 Route::get('messaging/remaining-sms-credits', 'MessagingController@getRemainingSMSCredits');
 
 Route::post('documents', 'DocumentsController@create');
+Route::get('documents/candidates', 'DocumentsController@getAllFilesForCandidates');
 Route::get('documents/user/{user}', 'DocumentsController@getFilesForUser');
 Route::get('documents/request-token/{documents}', 'DocumentsController@getRequestTokenForDocument');
 Route::get('documents/{requestToken}', 'DocumentsController@getFile');
 Route::delete('documents/{documents}', 'DocumentsController@deleteFile');
+Route::post('documents/{documents}/accept', 'DocumentsController@acceptDocument');
+Route::post('documents/{documents}/refuse', 'DocumentsController@refuseDocument');
