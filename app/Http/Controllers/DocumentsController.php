@@ -28,13 +28,14 @@ class DocumentsController extends Controller
             'name' => $document->getClientOriginalName(),
             'extension' => $document->getClientOriginalExtension(),
             'size' => $document->getClientSize(),
-            'size_readable' => Document::getReadableFilesize($document->getClientSize())
+            'size_readable' => Document::getReadableFilesize($document->getClientSize()),
+            'status' => 'PENDING'
         ]);
 
         if (is_array($data) && array_key_exists('user', $data)) {
             $user = User::whereId(app('Hashids')->decode($data['user'])[0])->firstOrFail();
 
-            if($user->profile_type == 'CVS\Candidate') {
+            if ($user->profile_type == 'CVS\Candidate') {
                 foreach ($user->documents as $document) {
                     $document->dissociate();
                     $document->save();
@@ -47,10 +48,14 @@ class DocumentsController extends Controller
         $info = $document->move(storage_path('documents/'),$documentObject->ido);
 
         if ($documentObject) {
-            return response()->json(['ido' => $documentObject->ido, 'name' => $documentObject->name]);
+            return response()->json([
+                'ido' => $documentObject->ido,
+                'name' => $documentObject->name,
+                'status' => $documentObject->status
+            ]);
         }
 
-        abort(500);
+        abort(500, "Could not save document");
     }
 
     public function getFilesForUser(User $user)
