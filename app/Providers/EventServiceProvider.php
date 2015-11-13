@@ -23,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         'CVS\Events\InterviewWasCanceled' => [
             'CVS\Listeners\EmailCandidateInterviewWasCanceled',
         ],
+        'CVS\Events\ResumeWasRefused' => [
+            'CVS\Listeners\EmailCandidateResumeWasRefused',
+        ],
     ];
 
     /**
