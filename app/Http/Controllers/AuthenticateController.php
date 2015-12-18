@@ -29,11 +29,6 @@ class AuthenticateController extends Controller
 		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer', 'pusherToken']]);
 	}
 
-	public function test2()
-	{
-		echo app('Pusher')->presence_auth('presence-interviews-channel', 'socket id', 42, []);
-	}
-
 	public function checkEmail(Request $request)
 	{
 		if (User::where('email', $request->get('email'))->count()) {
@@ -130,9 +125,10 @@ class AuthenticateController extends Controller
 
         if ($request->has('showDetails')) {
             if ($user->profile_type === 'CVS\\Recruiter') {
-                $recruiter = Recruiter::whereId($user->profile_id)->first();
-                $interviews = Interview::getAllForRecruiter($recruiter);
-                $profile['user']['recruiter'] = $interviews;
+	            $profile['user']['recruiter'] = [
+		            'interviews' => Interview::getAllForRecruiter($user->profile)['interviews'],
+		            'company' => $user->profile->company
+	            ];
 
             } elseif ($user->profile_type === 'CVS\\Candidate') {
 //                $profile['user']['candidate'] = [

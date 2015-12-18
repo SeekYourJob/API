@@ -31,8 +31,10 @@ class InviteParticipantsFromRecruiterRegister extends Job implements SelfHandlin
         $userMailer = new UserMailer;
 
         foreach($this->emails as $email) {
-            WaitingList::updateOrCreate(['email' => $email], ['sent' => true]);
-            $userMailer->inviteParticipant($this->referral, $email);
+            if (!User::whereEmail($email)->first()) {
+                WaitingList::updateOrCreate(['email' => $email], ['sent' => true]);
+                $userMailer->inviteParticipant($this->referral, $email);
+            }
         }
     }
 }

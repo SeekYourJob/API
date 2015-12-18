@@ -31,45 +31,47 @@ class RegisterParticipantsFromRecruiterRegister extends Job implements SelfHandl
     public function handle()
     {
         foreach ($this->participants as $participant) {
-            \DB::transaction(function() use($participant) {
-                try {
-                    $randomPassword = str_random(10);
+            if (!User::whereEmail($participant['email'])->first()) {
+                \DB::transaction(function() use($participant) {
+                    try {
+                        $randomPassword = str_random(10);
 
-                    // Creating the User
-                    $user = User::create([
-                        'email' => $participant['email'],
-                        'password' => bcrypt($randomPassword),
-                        'firstname' => $participant['firstname'],
-                        'lastname' => $participant['lastname'],
-                        'phone' => NULL,
-                        'email_notifications' => true,
-                        'sms_notifications' => false
-                    ]);
+                        // Creating the User
+                        $user = User::create([
+                            'email' => $participant['email'],
+                            'password' => bcrypt($randomPassword),
+                            'firstname' => $participant['firstname'],
+                            'lastname' => $participant['lastname'],
+                            'phone' => NULL,
+                            'email_notifications' => true,
+                            'sms_notifications' => true
+                        ]);
 
-                    // Getting or creating the Company
-                    $company = $this->referral->company;
+                        // Getting or creating the Company
+                        $company = $this->referral->company;
 
-                    // Creating the Recruiter
-                    $recruiter = new Recruiter;
-                    $recruiter->company()->associate($company);
-                    $recruiter->availability = $participant['availability'];
-                    $recruiter->parking_option = (isset($participant['parkingOption']) && $participant['parkingOption']) ? true : false;
-                    $recruiter->lunch_option = (isset($participant['lunchOption']) && $participant['lunchOption']) ? true : false;
-                    $recruiter->save();
+                        // Creating the Recruiter
+                        $recruiter = new Recruiter;
+                        $recruiter->company()->associate($company);
+                        $recruiter->availability = $participant['availability'];
+                        $recruiter->parking_option = (isset($participant['parkingOption']) && $participant['parkingOption']) ? true : false;
+                        $recruiter->lunch_option = (isset($participant['lunchOption']) && $participant['lunchOption']) ? true : false;
+                        $recruiter->save();
 
-                    // Associating the Recruiter to the User
-                    $recruiter->user()->save($user);
+                        // Associating the Recruiter to the User
+                        $recruiter->user()->save($user);
 
-                    // Associating interviews to the Recruiter
-                    $this->dispatch(new AddInterviewsToRecruiter($recruiter));
+                        // Associating interviews to the Recruiter
+                        $this->dispatch(new AddInterviewsToRecruiter($recruiter));
 
-                    event(new InvitedRecruiterWasRegistered($this->referral, $recruiter, $randomPassword));
+                        event(new InvitedRecruiterWasRegistered($this->referral, $recruiter, $randomPassword));
 
-                    return $recruiter;
-                } catch (Exception $e) {
-                    return false;
-                }
-            });
+                        return $recruiter;
+                    } catch (Exception $e) {
+                        return false;
+                    }
+                });
+            }
         }
     }
 }

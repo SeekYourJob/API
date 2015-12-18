@@ -50,14 +50,15 @@ class RegisterRecruiter extends Job implements SelfHandling
                     'lastname' => $userInputs['lastname'],
                     'phone' => User::getInternationalPhoneNumber($userInputs['phone']),
                     'email_notifications' => true,
-                    'sms_notifications' => false
+                    'sms_notifications' => true
                 ]);
 
                 // Getting or creating the Company
-                $company = Company::firstOrCreate([
+                $company = Company::firstOrNew([
                     'name' => $recruiterInputs['company']['name'],
-                    'job_types' => $recruiterInputs['company']['jobTypes']
-               ]);
+                ]);
+                $company->job_types = $recruiterInputs['company']['jobTypes'];
+                $company->save();
 
                 // Creating the Recruiter
                 $recruiter = new Recruiter;
@@ -72,10 +73,12 @@ class RegisterRecruiter extends Job implements SelfHandling
 
                 // Associating interviews to the Recruiter
                 $this->dispatch(new AddInterviewsToRecruiter($recruiter));
+
                 // Associating Documents to the User
                 if (isset($recruiterInputs['documents']))
                     foreach ($recruiterInputs['documents'] as $document)
                         $user->documents()->save(Document::find(app('Hashids')->decode($document['ido'])[0]));
+
                 // Inviting other participants by email
                 $this->dispatch(new InviteParticipantsFromRecruiterRegister($recruiter, $participantsEmails));
 
