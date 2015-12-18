@@ -5,7 +5,6 @@ use CVS\Download;
 use CVS\Slot;
 
 Route::get('/', function() {
-    Bugsnag::notifyError('ErrorType', 'Test Error');
     return response()->json('Welcome to the SeekYourJob API!');
 });
 
