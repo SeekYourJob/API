@@ -31,7 +31,7 @@ class AuthenticateController extends Controller
 
 	public function checkEmail(Request $request)
 	{
-		if (User::where('email', $request->get('email'))->count()) {
+		if (User::where('email', $request->get('email'))) {
 			return response()->json(['error' => 'email_already_taken'], 409);
 		}
 
