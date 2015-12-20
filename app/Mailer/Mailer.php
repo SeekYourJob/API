@@ -40,6 +40,8 @@ class Mailer
 			'lastname' => $user->lastname
 		]);
 
+        \Log::alert('sending to user :'.$user);
+
 		// Sending email...
 		$this->sendToEmail($user->email, $user->firstname . ' ' . $user->lastname, $subject, $view, $allData, $attachments, false);
 

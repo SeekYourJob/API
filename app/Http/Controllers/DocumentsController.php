@@ -4,6 +4,7 @@ namespace CVS\Http\Controllers;
 
 use Auth;
 use CVS\Download;
+use CVS\Events\ResumeWasRefused;
 use Input;
 use Response;
 use CVS\Document;
@@ -116,7 +117,8 @@ class DocumentsController extends Controller
         $document->status = 'REJECTED';
         $document->save();
 
-        //TODO MAILER
+        // Triggering the corresponding event
+        event(new ResumeWasRefused($document));
 
         return response('');
     }

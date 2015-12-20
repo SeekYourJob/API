@@ -93,7 +93,7 @@ class MessagingController extends Controller
 					return (new RecruiterMailer())->sendMapAndParkingCodeToRecruiters() ? response()->json('Predefined email sent') : abort(500);
 					break;
 				case 'RESUME':
-					//TODO
+					return {new RecruiterMailer()}
 					break;
 				default:
 					abort(422, "Predefined email not found");
