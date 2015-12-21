@@ -58,3 +58,7 @@ $factory->define(CVS\Slot::class, function ($faker) {
         'availability' => $faker->randomElement(['AM', 'PM'])
     ];
 });
+
+$factory->define(CVS\Interview::class,function () {
+    return [];
+});
