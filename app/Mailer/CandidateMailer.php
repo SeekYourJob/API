@@ -12,13 +12,12 @@ class CandidateMailer extends Mailer
         $data = [
             'documentName' => $document->name,
         ];
-        \Log::alert('document : '.$document->name);
-        \Log::alert('user : '.$user->email);
 
         $this->sendToUser($user,
             'Votre CV a été refusé',
             'emails.refuse-document',
-            $data);
+            $data,[], true
+        );
 
         return true;
     }

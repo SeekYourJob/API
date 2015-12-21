@@ -2,10 +2,8 @@
 
 namespace CVS\Events;
 
-use CVS\Events\Event;
 use CVS\Document;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class ResumeWasRefused extends Event
 {
