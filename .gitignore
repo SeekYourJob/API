@@ -11,3 +11,4 @@ _ide_helper_models.php
 storage/waiting_s3
 storage/documents
 storage/zippings
+storage/tmp

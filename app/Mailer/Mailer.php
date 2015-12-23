@@ -13,8 +13,9 @@ class Mailer
 			$message->to($email, $identity);
 			$message->subject($subject);
 
-			foreach($attachments as $attachment)
-				$message->attach($attachment);
+			foreach($attachments as $attachment) {
+                $message->attach($attachment);
+            }
 		});
 
 		// Saving in History...
@@ -41,7 +42,6 @@ class Mailer
 		]);
 
         \Log::alert('sending to user :'.$user);
-
 		// Sending email...
 		$this->sendToEmail($user->email, $user->firstname . ' ' . $user->lastname, $subject, $view, $allData, $attachments, false);
 

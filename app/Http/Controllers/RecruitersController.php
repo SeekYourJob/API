@@ -4,7 +4,6 @@ namespace CVS\Http\Controllers;
 
 use Auth;
 use CVS\Interview;
-use CVS\Jobs\AddInterviewsToRecruiter;
 use CVS\Recruiter;
 use Illuminate\Http\Request;
 
