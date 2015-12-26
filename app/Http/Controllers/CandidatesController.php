@@ -2,6 +2,7 @@
 
 namespace CVS\Http\Controllers;
 
+use Auth;
 use CVS\Candidate;
 use CVS\Company;
 use Illuminate\Http\Request;
@@ -20,8 +21,20 @@ class CandidatesController extends Controller
         return Candidate::with(['user'])->get();
     }
 
+    public function show(Candidate $candidate)
+    {
+        if (Auth::user()->organizer || Auth::user()->id === $candidate->user->id) {
+            return $candidate::with(['user'])
+                ->whereId($candidate->id)
+                ->first();
+        }
+
+        abort(401);
+    }
+
     public function getInterviewsForCandidate(Candidate $candidate)
     {
 		return Company::getInterviewsGroupedByCompaniesForCandidate($candidate);
     }
+
 }
