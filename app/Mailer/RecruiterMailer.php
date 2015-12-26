@@ -33,8 +33,8 @@ class RecruiterMailer extends Mailer
         if (!is_null($recruiter))
             $recruiters[] = $recruiter;
         else
-            $recruiters = Recruiter::whereId('3')->get();
-//            $recruiters = Recruiter::all();
+            //$recruiters = Recruiter::whereId('3')->get();
+            $recruiters = Recruiter::all();
             $attachments = [];
         foreach ($recruiters as $recruiter) {
             if (count($recruiter->interviews)) {
