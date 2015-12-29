@@ -63,6 +63,14 @@ class InterviewsController extends Controller
         if (Auth::user()->organizer || Auth::user()->id == $candidate->user->id) {
             return Interview::getAllForCandidate($candidate);
         }
+        abort(401);
+	}
+
+    public function getAllForCandidateByCompany(Candidate $candidate)
+    {
+        if (Auth::user()->organizer || Auth::user()->id == $candidate->user->id) {
+            return Company::getInterviewsGroupedByCompaniesForCandidate($candidate);
+        }
 
         abort(401);
 	}
