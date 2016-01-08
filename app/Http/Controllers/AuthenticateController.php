@@ -111,6 +111,7 @@ class AuthenticateController extends Controller
         $profile = ['user' => [
             'ido' => $user->ido,
             'profile' => $user->profile_type,
+	        'profile_ido' => $user->profile->ido,
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
             'email' => $user->email,
