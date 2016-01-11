@@ -12,7 +12,7 @@ class Candidate extends Model
 	protected $table = 'candidates';
 	protected $guarded = ['id'];
 	protected $hidden = ['id'];
-	protected $appends = ['ido', 'registered_slots', 'registered_slots_obfuscated'];
+	protected $appends = ['ido', 'registered_slots', 'registered_slots_obfuscated', 'can_register_to_interviews'];
 
 	public function user()
 	{
@@ -49,6 +49,20 @@ class Candidate extends Model
 			$slots[app('Hashids')->encode($slot_id)] = $company_name;
 
 		return ($slots);
+	}
+
+	public function canRegisterToInterviewsAttribute()
+	{
+		return $this->canRegisterToInterviews();
+	}
+
+	public function canRegisterToInterviews()
+	{
+		foreach ($this->user->documents as &$document)
+			if ($document->status === 'ACCEPTED')
+				return true;
+
+		return false;
 	}
 
 	public static function getAllIdos()

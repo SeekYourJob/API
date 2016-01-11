@@ -42,9 +42,9 @@ class Company extends Model
 	public static function getInterviewsForCompany(Company $company, $candidate = false)
 	{
 		$companyToReturn = [
-				'company' => $company,
-				'interviews' => [],
-				'summary' => []
+			'company' => $company,
+			'interviews' => [],
+			'summary' => [],
 		];
 
 		$slots = DB::select('
@@ -66,9 +66,10 @@ class Company extends Model
 				if ($candidate) {
 					// Checking if the Candidate has an interview with the current Company
 					if (in_array($candidate->id, $slot->candidate_ids)) {
+						$companyToReturn['hasInterviewWithCandidate'] = true;
 						$slot->interview = Interview::where('company_id', $company->id)
-								->where('candidate_id', $candidate->id)
-								->first()->ido;
+							->where('candidate_id', $candidate->id)
+							->first()->ido;
 					}
 				}
 			}
@@ -115,8 +116,10 @@ class Company extends Model
 	{
 		$response = ['slots' => Slot::all(), 'companies' => []];
 
-		foreach(self::all() as &$company)
+		foreach(self::orderBy('name', 'ASC')->get() as &$company) {
 			$response['companies'][] = self::getInterviewsForCompany($company, $candidate);
+		}
+
 
 		return $response;
 	}

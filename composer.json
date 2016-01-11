@@ -17,7 +17,8 @@
         "guzzlehttp/guzzle": "~6.0",
         "pda/pheanstalk": "~3.0",
         "vinkla/hashids": "^2.1",
-        "pusher/pusher-php-server": "^2.2"
+        "pusher/pusher-php-server": "^2.2",
+        "bugsnag/bugsnag-laravel": "1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
