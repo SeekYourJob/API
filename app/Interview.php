@@ -46,7 +46,9 @@ class Interview extends Model
 	public static function getAllForAllCompanies()
 	{
 		$allSlots = Slot::all();
-		$allCompanies = Company::with(['recruiters.interviews.candidate.user', 'recruiters.user'])->get();
+		$allCompanies = Company::with(['recruiters.interviews.candidate.user', 'recruiters.user'])
+			->orderBy('name', 'ASC')
+			->get();
 
 		$allInterviewsByCompany = [];
 		foreach ($allCompanies as $company) {

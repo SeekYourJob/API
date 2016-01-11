@@ -116,7 +116,7 @@ class Company extends Model
 	{
 		$response = ['slots' => Slot::all(), 'companies' => []];
 
-		foreach(self::all() as &$company) {
+		foreach(self::orderBy('name', 'ASC')->get() as &$company) {
 			$response['companies'][] = self::getInterviewsForCompany($company, $candidate);
 		}
 

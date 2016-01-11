@@ -8,6 +8,8 @@ Route::get('/', function() {
     return response()->json('Welcome to the SeekYourJob API!');
 });
 
+Route::get('/test', 'AuthenticateController@test');
+
 
 Route::get('me', 'AuthenticateController@me');
 Route::get('logout', 'AuthenticateController@logout');

@@ -26,7 +26,14 @@ class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer', 'pusherToken']]);
+		$this->middleware('jwt.auth', ['only' => ['test', 'me', 'checkOrganizer', 'pusherToken']]);
+	}
+
+	public function test()
+	{
+		dd(Auth::user()->profile->canRegisterToInterviews());
+
+		return Auth::user()->profile;
 	}
 
 	public function checkEmail(Request $request)
@@ -132,9 +139,9 @@ class AuthenticateController extends Controller
 	            ];
 
             } elseif ($user->profile_type === 'CVS\\Candidate') {
-//                $profile['user']['candidate'] = [
-//		            'candidate' => $user->profile
-//	            ];
+                $profile['user']['candidate'] = [
+		            'canRegisterToInterviews' => $user->profile->canRegisterToInterviews()
+	            ];
             }
         }
 
