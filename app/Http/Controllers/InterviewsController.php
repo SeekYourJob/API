@@ -124,8 +124,17 @@ class InterviewsController extends Controller
 		return response()->json('Interview canceled');
 	}
 
-	public function getAvailableStudentsForGivenSlot(Slot $slot)
+	public function getAvailableStudentsForGivenSlotAndCompany(Request $request)
 	{
-		return $slot->getAvailableCandidatesForSlot();
+		if (!$request->has(['idoCompany', 'idoSlot'])) {
+			abort(422, 'Missing fields');
+		}
+
+		$slot = Slot::findByIdo($request->get('idoSlot'));
+		$company = Company::findByIdo($request->get('idoCompany'));
+
+		return [
+			'slots' => Slot::all(),
+			'candidates' => Candidate::getAvailableForSlotAndCompany($slot, $company)];
 	}
 }

@@ -51,7 +51,7 @@ class Candidate extends Model
 		return ($slots);
 	}
 
-	public function canRegisterToInterviewsAttribute()
+	public function getCanRegisterToInterviewsAttribute()
 	{
 		return $this->canRegisterToInterviews();
 	}
@@ -109,5 +109,27 @@ class Candidate extends Model
 				$gradesAndEducations[$candidate->grade . ' ' . $candidate->education][] = $candidate->user->ido;
 
 		return $gradesAndEducations;
+	}
+
+	public static function getAvailableForSlotAndCompany(Slot $slot, Company $company)
+	{
+		$availableCandidates = [];
+		$candidates = Candidate::with(['interviews', 'user'])->get();
+
+		foreach ($candidates as $candidate) {
+			$candidateIsAvailable = true;
+
+			foreach ($candidate->interviews as $interview) {
+				if ($interview->slot_id == $slot->id || $interview->company_id == $company->id) {
+					$candidateIsAvailable = false;
+					break;
+				}
+			}
+
+			if ($candidateIsAvailable)
+				$availableCandidates[] = $candidate;
+		}
+
+		return $availableCandidates;
 	}
 }

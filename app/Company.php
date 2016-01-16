@@ -23,6 +23,11 @@ class Company extends Model
 		return $this->hasMany(Recruiter::class);
 	}
 
+	public static function findByIdo($ido)
+	{
+		return self::find(app('Hashids')->decode($ido)[0]);
+	}
+
 	public static function getIdosGroupedByCompanies()
 	{
 		$companies = self::with('recruiters.user')->get();
