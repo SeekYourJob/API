@@ -30,6 +30,7 @@ Route::get('users/{user}', 'UsersController@getUser');
 Route::delete('users/{user}', 'UsersController@deleteUser');
 
 Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters'); // TOK
+Route::get('companies/{companies}/offers', 'CompaniesController@showOffers');
 Route::resource('companies', 'CompaniesController');
 
 Route::resource('recruiters', 'RecruitersController');

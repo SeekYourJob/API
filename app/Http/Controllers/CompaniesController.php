@@ -57,6 +57,16 @@ class CompaniesController extends Controller
     }
 
     /**
+     * @param Company $company
+     * Returns the Offers of the specified Company
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showOffers(Company $company)
+    {
+        return response()->json($company->getOffers());
+    }
+
+    /**
      * @param Request $request
      * @param Company $company
      * Updates a Company

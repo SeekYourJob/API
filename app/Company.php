@@ -133,4 +133,15 @@ class Company extends Model
 	{
 		return self::getInterviewsGroupedByCompanies($candidate);
 	}
+
+	public function getOffers()
+	{
+		$offers = [];
+
+		foreach ($this->recruiters as $recruiter)
+			foreach ($recruiter->user->documents as $offer)
+				$offers[] = $offer;
+
+		return $offers;
+	}
 }

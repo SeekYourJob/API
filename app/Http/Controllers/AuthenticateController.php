@@ -31,9 +31,7 @@ class AuthenticateController extends Controller
 
 	public function test()
 	{
-		dd(Auth::user()->profile->canRegisterToInterviews());
-
-		return Auth::user()->profile;
+		return Company::find(2)->getOffers();
 	}
 
 	public function checkEmail(Request $request)
