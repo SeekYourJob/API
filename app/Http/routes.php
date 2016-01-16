@@ -35,6 +35,7 @@ Route::resource('companies', 'CompaniesController');
 
 Route::resource('recruiters', 'RecruitersController');
 
+Route::get('candidates/{candidates}/summary', 'CandidatesController@showSummary');
 Route::resource('candidates', 'CandidatesController');
 
 Route::get('interviews', 'InterviewsController@getAll');
