@@ -68,3 +68,7 @@ Route::get('documents/{requestToken}', 'DocumentsController@getFile');
 Route::delete('documents/{documents}', 'DocumentsController@deleteFile');
 Route::post('documents/{documents}/accept', 'DocumentsController@acceptDocument');
 Route::post('documents/{documents}/refuse', 'DocumentsController@refuseDocument');
+
+Route::get('locations', 'LocationsController@getAll');
+Route::put('locations/update-interview/{interviews}', 'LocationsController@updateInterview');
+Route::put('locations/update-recruiter/{recruiters}', 'LocationsController@updateRecruiter');

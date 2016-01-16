@@ -38,6 +38,11 @@ class Interview extends Model
 		return $this->belongsTo(Candidate::class);
 	}
 
+	public function location()
+	{
+		return $this->belongsTo(Location::class);
+	}
+
 	public function getSlotIdoAttribute()
 	{
 		return app('Hashids')->encode($this->slot_id);
@@ -100,10 +105,14 @@ class Interview extends Model
 					'begins_at' => $slot->begins_at_formatted,
 					'ends_at' => $slot->ends_at_formatted
 				],
+				'location' => false,
 				'status' => InterviewStatus::UNAVAILABLE
 			];
 
 			foreach ($recruiter->interviews as $interview) {
+				// Add the location
+				$interviewToAdd['location'] = $interview->location;
+
 				// Check if the recruiter is available for the specified slot
 				if (isset($slot->id, $interview->slot_id) && $slot->id == $interview->slot_id) {
 					$interviewToAdd['ido'] = $interview->ido;
