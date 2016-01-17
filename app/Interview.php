@@ -111,7 +111,7 @@ class Interview extends Model
 
 			foreach ($recruiter->interviews as $interview) {
 				// Add the location
-				$interviewToAdd['location'] = $interview->location;
+				$interviewToAdd['location'] = (isset($interview->location)) ? $interview->location : false;
 
 				// Check if the recruiter is available for the specified slot
 				if (isset($slot->id, $interview->slot_id) && $slot->id == $interview->slot_id) {
