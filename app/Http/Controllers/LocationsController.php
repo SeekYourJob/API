@@ -47,6 +47,7 @@ class LocationsController extends Controller
 			abort(422, 'Missing new location');
 		}
 
+		// Removing location if asked...
 		if ($request->get('idoLocation') == 'NONE') {
 			foreach ($recruiter->interviews as $interview) {
 				$interview->location_id = null;
@@ -56,8 +57,18 @@ class LocationsController extends Controller
 			return response()->json('Locations updated');
 		}
 
-		
+		$location = Location::findByIdo($request->get('idoLocation'));
+		$results = ['success' => [], 'errors' => []];
+		foreach ($recruiter->interviews as $interview) {
+			try {
+				$interview->location_id = $location->id;
+				$interview->save();
+				$results['success'][] = $interview;
+			} catch (\Exception $e) {
+				$results['errors'][] = $interview;
+			}
+		}
 
-		return response()->json('Locations updated');
+		return response()->json($results, (count($results['errors'])) ? 409 : 200);
 	}
 }

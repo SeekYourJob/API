@@ -15,7 +15,7 @@ class Interview extends Model
 
 	protected $table = 'interviews';
 	protected $guarded = ['id'];
-	protected $hidden = ['id', 'created_at', 'updated_at', 'slot_id', 'company_id', 'recruiter_id', 'candidate_id'];
+	protected $hidden = ['id', 'created_at', 'updated_at', 'slot_id', 'company_id', 'recruiter_id', 'candidate_id', 'location_id'];
 	protected $appends = ['ido', 'slot_ido'];
 
 	public function company()
