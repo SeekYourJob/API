@@ -111,6 +111,10 @@ class Interview extends Model
 
 			foreach ($recruiter->interviews as $interview) {
 				// Add the location
+
+				\Log::info($interview->toArray());
+				\Log::info($interview->location->toArray());
+
 				$interviewToAdd['location'] = (isset($interview->location)) ? $interview->location : false;
 
 				// Check if the recruiter is available for the specified slot
