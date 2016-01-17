@@ -115,7 +115,7 @@ class Interview extends Model
 				\Log::info($interview->toArray());
 				\Log::info($interview->location->toArray());
 
-				$interviewToAdd['location'] = (isset($interview->location)) ? $interview->location : false;
+				$interviewToAdd['location'] = (!is_null($interview->location)) ? $interview->location : false;
 
 				// Check if the recruiter is available for the specified slot
 				if (isset($slot->id, $interview->slot_id) && $slot->id == $interview->slot_id) {
