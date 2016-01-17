@@ -51,7 +51,7 @@ class Interview extends Model
 	public static function getAllForAllCompanies()
 	{
 		$allSlots = Slot::all();
-		$allCompanies = Company::with(['recruiters.interviews.candidate.user', 'recruiters.user'])
+		$allCompanies = Company::with(['recruiters.interviews.candidate.user', 'recruiters.interviews.location', 'recruiters.user'])
 			->orderBy('name', 'ASC')
 			->get();
 
@@ -86,7 +86,7 @@ class Interview extends Model
 
 	public static function getAllForRecruiter(Recruiter $recruiter, &$allSlots = false)
 	{
-		if ( ! $allSlots) {
+		if (!$allSlots) {
 			$allSlots = Slot::all();
 		}
 
@@ -109,17 +109,14 @@ class Interview extends Model
 				'status' => InterviewStatus::UNAVAILABLE
 			];
 
-			foreach ($recruiter->interviews as $interview) {
-				// Add the location
-				if (!is_null($interview->location)) {
-					$interviewToAdd['location'] = $interview->location;
-				}
-
+			foreach ($recruiter->interviews as &$interview) {
 				// Check if the recruiter is available for the specified slot
 				if (isset($slot->id, $interview->slot_id) && $slot->id == $interview->slot_id) {
 					$interviewToAdd['ido'] = $interview->ido;
 					$interviewToAdd['status'] = InterviewStatus::FREE;
-					if (! is_null($interview->candidate)) {
+					$interviewToAdd['location'] = $interview->location;
+
+					if (!is_null($interview->candidate)) {
 						$interviewToAdd['status'] = InterviewStatus::TAKEN;
 						$interviewToAdd['candidate'] = [
 							'ido' => $interview->candidate->ido,
