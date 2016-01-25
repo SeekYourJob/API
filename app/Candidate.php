@@ -96,4 +96,10 @@ class Candidate extends Model
 
 		return $gradesAndEducations;
 	}
+
+    public static function getIsValidGrade($grade)
+    {
+        $grades = ['M1', 'M2', 'L3'];
+        return in_array($grade,$grades);
+    }
 }
