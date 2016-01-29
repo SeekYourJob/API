@@ -11,7 +11,7 @@ class SlotsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('slots')->truncate();
+//        DB::table('slots')->truncate();
 
         factory(\CVS\Slot::class)->create(['begins_at' => '2015-02-12 09:00:00', 'ends_at' => '2015-02-12 09:45:00', 'availability' => 'AM']);
         factory(\CVS\Slot::class)->create(['begins_at' => '2015-02-12 09:45:00', 'ends_at' => '2015-02-12 10:30:00', 'availability' => 'AM']);

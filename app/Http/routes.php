@@ -8,23 +8,8 @@ Route::get('/', function() {
     return response()->json('Welcome to the SeekYourJob API!');
 });
 
-Route::get('test', function() {
-    $recruiterMailer = new \CVS\Mailer\RecruiterMailer();
-    $recruiterMailer->sendMapAndParkingCode(\CVS\Recruiter::find(1));
+Route::get('/test', 'AuthenticateController@test');
 
-//    $recruiter = \CVS\User::find(53);
-//    $zipArchiveName = str_random(21);
-//
-//    $filesToZip = [];
-//    foreach ($recruiter->documents as $document)
-//        $filesToZip[storage_path('documents/' . $document->ido)] = $document->name;
-//
-//    touch(storage_path("zippings/$zipArchiveName.zip"));
-//
-//    $result = Download::zipFiles($filesToZip, storage_path("zippings/$zipArchiveName.zip"), true);
-});
-
-Route::get('test2', 'AuthenticateController@test2');
 
 Route::get('me', 'AuthenticateController@me');
 Route::get('logout', 'AuthenticateController@logout');
@@ -47,10 +32,12 @@ Route::get('users/{user}', 'UsersController@getUser');
 Route::delete('users/{user}', 'UsersController@deleteUser');
 
 Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruiters'); // TOK
+Route::get('companies/{companies}/offers', 'CompaniesController@showOffers');
 Route::resource('companies', 'CompaniesController');
 
 Route::resource('recruiters', 'RecruitersController');
 
+Route::get('candidates/{candidates}/summary', 'CandidatesController@showSummary');
 Route::resource('candidates', 'CandidatesController');
 
 Route::get('interviews', 'InterviewsController@getAll');
@@ -63,8 +50,9 @@ Route::delete('interviews/{interviews}', 'InterviewsController@deleteInterview')
 Route::post('interviews/{interviews}/free', 'InterviewsController@freeInterview');
 Route::get('interviews/company/{companies}', 'InterviewsController@getAllForCompany');
 Route::get('interviews/candidate/{candidates}', 'InterviewsController@getAllForCandidate');
+Route::get('interviews/candidate-by-company/{candidates}', 'InterviewsController@getAllForCandidateByCompany');
 Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
-Route::get('interviews/candidates-available-for-slot/{slots}', 'InterviewsController@getAvailableStudentsForGivenSlot');
+Route::get('interviews/candidates-available-for-slot-and-company', 'InterviewsController@getAvailableStudentsForGivenSlotAndCompany');
 
 
 Route::post('messaging/send-sms', 'MessagingController@sendSMS');
@@ -83,3 +71,7 @@ Route::get('documents/{requestToken}', 'DocumentsController@getFile');
 Route::delete('documents/{documents}', 'DocumentsController@deleteFile');
 Route::post('documents/{documents}/accept', 'DocumentsController@acceptDocument');
 Route::post('documents/{documents}/refuse', 'DocumentsController@refuseDocument');
+
+Route::get('locations', 'LocationsController@getAll');
+Route::put('locations/update-interview/{interviews}', 'LocationsController@updateInterview');
+Route::put('locations/update-recruiter/{recruiters}', 'LocationsController@updateRecruiter');

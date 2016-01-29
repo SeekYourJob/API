@@ -119,11 +119,11 @@ return [
     |
     */
 
-    'pretend' => false,
-
-    'to' => [
-        'address' => 'nducom@gmail.com',
-        'name' => 'Nicolas Ducom'
-    ],
+//    'pretend' => false,
+//
+//    'to' => [
+//        'address' => 'me@valentinpolo.fr',
+//        'name' => 'Valentin Polo'
+//    ],
 
 ];

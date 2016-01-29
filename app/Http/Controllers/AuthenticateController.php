@@ -28,12 +28,12 @@ class AuthenticateController extends Controller
 {
 	public function __construct()
 	{
-		$this->middleware('jwt.auth', ['only' => ['me', 'checkOrganizer', 'pusherToken']]);
+		$this->middleware('jwt.auth', ['only' => ['test', 'me', 'checkOrganizer', 'pusherToken']]);
 	}
 
-	public function test2()
+	public function test()
 	{
-		echo app('Pusher')->presence_auth('presence-interviews-channel', 'socket id', 42, []);
+		return Company::find(2)->getOffers();
 	}
 
 	public function checkEmail(Request $request)
@@ -122,6 +122,7 @@ class AuthenticateController extends Controller
         $profile = ['user' => [
             'ido' => $user->ido,
             'profile' => $user->profile_type,
+	        'profile_ido' => $user->profile->ido,
             'firstname' => $user->firstname,
             'lastname' => $user->lastname,
             'email' => $user->email,
@@ -136,14 +137,15 @@ class AuthenticateController extends Controller
 
         if ($request->has('showDetails')) {
             if ($user->profile_type === 'CVS\\Recruiter') {
-                $recruiter = Recruiter::whereId($user->profile_id)->first();
-                $interviews = Interview::getAllForRecruiter($recruiter);
-                $profile['user']['recruiter'] = $interviews;
+	            $profile['user']['recruiter'] = [
+		            'interviews' => Interview::getAllForRecruiter($user->profile)['interviews'],
+		            'company' => $user->profile->company
+	            ];
 
             } elseif ($user->profile_type === 'CVS\\Candidate') {
-//                $profile['user']['candidate'] = [
-//		            'candidate' => $user->profile
-//	            ];
+                $profile['user']['candidate'] = [
+		            'canRegisterToInterviews' => $user->profile->canRegisterToInterviews()
+	            ];
             }
         }
 

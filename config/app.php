@@ -153,6 +153,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider::class,
 
     ],
 
@@ -205,7 +206,8 @@ return [
 
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
-        'Hashids'   => Vinkla\Hashids\Facades\Hashids::class
+        'Hashids'   => Vinkla\Hashids\Facades\Hashids::class,
+        'Bugsnag' => Bugsnag\BugsnagLaravel\BugsnagFacade::class,
 
     ],
 

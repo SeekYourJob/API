@@ -35,7 +35,7 @@ class AddInterviewsToRecruiter extends Job implements SelfHandling
                 $slots[] = $this->slots;
             }
         } else {
-            if ($this->recruiter->availability == 'ALL') {
+            if ($this->recruiter->availability == 'all') {
                 $slots = Slot::all();
             } else {
                 $slots = Slot::where('availability', $this->recruiter->availability)->get();

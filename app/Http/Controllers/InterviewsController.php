@@ -60,7 +60,19 @@ class InterviewsController extends Controller
 
 	public function getAllForCandidate(Candidate $candidate)
 	{
-		return Company::getInterviewsGroupedByCompaniesForCandidate($candidate);
+        if (Auth::user()->organizer || Auth::user()->id == $candidate->user->id) {
+            return Interview::getAllForCandidate($candidate);
+        }
+        abort(401);
+	}
+
+    public function getAllForCandidateByCompany(Candidate $candidate)
+    {
+        if (Auth::user()->organizer || Auth::user()->id == $candidate->user->id) {
+            return Company::getInterviewsGroupedByCompaniesForCandidate($candidate);
+        }
+
+        abort(401);
 	}
 
 	public function getAllSlots()
@@ -124,8 +136,17 @@ class InterviewsController extends Controller
 		return response()->json('Interview canceled');
 	}
 
-	public function getAvailableStudentsForGivenSlot(Slot $slot)
+	public function getAvailableStudentsForGivenSlotAndCompany(Request $request)
 	{
-		return $slot->getAvailableCandidatesForSlot();
+		if (!$request->has(['idoCompany', 'idoSlot'])) {
+			abort(422, 'Missing fields');
+		}
+
+		$slot = Slot::findByIdo($request->get('idoSlot'));
+		$company = Company::findByIdo($request->get('idoCompany'));
+
+		return [
+			'slots' => Slot::all(),
+			'candidates' => Candidate::getAvailableForSlotAndCompany($slot, $company)];
 	}
 }

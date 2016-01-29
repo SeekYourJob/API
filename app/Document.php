@@ -11,6 +11,7 @@ class Document extends Model
 
 	protected $table = 'documents';
 	protected $guarded = ['id'];
+	protected $hidden = ['id', 'user_id', 'name_s3', 'size', 'created_at', 'updated_at'];
 	protected $appends = ['ido'];
 
 	public function profile()
