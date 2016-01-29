@@ -12,7 +12,7 @@ class CompanyACL
 
 	public function showAll(User $user)
 	{
-		return $user->organizer;
+		return true;
 	}
 
 	public function update(User $user)

@@ -22,7 +22,8 @@ class CreateInterviewsTable extends Migration
             $table->foreign('recruiter_id')->references('id')->on('recruiters');
             $table->integer('candidate_id')->unsigned()->nullable();
             $table->foreign('candidate_id')->references('id')->on('candidates');
-//            $table->enum('status', ['FREE', 'PENDING', 'DONE'])->default('FREE');
+            $table->integer('location_id')->unsigned()->nullable();
+            $table->foreign('location_id')->references('id')->on('locations');
             $table->timestamps();
         });
     }

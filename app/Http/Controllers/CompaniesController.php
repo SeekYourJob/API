@@ -12,17 +12,18 @@ class CompaniesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth', ['except' => ['index']]);
     }
 
     /**
      * Returns all Companies
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function index()
+    public function index(Request $request)
     {
-        // This Policy is defined in Providers\AuthServiceProvider and uses the corresponding method in the ACLs\CompanyACL class
-        $this->authorize('show-all-companies');
+        if ($request->has('short')) {
+            return Company::all();
+        }
 
         return Company::with('recruiters')->get();
     }
@@ -53,6 +54,16 @@ class CompaniesController extends Controller
             ->first();
 
         return response()->json($companyRecruiters->recruiters);
+    }
+
+    /**
+     * @param Company $company
+     * Returns the Offers of the specified Company
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showOffers(Company $company)
+    {
+        return response()->json($company->getOffers());
     }
 
     /**

@@ -4,6 +4,7 @@ namespace CVS\Http\Controllers;
 
 use Auth;
 use CVS\Download;
+use CVS\Events\ResumeWasRefused;
 use Input;
 use Response;
 use CVS\Document;
@@ -71,7 +72,55 @@ class DocumentsController extends Controller
         }
 
         return  response()->json($response);
+    }
 
+    public function getAllFilesForCandidates()
+    {
+        $this->authorize('show-all-users');
+
+        $documents = Document::with('user')->whereHas('user',function($query) {
+                      $query->where('profile_type', 'CVS\Candidate');
+                    })->where('status', 'PENDING')->whereNotNull('user_id')->get();
+
+        $response = [];
+        foreach ($documents as $document)
+        {
+            $user = $document->user;
+            $response[] = [
+                'ido' => $document->ido,
+                'name' => $document->name,
+                'status' => $document->status,
+                'user' => [
+                    'ido' => $user->ido,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname
+                ]
+            ];
+        }
+        return  response()->json($response);
+    }
+
+    public function acceptDocument(Document $document) {
+
+        $this->authorize('show-all-users');
+
+        $document->status = 'ACCEPTED';
+        $document->save();
+
+        return response('');
+    }
+
+    public function refuseDocument(Document $document) {
+
+        $this->authorize('show-all-users');
+
+        $document->status = 'REJECTED';
+        $document->save();
+
+        // Triggering the corresponding event
+        event(new ResumeWasRefused($document));
+
+        return response('');
     }
 
     public function deleteFile(Document $document)

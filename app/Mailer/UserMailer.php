@@ -8,16 +8,16 @@ class UserMailer extends Mailer
 	public function sendResetPassword(User $user)
 	{
 		$this->sendToUser($user,
-				'Réinitialiser votre mot de passe SeekYourJob',
-				'emails.reset-password',
-				['reset_password_token' => $user->reset_password_token], [], true
+			'Réinitialiser votre mot de passe SeekYourJob',
+			'emails.reset-password',
+			['reset_password_token' => $user->reset_password_token], [], true
 		);
 	}
 
 	public function welcomeRecruiter(Recruiter $recruiter)
 	{
 		$this->sendToUser($recruiter->user,
-			'Votre inscription au Jobs Dating de la filière informatique de la FGES',
+			'Inscription au Job Forum de la FGES',
 			'emails.register-recruiter',
 			[],
 			[
@@ -36,7 +36,7 @@ class UserMailer extends Mailer
 		];
 
 		$this->sendToUser($recruiter->user,
-			'Votre inscription au Job Forum SeekYourJob de la FGES',
+			'Inscription au Job Forum de la FGES',
 			'emails.register-invited-recruiter',
 			$data);
 	}
@@ -50,8 +50,8 @@ class UserMailer extends Mailer
 			'referralAvailability' => $referral->availability
 		];
 
-		$this->sendToEmail($email,
-			$referral->user->firstname . ' ' . $referral->user->lastname . ' vous invite au Job Forum SeekYourJob de la FGES',
+		$this->sendToEmail($email, $email,
+			$referral->user->firstname . ' ' . $referral->user->lastname . ' vous invite au Job Forum de la FGES',
 			'emails.invite-recruiter',
 			$data);
 	}

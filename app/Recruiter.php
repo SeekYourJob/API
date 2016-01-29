@@ -38,4 +38,11 @@ class Recruiter extends Model
 
 		return $recruitersIdos;
 	}
+
+    public static function getInterviewsForRecruiter(Recruiter $recruiter)
+    {
+        $interviews = Interview::where('recruiter_id', $recruiter->id)->with(['slot','candidate','candidate.user'])->get();
+
+        return $interviews;
+    }
 }

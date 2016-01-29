@@ -16,7 +16,7 @@ class Interview extends Model
 
 	protected $table = 'interviews';
 	protected $guarded = ['id'];
-	protected $hidden = ['id', 'created_at', 'updated_at', 'slot_id', 'company_id', 'recruiter_id', 'candidate_id'];
+	protected $hidden = ['id', 'created_at', 'updated_at', 'slot_id', 'company_id', 'recruiter_id', 'candidate_id', 'location_id'];
 	protected $appends = ['ido', 'slot_ido'];
 
 	public function company()
@@ -39,6 +39,11 @@ class Interview extends Model
 		return $this->belongsTo(Candidate::class);
 	}
 
+	public function location()
+	{
+		return $this->belongsTo(Location::class);
+	}
+
 	public function getSlotIdoAttribute()
 	{
 		return app('Hashids')->encode($this->slot_id);
@@ -47,7 +52,9 @@ class Interview extends Model
 	public static function getAllForAllCompanies()
 	{
 		$allSlots = Slot::all();
-		$allCompanies = Company::with(['recruiters.interviews.candidate.user', 'recruiters.user'])->get();
+		$allCompanies = Company::with(['recruiters.interviews.candidate.user', 'recruiters.interviews.location', 'recruiters.user'])
+			->orderBy('name', 'ASC')
+			->get();
 
 		$allInterviewsByCompany = [];
 		foreach ($allCompanies as $company) {
@@ -80,7 +87,7 @@ class Interview extends Model
 
 	public static function getAllForRecruiter(Recruiter $recruiter, &$allSlots = false)
 	{
-		if ( ! $allSlots) {
+		if (!$allSlots) {
 			$allSlots = Slot::all();
 		}
 
@@ -99,15 +106,18 @@ class Interview extends Model
 					'begins_at' => $slot->begins_at_formatted,
 					'ends_at' => $slot->ends_at_formatted
 				],
+				'location' => false,
 				'status' => InterviewStatus::UNAVAILABLE
 			];
 
-			foreach ($recruiter->interviews as $interview) {
+			foreach ($recruiter->interviews as &$interview) {
 				// Check if the recruiter is available for the specified slot
 				if (isset($slot->id, $interview->slot_id) && $slot->id == $interview->slot_id) {
 					$interviewToAdd['ido'] = $interview->ido;
 					$interviewToAdd['status'] = InterviewStatus::FREE;
-					if (! is_null($interview->candidate)) {
+					$interviewToAdd['location'] = $interview->location;
+
+					if (!is_null($interview->candidate)) {
 						$interviewToAdd['status'] = InterviewStatus::TAKEN;
 						$interviewToAdd['candidate'] = [
 							'ido' => $interview->candidate->ido,

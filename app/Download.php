@@ -24,22 +24,22 @@ class Download extends Model
 		return $this->belongsTo(Document::class, 'document_id');
 	}
 
-	public static function zipFiles($files, $destination, $overwrite = false) {
+    //Adds files to archive
+	public static function zipFiles($documents, $destination, $overwrite = false) {
 		if (file_exists($destination) && !$overwrite)
 			return false;
-
-		if (is_array($files) && count($files)) {
+		if (count($documents)) {
 			$zip = new ZipArchive();
 			if ($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true)
 				return false;
-
-			foreach ($files as $filePath => $fileOriginalName)
-				$zip->addFile($filePath, $fileOriginalName);
-
+			foreach ($documents as $document) {
+                $zip->addFile(Document::getDocumentFullPath($document),Document::getResumeFormattedBaseName($document));
+            }
 			$zip->close();
+
 			return file_exists($destination);
 		}
-
 		return false;
 	}
+
 }
