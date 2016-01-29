@@ -119,8 +119,8 @@ return [
     |
     */
 
-//    'pretend' => false,
-//
+    'pretend' => false,
+
 //    'to' => [
 //        'address' => 'me@valentinpolo.fr',
 //        'name' => 'Valentin Polo'

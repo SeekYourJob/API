@@ -63,6 +63,7 @@ class InterviewsController extends Controller
         if (Auth::user()->organizer || Auth::user()->id == $candidate->user->id) {
             return Interview::getAllForCandidate($candidate);
         }
+
         abort(401);
 	}
 
