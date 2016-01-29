@@ -5,6 +5,7 @@ namespace CVS\Http\Controllers;
 use CVS\Interview;
 use CVS\Location;
 use CVS\Recruiter;
+use CVS\Slot;
 use Illuminate\Http\Request;
 
 use CVS\Http\Requests;
@@ -70,5 +71,10 @@ class LocationsController extends Controller
 		}
 
 		return response()->json($results, (count($results['errors'])) ? 409 : 200);
+	}
+
+	public function getAllWithInterviewsForSlot(Slot $slot)
+	{
+		return Interview::getByLocationsForCurrentAndNextSlot($slot);
 	}
 }

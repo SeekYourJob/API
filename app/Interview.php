@@ -48,6 +48,14 @@ class Interview extends Model
 		return app('Hashids')->encode($this->slot_id);
 	}
 
+	public function free()
+	{
+		$this->candidate_id = null;
+		$this->save();
+
+		event(new InterviewWasCanceled($this));
+	}
+
 	public static function getAllForAllCompanies()
 	{
 		$allSlots = Slot::all();
@@ -184,11 +192,53 @@ class Interview extends Model
 		return $interview;
 	}
 
-	public function free()
+	public static function getByLocationsForCurrentAndNextSlot(Slot $currentSlot)
 	{
-		$this->candidate_id = null;
-		$this->save();
+		$results = [
+			'currentSlot' => ['ido' => $currentSlot->ido, 'begins_at' => $currentSlot->begins_at_formatted, 'ends_at' => $currentSlot->ends_at_formatted],
+			'nextSlot' => ($nextSlot = $currentSlot->nextSlot()) ? [
+				'ido' => $nextSlot->ido, 'begins_at' => $nextSlot->begins_at_formatted, 'ends_at' => $nextSlot->ends_at_formatted
+			] : false,
+			'interviews' => false
+		];
 
-		event(new InterviewWasCanceled($this));
+		$interviews = [];
+		foreach (Location::all() as &$location)
+			$interviews[] = [
+				'location' => $location,
+				'current' => self::getInterviewForSlotAndLocation($currentSlot, $location),
+				'next' => ($nextSlot = $currentSlot->nextSlot()) ? self::getInterviewForSlotAndLocation($nextSlot, $location) : false
+			];
+
+		$results['interviews'] = $interviews;
+
+		return $results;
+	}
+
+	public static function getInterviewForSlotAndLocation(Slot $slot, Location $location)
+	{
+		$interviewToReturn = false;
+
+		foreach ($slot->interviews as $interview)
+			if (isset($slot->id, $interview->slot_id, $interview->candidate_id, $interview->location_id) && $slot->id == $interview->slot_id && $interview->location_id == $location->id)
+				$interviewToReturn = [
+					'recruiter' => [
+						'ido' => $interview->recruiter->ido,
+						'firstname' => $interview->recruiter->user->firstname,
+						'lastname' => $interview->recruiter->user->lastname,
+						'company' => [
+							'ido' => $interview->recruiter->company->ido,
+							'name' => $interview->recruiter->company->name,
+						]
+					],
+					'candidate' => [
+						'ido' => $interview->candidate->ido,
+						'firstname' => $interview->candidate->user->firstname,
+						'lastname' => $interview->candidate->user->lastname,
+						'grade' => $interview->candidate->grade . $interview->candidate->education
+					]
+				];
+
+		return $interviewToReturn;
 	}
 }

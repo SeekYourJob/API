@@ -11,6 +11,7 @@ use CVS\Jobs\RegisterRecruiter;
 use CVS\Mailer\RecruiterMailer;
 use CVS\Mailer\UserMailer;
 use CVS\Recruiter;
+use CVS\Slot;
 use CVS\Texter\Texter;
 use CVS\User;
 use Exception;
@@ -31,7 +32,7 @@ class AuthenticateController extends Controller
 
 	public function test()
 	{
-		return Company::find(2)->getOffers();
+		return Interview::getByLocationsForCurrentAndNextSlot(Slot::find(2));
 	}
 
 	public function checkEmail(Request $request)
