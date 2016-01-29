@@ -9,8 +9,8 @@ namespace CVS\Jobs;
 
 use CVS\Company;
 use CVS\Document;
-use CVS\Events\RecruiterWasRegistered;
-use CVS\Http\Requests\RegisterRecruiterRequest;
+use CVS\Events\CandidateWasRegistered;
+use CVS\Http\Requests\RegisterCandidateRequest;
 use CVS\Jobs\Job;
 use CVS\Candidate;
 use CVS\User;
@@ -62,8 +62,8 @@ class RegisterCandidate extends Job implements SelfHandling
                 $candidate->grade = $candidateInputs['grade'];
                 $candidate->save();
 
-                // Associating the Recruiter to the User
-                $recruiter->user()->save($user);
+                // Associating the Candidate to the User
+                $candidate->user()->save($user);
 
                 // Associating Documents to the User
                 if (isset($candidateInputs['documents']))
@@ -71,7 +71,7 @@ class RegisterCandidate extends Job implements SelfHandling
                         $user->documents()->save(Document::find(app('Hashids')->decode($document['ido'])[0]));
 
                 // Triggering the corresponding event
-                event(new RecruiterWasRegistered($recruiter));
+                event(new CandidateWasRegistered($candidate));
 
                 return $user;
 

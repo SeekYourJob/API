@@ -9,6 +9,7 @@ use CVS\Http\Requests\RegisterCandidateRequest;
 use CVS\Http\Requests\RegisterRecruiterRequest;
 use CVS\Interview;
 use CVS\Jobs\RegisterRecruiter;
+use CVS\Jobs\RegisterCandidate;
 use CVS\Mailer\RecruiterMailer;
 use CVS\Mailer\UserMailer;
 use CVS\Recruiter;

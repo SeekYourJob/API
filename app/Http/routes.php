@@ -36,6 +36,8 @@ Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganize
 Route::post('authenticate/do-reset-password', 'AuthenticateController@doResetPassword');
 Route::post('authenticate/ask-reset-password', 'AuthenticateController@askResetPassword');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
+Route::post('authenticate/register-candidate', 'AuthenticateController@registerCandidate');
+
 
 Route::get('users', 'UsersController@getUsers');
 Route::get('users/groups', 'UsersController@getGroups');
