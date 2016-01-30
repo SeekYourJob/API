@@ -21,6 +21,8 @@ Route::get('authenticate/check-organizer', 'AuthenticateController@checkOrganize
 Route::post('authenticate/do-reset-password', 'AuthenticateController@doResetPassword');
 Route::post('authenticate/ask-reset-password', 'AuthenticateController@askResetPassword');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
+Route::post('authenticate/register-candidate', 'AuthenticateController@registerCandidate');
+
 
 Route::get('users', 'UsersController@getUsers');
 Route::get('users/groups', 'UsersController@getGroups');
@@ -48,6 +50,7 @@ Route::delete('interviews/{interviews}', 'InterviewsController@deleteInterview')
 Route::post('interviews/{interviews}/free', 'InterviewsController@freeInterview');
 Route::get('interviews/company/{companies}', 'InterviewsController@getAllForCompany');
 Route::get('interviews/candidate/{candidates}', 'InterviewsController@getAllForCandidate');
+Route::get('interviews/candidate-by-company/{candidates}', 'InterviewsController@getAllForCandidateByCompany');
 Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
 Route::get('interviews/candidates-available-for-slot-and-company', 'InterviewsController@getAvailableStudentsForGivenSlotAndCompany');
 

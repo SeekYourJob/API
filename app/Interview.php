@@ -8,6 +8,7 @@ use CVS\Events\InterviewWasRegistered;
 use CVS\Traits\ObfuscatedIdTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use DB;
 
 class Interview extends Model
 {
@@ -241,4 +242,13 @@ class Interview extends Model
 
 		return $interviewToReturn;
 	}
+
+    public static function getAllForCandidate(Candidate $candidate)
+    {
+        $slots = Slot::with(['interviews' => function ($query) use ($candidate) {
+            $query->where('candidate_id', $candidate->id);
+        },'interviews.recruiter','interviews.recruiter.user', 'interviews.recruiter.company'])->get();
+
+        return $slots;
+    }
 }

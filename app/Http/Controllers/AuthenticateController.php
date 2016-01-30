@@ -5,9 +5,11 @@ namespace CVS\Http\Controllers;
 use Auth;
 use CVS\Company;
 use CVS\Document;
+use CVS\Http\Requests\RegisterCandidateRequest;
 use CVS\Http\Requests\RegisterRecruiterRequest;
 use CVS\Interview;
 use CVS\Jobs\RegisterRecruiter;
+use CVS\Jobs\RegisterCandidate;
 use CVS\Mailer\RecruiterMailer;
 use CVS\Mailer\UserMailer;
 use CVS\Recruiter;
@@ -62,9 +64,13 @@ class AuthenticateController extends Controller
 		abort(500, "Recruiter registration failed.");
 	}
 
-	public function registerCandidate()
+	public function registerCandidate(RegisterCandidateRequest $request)
 	{
+        if ($user = $this->dispatchFrom(RegisterCandidate::class, $request)) {
+            return response()->json($user);
+        }
 
+        abort(500, "Candidate registration failed.");
 	}
 
 	public function authenticate(Request $request)
