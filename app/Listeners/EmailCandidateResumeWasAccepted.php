@@ -2,13 +2,12 @@
 
 namespace CVS\Listeners;
 
-use CVS\Candidate;
-use CVS\Events\ResumeWasRefused;
+use CVS\Events\ResumeWasAccepted;
 use CVS\Mailer\CandidateMailer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailCandidateResumeWasRefused implements shouldQueue
+class EmailCandidateResumeWasAccepted implements shouldQueue
 {
     use InteractsWithQueue;
 
@@ -19,8 +18,8 @@ class EmailCandidateResumeWasRefused implements shouldQueue
         $this->candidateMailer = $candidateMailer;
     }
 
-    public function handle(ResumeWasRefused $event)
+    public function handle(ResumeWasAccepted $event)
     {
-        $this->candidateMailer->refuseCandidateDocument($event->document);
+        $this->candidateMailer->acceptCandidateDocument($event->document);
     }
 }
