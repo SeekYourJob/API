@@ -77,4 +77,15 @@ class LocationsController extends Controller
 	{
 		return Interview::getByLocationsForCurrentAndNextSlot($slot);
 	}
+
+	public function getAllWithInterviewsForCurrentSlot()
+	{
+		$slot = Slot::whereRaw('begins_at < NOW() AND ends_at > NOW()')->first();
+
+		if ($slot) {
+			return $this->getAllWithInterviewsForSlot($slot);
+		}
+
+		abort(404);
+	}
 }

@@ -74,5 +74,6 @@ Route::post('documents/{documents}/refuse', 'DocumentsController@refuseDocument'
 
 Route::get('locations', 'LocationsController@getAll');
 Route::get('locations/interviews-for-slot/{slots}', 'LocationsController@getAllWithInterviewsForSlot');
+Route::get('locations/interviews-for-current-slot/', 'LocationsController@getAllWithInterviewsForCurrentSlot');
 Route::put('locations/update-interview/{interviews}', 'LocationsController@updateInterview');
 Route::put('locations/update-recruiter/{recruiters}', 'LocationsController@updateRecruiter');

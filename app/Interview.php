@@ -211,7 +211,18 @@ class Interview extends Model
 				'next' => ($nextSlot = $currentSlot->nextSlot()) ? self::getInterviewForSlotAndLocation($nextSlot, $location) : false
 			];
 
-		$results['interviews'] = $interviews;
+		$interviewsCollection = collect($interviews)
+			->filter(function($interview) {
+				return $interview['current'] || $interview['next'];
+			})
+			->sortBy(function($interview, $key) {
+				if ($interview['current']) {
+					return $interview['current']['recruiter']['company']['name'];
+				}
+			});
+
+		$results['interviews'] = array_values($interviewsCollection->toArray());
+		$results['interviewsPaginated'] = array_values($interviewsCollection->chunk(12)->toArray());
 
 		return $results;
 	}
