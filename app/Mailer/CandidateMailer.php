@@ -1,5 +1,7 @@
 <?php namespace CVS\Mailer;
 
+use CVS\Candidate;
+use CVS\Interview;
 use CVS\User;
 use CVS\Document;
 
@@ -37,5 +39,29 @@ class CandidateMailer extends Mailer
         );
 
         return true;
+    }
+
+    public function sendInterviewReminderToCandidate(Interview $interview)
+    {
+        $this->sendToUser($interview->candidate->user,
+            "Nouvel entretien avec " . $interview->recruiter->company->name,
+            "emails.interview-bigday-reminder",
+            [
+                'interviewCompanyName' => $interview->recruiter->company->name,
+                'interviewBeginsAt' => $interview->slot->begins_at_formatted
+            ], [], true
+        );
+    }
+
+    public function sendNoticeInterviewHasBeenCancelledToCandidate(Interview $interview, Candidate $previousCandidate)
+    {
+        $this->sendToUser($previousCandidate->user,
+            "Annulation de votre entretien avec " . $interview->recruiter->company->name,
+            "emails.interview-bigday-cancellation",
+            [
+                'interviewCompanyName' => $interview->recruiter->company->name,
+                'interviewBeginsAt' => $interview->slot->begins_at_formatted
+            ], [], true
+        );
     }
 }

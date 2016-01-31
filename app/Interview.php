@@ -51,10 +51,12 @@ class Interview extends Model
 
 	public function free()
 	{
+		$oldCandidate = Candidate::find($this->candidate_id);
+
 		$this->candidate_id = null;
 		$this->save();
 
-		event(new InterviewWasCanceled($this));
+		event(new InterviewWasCanceled($this, $oldCandidate));
 	}
 
 	public static function getAllForAllCompanies()

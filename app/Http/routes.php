@@ -3,12 +3,18 @@
 use CVS\Company;
 use CVS\Download;
 use CVS\Slot;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberType;
 
 Route::get('/', function() {
     return response()->json('Welcome to the SeekYourJob API!');
 });
 
-Route::get('/test', 'AuthenticateController@test');
+Route::get('/test', function(Request $request) {
+
+
+
+});
 
 
 Route::get('me', 'AuthenticateController@me');

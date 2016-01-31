@@ -19,9 +19,13 @@ class EventServiceProvider extends ServiceProvider
         'CVS\Events\InvitedRecruiterWasRegistered' => [
             'CVS\Listeners\EmailWelcomeEmailWithPasswordToInvitedRecruiter',
         ],
-        'CVS\Events\InterviewWasRegistered' => [],
+        'CVS\Events\InterviewWasRegistered' => [
+            'CVS\Listeners\EmailCandidateInterviewWasRegistered',
+            'CVS\Listeners\TextCandidateInterviewWasRegistered'
+        ],
         'CVS\Events\InterviewWasCanceled' => [
             'CVS\Listeners\EmailCandidateInterviewWasCanceled',
+            'CVS\Listeners\TextCandidateInterviewWasCanceled',
         ],
         'CVS\Events\ResumeWasRefused' => [
             'CVS\Listeners\EmailCandidateResumeWasRefused',

@@ -2,6 +2,7 @@
 
 namespace CVS\Events;
 
+use CVS\Candidate;
 use CVS\Events\Event;
 use CVS\Interview;
 use Illuminate\Queue\SerializesModels;
@@ -12,10 +13,12 @@ class InterviewWasCanceled extends Event implements ShouldBroadcast
     use SerializesModels;
 
     public $interview;
+    public $previousCandidate;
 
-    public function __construct(Interview $interview)
+    public function __construct(Interview $interview, Candidate $previousCandidate)
     {
         $this->interview = $interview;
+        $this->previousCandidate = $previousCandidate;
     }
 
     public function broadcastOn()

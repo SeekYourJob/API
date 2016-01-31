@@ -2,13 +2,13 @@
 
 namespace CVS\Listeners;
 
-use CVS\Events\InterviewWasCanceled;
+use CVS\Events\InterviewWasRegistered;
 use CVS\Mailer\CandidateMailer;
 use CVS\Slot;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailCandidateInterviewWasCanceled implements shouldQueue
+class EmailCandidateInterviewWasRegistered implements shouldQueue
 {
     public $candidateMailer;
 
@@ -17,10 +17,10 @@ class EmailCandidateInterviewWasCanceled implements shouldQueue
         $this->candidateMailer = $candidateMailer;
     }
 
-    public function handle(InterviewWasCanceled $event)
+    public function handle(InterviewWasRegistered $event)
     {
         if (Slot::isBigDay()) {
-            $this->candidateMailer->sendNoticeInterviewHasBeenCancelledToCandidate($event->interview, $event->previousCandidate);
+            $this->candidateMailer->sendInterviewReminderToCandidate($event->interview);
         }
     }
 }
