@@ -38,11 +38,11 @@ class Location extends Model
 								'lastname' => $interview->recruiter->user->lastname,
 								'company' => $interview->recruiter->company->name
 							],
-							'candidate' => [
+							'candidate' => (isset($interview->candidate)) ? [
 								'ido' => $interview->candidate->ido,
 								'firstname' => $interview->candidate->user->firstname,
 								'lastname' => $interview->candidate->user->lastname,
-							]
+							] : false
 						];
 						break;
 					}
