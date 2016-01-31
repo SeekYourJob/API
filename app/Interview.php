@@ -264,4 +264,28 @@ class Interview extends Model
 
         return $slots;
     }
+
+	public static function getBookedWithoutLocation()
+	{
+		$bookedInterviewsWithoutLocationRaw = self::with(['candidate.user', 'recruiter.user', 'recruiter.company', 'slot'])
+			->whereNotNull('candidate_id')
+			->whereNull('location_id')
+			->get();
+
+		$bookedInterviewsWithoutLocation = [];
+		foreach($bookedInterviewsWithoutLocationRaw as $interview)
+			$bookedInterviewsWithoutLocation[] = [
+				'slot' => [
+					'ido' => $interview->slot->ido, 'begins_at' => $interview->slot->begins_at_formatted, 'ends_at' => $interview->slot->ends_at_formatted
+				],
+				'candidate' => [
+					'ido' => $interview->candidate->ido, 'firstname' => $interview->candidate->user->firstname, 'lastname' => $interview->candidate->user->lastname
+				],
+				'recruiter' => [
+					'ido' => $interview->recruiter->ido, 'firstname' => $interview->recruiter->user->firstname, 'lastname' => $interview->recruiter->user->lastname, 'company' => $interview->recruiter->company->name
+				]
+			];
+
+		return $bookedInterviewsWithoutLocation;
+	}
 }

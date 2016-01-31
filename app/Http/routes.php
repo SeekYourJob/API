@@ -2,9 +2,9 @@
 
 use CVS\Company;
 use CVS\Download;
+use CVS\Interview;
+use CVS\Location;
 use CVS\Slot;
-use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberType;
 
 Route::get('/', function() {
     return response()->json('Welcome to the SeekYourJob API!');
@@ -12,10 +12,7 @@ Route::get('/', function() {
 
 Route::get('/test', function(Request $request) {
 
-
-
 });
-
 
 Route::get('me', 'AuthenticateController@me');
 Route::get('logout', 'AuthenticateController@logout');
@@ -28,7 +25,6 @@ Route::post('authenticate/do-reset-password', 'AuthenticateController@doResetPas
 Route::post('authenticate/ask-reset-password', 'AuthenticateController@askResetPassword');
 Route::post('authenticate/register-recruiter', 'AuthenticateController@registerRecruiter');
 Route::post('authenticate/register-candidate', 'AuthenticateController@registerCandidate');
-
 
 Route::get('users', 'UsersController@getUsers');
 Route::get('users/groups', 'UsersController@getGroups');
@@ -60,7 +56,6 @@ Route::get('interviews/candidate-by-company/{candidates}', 'InterviewsController
 Route::get('interviews/recruiter/{recruiters}', 'InterviewsController@getAllForRecruiter');
 Route::get('interviews/candidates-available-for-slot-and-company', 'InterviewsController@getAvailableStudentsForGivenSlotAndCompany');
 
-
 Route::post('messaging/send-sms', 'MessagingController@sendSMS');
 Route::post('messaging/send-email', 'MessagingController@sendEmail');
 Route::get('messaging/predefined-sms', 'MessagingController@getPredefinedSMS');
@@ -79,7 +74,9 @@ Route::post('documents/{documents}/accept', 'DocumentsController@acceptDocument'
 Route::post('documents/{documents}/refuse', 'DocumentsController@refuseDocument');
 
 Route::get('locations', 'LocationsController@getAll');
+Route::get('locations/bookings', 'LocationsController@getBookings');
 Route::get('locations/interviews-for-slot/{slots}', 'LocationsController@getAllWithInterviewsForSlot');
 Route::get('locations/interviews-for-current-slot/', 'LocationsController@getAllWithInterviewsForCurrentSlot');
+Route::get('locations/missing', 'LocationsController@getMissingLocationsForInterviews');
 Route::put('locations/update-interview/{interviews}', 'LocationsController@updateInterview');
 Route::put('locations/update-recruiter/{recruiters}', 'LocationsController@updateRecruiter');

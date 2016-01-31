@@ -88,4 +88,14 @@ class LocationsController extends Controller
 
 		abort(404);
 	}
+
+	public function getMissingLocationsForInterviews()
+	{
+		return Interview::getBookedWithoutLocation();
+	}
+
+	public function getBookings()
+	{
+		return Location::getBookings();
+	}
 }
