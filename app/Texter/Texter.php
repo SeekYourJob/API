@@ -4,6 +4,8 @@ use CVS\HistoryText;
 use CVS\Jobs\SendTextToPhoneNumber;
 use CVS\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberType;
 use Log;
 
 class Texter
@@ -42,6 +44,19 @@ class Texter
 			return;
 		}
 
+		// Checking is mobile phone number
+		$phoneUtils = app('PhoneUtils');
+		try {
+			$phoneNumberProto = $phoneUtils->parse($user->phone, "FR");
+			if ($phoneUtils->getNumberType($phoneNumberProto) !== PhoneNumberType::MOBILE) {
+				\Log::warning('[TEXT] Not a mobile phone number. Sending aborted to ' . $user->firstname . ' ' . $user->lastname .' with message ' . $message);
+				return ;
+			}
+		} catch (NumberParseException $e) {
+			\Log::warning('[TEXT] Phone number invalid. Sending aborted to ' . $user->firstname . ' ' . $user->lastname .' with message ' . $message);
+			return ;
+		}
+
 		if (!$forceSend && !$user->sms_notifications) {
 			\Log::warning('[TEXT] Text notifications disabled. Sending aborted to ' . $user->firstname . ' ' . $user->lastname .' with message ' . $message);
 			return;
@@ -63,7 +78,7 @@ class Texter
 				'login' => env('ALLMYSMS_LOGIN'),
 				'apiKey' => env('ALLMYSMS_API_KEY'),
 				'tpoa' => 'SeekYourJob',
-				'message' => $message . "\r\n\r\nSTOP au 36180",
+				'message' => $message . "\r\nSTOP au 36180",
 				'mobile' => $phoneNumber
 			]
 		]);

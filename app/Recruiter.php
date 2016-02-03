@@ -13,6 +13,7 @@ class Recruiter extends Model
 	protected $guarded = ['id'];
 	protected $hidden = ['id', 'company_id'];
 	protected $appends = ['ido'];
+	protected $casts = ['parking_option' => 'boolean', 'lunch_option' => 'boolean'];
 
 	public function user()
 	{

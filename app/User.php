@@ -10,6 +10,8 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberFormat;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -72,7 +74,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         try {
             $phoneNumberProto = $phoneUtils->parse($phoneNumber, "FR");
-            return $phoneUtils->format($phoneNumberProto, \libphonenumber\PhoneNumberFormat::E164);
+            return $phoneUtils->format($phoneNumberProto, PhoneNumberFormat::E164);
         } catch (\libphonenumber\NumberParseException $e) {
             return NULL;
         }
@@ -84,8 +86,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         try {
             $phoneNumberProto = $phoneUtils->parse($phoneNumber, "FR");
-            return $phoneUtils->format($phoneNumberProto, \libphonenumber\PhoneNumberFormat::NATIONAL);
-        } catch (\libphonenumber\NumberParseException $e) {
+            return $phoneUtils->format($phoneNumberProto, PhoneNumberFormat::NATIONAL);
+        } catch (NumberParseException $e) {
             return NULL;
         }
     }

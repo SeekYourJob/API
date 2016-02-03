@@ -4,6 +4,7 @@ namespace CVS\Http\Controllers;
 
 use Auth;
 use CVS\Download;
+use CVS\Events\ResumeWasAccepted;
 use CVS\Events\ResumeWasRefused;
 use Input;
 use Response;
@@ -106,6 +107,9 @@ class DocumentsController extends Controller
 
         $document->status = 'ACCEPTED';
         $document->save();
+
+        // Triggering the corresponding event
+        event(new ResumeWasAccepted($document));
 
         return response('');
     }

@@ -3,29 +3,24 @@
 namespace CVS\Listeners;
 
 use CVS\Events\InterviewWasCanceled;
+use CVS\Mailer\CandidateMailer;
+use CVS\Slot;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailCandidateInterviewWasCanceled
+class EmailCandidateInterviewWasCanceled implements shouldQueue
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
+    public $candidateMailer;
+
+    public function __construct(CandidateMailer $candidateMailer)
     {
-        //
+        $this->candidateMailer = $candidateMailer;
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  InterviewWasCanceled  $event
-     * @return void
-     */
     public function handle(InterviewWasCanceled $event)
     {
-        //
+        if (Slot::isBigDay()) {
+            $this->candidateMailer->sendNoticeInterviewHasBeenCancelledToCandidate($event->interview, $event->previousCandidate);
+        }
     }
 }

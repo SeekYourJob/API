@@ -2,16 +2,14 @@
 
 namespace CVS\Listeners;
 
-use CVS\Candidate;
-use CVS\Events\ResumeWasRefused;
+use CVS\Events\InterviewWasRegistered;
 use CVS\Mailer\CandidateMailer;
+use CVS\Slot;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class EmailCandidateResumeWasRefused implements shouldQueue
+class EmailCandidateInterviewWasRegistered implements shouldQueue
 {
-    use InteractsWithQueue;
-
     public $candidateMailer;
 
     public function __construct(CandidateMailer $candidateMailer)
@@ -19,8 +17,10 @@ class EmailCandidateResumeWasRefused implements shouldQueue
         $this->candidateMailer = $candidateMailer;
     }
 
-    public function handle(ResumeWasRefused $event)
+    public function handle(InterviewWasRegistered $event)
     {
-        $this->candidateMailer->refuseCandidateDocument($event->document);
+        if (Slot::isBigDay()) {
+            $this->candidateMailer->sendInterviewReminderToCandidate($event->interview);
+        }
     }
 }

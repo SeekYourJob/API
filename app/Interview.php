@@ -49,6 +49,16 @@ class Interview extends Model
 		return app('Hashids')->encode($this->slot_id);
 	}
 
+	public function free()
+	{
+		$oldCandidate = Candidate::find($this->candidate_id);
+
+		$this->candidate_id = null;
+		$this->save();
+
+		event(new InterviewWasCanceled($this, $oldCandidate));
+	}
+
 	public static function getAllForAllCompanies()
 	{
 		$allSlots = Slot::all();
@@ -185,12 +195,65 @@ class Interview extends Model
 		return $interview;
 	}
 
-	public function free()
+	public static function getByLocationsForCurrentAndNextSlot(Slot $currentSlot)
 	{
-		$this->candidate_id = null;
-		$this->save();
+		$results = [
+			'currentSlot' => ['ido' => $currentSlot->ido, 'begins_at' => $currentSlot->begins_at_formatted, 'ends_at' => $currentSlot->ends_at_formatted],
+			'nextSlot' => ($nextSlot = $currentSlot->nextSlot()) ? [
+				'ido' => $nextSlot->ido, 'begins_at' => $nextSlot->begins_at_formatted, 'ends_at' => $nextSlot->ends_at_formatted
+			] : false,
+			'interviews' => false
+		];
 
-		event(new InterviewWasCanceled($this));
+		$interviews = [];
+		foreach (Location::all() as &$location)
+			$interviews[] = [
+				'location' => $location,
+				'current' => self::getInterviewForSlotAndLocation($currentSlot, $location),
+				'next' => ($nextSlot = $currentSlot->nextSlot()) ? self::getInterviewForSlotAndLocation($nextSlot, $location) : false
+			];
+
+		$interviewsCollection = collect($interviews)
+			->filter(function($interview) {
+				return $interview['current'] || $interview['next'];
+			})
+			->sortBy(function($interview, $key) {
+				if ($interview['current']) {
+					return $interview['current']['recruiter']['company']['name'];
+				}
+			});
+
+		$results['interviews'] = array_values($interviewsCollection->toArray());
+		$results['interviewsPaginated'] = array_values($interviewsCollection->chunk(12)->toArray());
+
+		return $results;
+	}
+
+	public static function getInterviewForSlotAndLocation(Slot $slot, Location $location)
+	{
+		$interviewToReturn = false;
+
+		foreach ($slot->interviews as $interview)
+			if (isset($slot->id, $interview->slot_id, $interview->candidate_id, $interview->location_id) && $slot->id == $interview->slot_id && $interview->location_id == $location->id)
+				$interviewToReturn = [
+					'recruiter' => [
+						'ido' => $interview->recruiter->ido,
+						'firstname' => $interview->recruiter->user->firstname,
+						'lastname' => $interview->recruiter->user->lastname,
+						'company' => [
+							'ido' => $interview->recruiter->company->ido,
+							'name' => $interview->recruiter->company->name,
+						]
+					],
+					'candidate' => [
+						'ido' => $interview->candidate->ido,
+						'firstname' => $interview->candidate->user->firstname,
+						'lastname' => $interview->candidate->user->lastname,
+						'grade' => $interview->candidate->grade . $interview->candidate->education
+					]
+				];
+
+		return $interviewToReturn;
 	}
 
     public static function getAllForCandidate(Candidate $candidate)
@@ -201,4 +264,28 @@ class Interview extends Model
 
         return $slots;
     }
+
+	public static function getBookedWithoutLocation()
+	{
+		$bookedInterviewsWithoutLocationRaw = self::with(['candidate.user', 'recruiter.user', 'recruiter.company', 'slot'])
+			->whereNotNull('candidate_id')
+			->whereNull('location_id')
+			->get();
+
+		$bookedInterviewsWithoutLocation = [];
+		foreach($bookedInterviewsWithoutLocationRaw as $interview)
+			$bookedInterviewsWithoutLocation[] = [
+				'slot' => [
+					'ido' => $interview->slot->ido, 'begins_at' => $interview->slot->begins_at_formatted, 'ends_at' => $interview->slot->ends_at_formatted
+				],
+				'candidate' => [
+					'ido' => $interview->candidate->ido, 'firstname' => $interview->candidate->user->firstname, 'lastname' => $interview->candidate->user->lastname
+				],
+				'recruiter' => [
+					'ido' => $interview->recruiter->ido, 'firstname' => $interview->recruiter->user->firstname, 'lastname' => $interview->recruiter->user->lastname, 'company' => $interview->recruiter->company->name
+				]
+			];
+
+		return $bookedInterviewsWithoutLocation;
+	}
 }

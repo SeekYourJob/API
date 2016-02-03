@@ -3,6 +3,7 @@
 namespace CVS;
 
 use CVS\Traits\ObfuscatedIdTrait;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 
 class Slot extends Model
@@ -29,8 +30,22 @@ class Slot extends Model
 		return date("H:i", strtotime($this->ends_at));
 	}
 
+	public function nextSlot()
+	{
+		if ($nextSlotId = self::where('id', '>', $this->id)->min('id')) {
+			return self::find($nextSlotId);
+		}
+
+		return false;
+	}
+
 	public static function findByIdo($ido)
 	{
 		return self::find(app('Hashids')->decode($ido)[0]);
+	}
+
+	public static function isBigDay()
+	{
+		return (new DateTime("2016-02-12"))->format("Ymd") == (new DateTime())->format("Ymd");
 	}
 }
