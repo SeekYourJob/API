@@ -15,7 +15,7 @@ class CandidatesController extends Controller
 	public function __construct()
 	{
 		$this->middleware('jwt.auth');
-        $this->middleware('organizer', ['except' => ['show']]);
+        $this->middleware('organizer', ['except' => ['show', 'showSummary']]);
 	}
 
     public function index()
