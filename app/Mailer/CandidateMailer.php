@@ -67,7 +67,7 @@ class CandidateMailer extends Mailer
 
     public function sendPlanningToCandidates()
     {
-            $candidates = Candidate::whereId('34')->get();
+            $candidates = Candidate::all();
 
             foreach ($candidates as $candidate) {
                 if (count($candidate->interviews)) {
@@ -89,7 +89,7 @@ class CandidateMailer extends Mailer
 
     public function sendNoInterviewsWarningToCandidates()
     {
-        $candidates = Candidate::whereId('34')->get();
+        $candidates = Candidate::all();
 
         foreach ($candidates as $candidate) {
             if (!count($candidate->interviews)) {
