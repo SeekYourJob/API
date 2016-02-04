@@ -236,6 +236,8 @@ class Interview extends Model
 		foreach ($slot->interviews as $interview)
 			if (isset($slot->id, $interview->slot_id, $interview->candidate_id, $interview->location_id) && $slot->id == $interview->slot_id && $interview->location_id == $location->id)
 				$interviewToReturn = [
+					'ido' => $interview->ido,
+					'status' => $interview->status,
 					'recruiter' => [
 						'ido' => $interview->recruiter->ido,
 						'firstname' => $interview->recruiter->user->firstname,

@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->text('job_types');
             $table->string('website', 255)->nullable();
             $table->string('logo_path', 255)->nullable();
+            $table->mediumText('description')->nullable();
 
             $table->timestamps();
         });

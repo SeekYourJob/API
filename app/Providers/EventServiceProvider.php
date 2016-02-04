@@ -33,6 +33,7 @@ class EventServiceProvider extends ServiceProvider
         'CVS\Events\ResumeWasAccepted' => [
             'CVS\Listeners\EmailCandidateResumeWasAccepted',
         ],
+        'CVS\Events\InterviewStatusWasUpdated' => [],
     ];
 
     /**
