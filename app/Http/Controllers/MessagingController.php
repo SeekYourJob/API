@@ -65,9 +65,12 @@ class MessagingController extends Controller
 			],
 			[
 				'key' => 'RESUME',
-				'title' => 'Recruteurs : curriculums des candidats'
+				'title' => 'Recruteurs : planning et curriculums des candidats'
 			],
-
+            [
+                'key' => 'PLANNING',
+                'title' => 'Candidats : planning de la journée
+            ],
 		]);
 	}
 
