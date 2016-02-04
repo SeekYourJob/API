@@ -15,6 +15,7 @@ class CandidatesController extends Controller
 	public function __construct()
 	{
 		$this->middleware('jwt.auth');
+        $this->middleware('organizer', ['except' => ['show']]);
 	}
 
     public function index()
@@ -25,7 +26,7 @@ class CandidatesController extends Controller
     public function show(Candidate $candidate)
     {
         if (Auth::user()->organizer || Auth::user()->id === $candidate->user->id) {
-            return $candidate::with(['user'])
+            return $candidate::with(['user','interviews'])
                 ->whereId($candidate->id)
                 ->first();
         }
@@ -62,4 +63,30 @@ class CandidatesController extends Controller
 
 		return response()->json(['count' => $interviewsCount, 'summary' => $summary]);
 	}
+
+    public function update(Request $request, Candidate $candidate)
+    {
+        if (Auth::user()->organizer) {
+            try {
+                // Updating user
+                $candidate->user->update([
+                    'email' => $request->input('user.email'),
+                    'firstname' => $request->input('user.firstname'),
+                    'lastname' => $request->input('user.lastname'),
+                    'phone' => $request->input('user.phone'),
+                ]);
+
+                // Updating candidate
+                $candidate->update([
+                    'grade' => $request->input('grade')
+                ]);
+
+                return $candidate;
+            } catch (Exception $e) {
+                abort(500);
+            }
+        }
+
+        abort(401);
+    }
 }

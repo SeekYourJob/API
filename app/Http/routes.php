@@ -50,6 +50,7 @@ Route::post('interviews/generate', 'InterviewsController@generate');
 Route::post('interviews/register', 'InterviewsController@register');
 Route::delete('interviews/{interviews}', 'InterviewsController@deleteInterview');
 Route::post('interviews/{interviews}/free', 'InterviewsController@freeInterview');
+Route::post('interviews/{interviews}/toggle-status', 'InterviewsController@toggleStatusInterview');
 Route::get('interviews/company/{companies}', 'InterviewsController@getAllForCompany');
 Route::get('interviews/candidate/{candidates}', 'InterviewsController@getAllForCandidate');
 Route::get('interviews/candidate-by-company/{candidates}', 'InterviewsController@getAllForCandidateByCompany');
