@@ -6,6 +6,7 @@ use Auth;
 use CVS\Candidate;
 use CVS\Company;
 use CVS\Document;
+use CVS\Events\InterviewStatusWasUpdated;
 use CVS\Events\InterviewWasCanceled;
 use CVS\Events\InterviewWasRegistered;
 use CVS\Interview;
@@ -149,5 +150,19 @@ class InterviewsController extends Controller
 		return [
 			'slots' => Slot::all(),
 			'candidates' => Candidate::getAvailableForSlotAndCompany($slot, $company)];
+	}
+
+	public function toggleStatusInterview(Interview $interview)
+	{
+		if ($interview->status === 'IN_PROGRESS')
+			$interview->status = 'COMPLETED';
+		else
+			$interview->status = 'IN_PROGRESS';
+
+		$interview->save();
+
+		event(new InterviewStatusWasUpdated());
+
+		return $interview;
 	}
 }
