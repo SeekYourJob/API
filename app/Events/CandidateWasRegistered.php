@@ -16,7 +16,7 @@ class CandidateWasRegistered extends Event
 {
     use SerializesModels;
 
-    public $recruiter;
+    public $candidate;
 
     public function __construct(Candidate $candidate)
     {

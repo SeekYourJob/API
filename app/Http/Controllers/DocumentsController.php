@@ -4,6 +4,7 @@ namespace CVS\Http\Controllers;
 
 use Auth;
 use CVS\Download;
+use CVS\Events\CandidateDocumentWasUploaded;
 use CVS\Events\ResumeWasAccepted;
 use CVS\Events\ResumeWasRefused;
 use Input;
@@ -38,6 +39,10 @@ class DocumentsController extends Controller
             $user = User::whereId(app('Hashids')->decode($data['user'])[0])->firstOrFail();
 
             if ($user->profile_type == 'CVS\Candidate') {
+
+                // Sending email to organizers
+                event(new CandidateDocumentWasUploaded());
+
                 foreach ($user->documents as $document) {
                     $document->dissociate();
                     $document->save();
