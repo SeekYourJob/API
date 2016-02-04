@@ -64,4 +64,43 @@ class CandidateMailer extends Mailer
             ], [], true
         );
     }
+
+    public function sendPlanningToCandidates()
+    {
+            $candidates = Candidate::whereId('34')->get();
+
+            foreach ($candidates as $candidate) {
+                if (count($candidate->interviews)) {
+                    $data = [
+                        'interviews' => Candidate::getInterviewsForCandidate($candidate)
+                    ];
+
+                    $this->sendToUser($candidate->user,
+                        'Votre planning pour le Job Forum de la FGES',
+                        'emails.candidates-planning',
+                        $data,[], true
+                    );
+                }
+            }
+
+            return true;
+    }
+
+
+    public function sendNoInterviewsWarningToCandidates()
+    {
+        $candidates = Candidate::whereId('34')->get();
+
+        foreach ($candidates as $candidate) {
+            if (!count($candidate->interviews)) {
+                $this->sendToUser($candidate->user,
+                    'Vous n\'avez pas choisi d\'entretiens',
+                    'emails.candidates-planning-no-interviews',
+                    [], [], true
+                );
+            }
+        }
+
+        return true;
+    }
 }

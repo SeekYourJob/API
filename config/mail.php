@@ -121,9 +121,9 @@ return [
 
     'pretend' => false,
 
-//    'to' => [
-//        'address' => 'me@valentinpolo.fr',
-//        'name' => 'Valentin Polo'
-//    ],
+    'to' => [
+        'address' => 'nducom@gmail.com',
+        'name' => 'Nicolas Ducom'
+    ],
 
 ];

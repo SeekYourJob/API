@@ -5,6 +5,7 @@ namespace CVS\Http\Controllers;
 use CVS\Http\Requests\MessagingSendEmailRequest;
 use CVS\Http\Requests;
 use CVS\Http\Requests\MessagingSendSMSRequest;
+use CVS\Mailer\CandidateMailer;
 use CVS\Mailer\Mailer;
 use CVS\Mailer\RecruiterMailer;
 use CVS\Texter\RecruiterTexter;
@@ -67,6 +68,14 @@ class MessagingController extends Controller
 				'key' => 'RESUME',
 				'title' => 'Recruteurs : curriculums des candidats'
 			],
+            [
+                'key' => 'PLANNING',
+                'title' => 'Candidats : planning de la journée'
+            ],
+            [
+                'key' => 'NO_INTERVIEWS_WARNING',
+                'title' => 'Candidats : Pas d\'entretiens prévus'
+            ]
 
 		]);
 	}
@@ -95,6 +104,12 @@ class MessagingController extends Controller
 				case 'RESUME':
 					return (new RecruiterMailer())->sendCandidateResumesToRecruiters() ? response()->json('Predefined email sent') : abort(500);
 					break;
+                case 'PLANNING':
+                    return (new CandidateMailer())->sendPlanningToCandidates() ? response()->json('Predefined email sent') : abort(500);
+                    break;
+                case 'NO_INTERVIEWS_WARNING':
+                    return (new CandidateMailer())->sendNoInterviewsWarningToCandidates() ? response()->json('Predefined email sent') : abort(500);
+                    break;
 				default:
 					abort(422, "Predefined email not found");
 			}

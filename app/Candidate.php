@@ -138,4 +138,11 @@ class Candidate extends Model
 
 		return $availableCandidates;
 	}
+
+    public static function getInterviewsForCandidate(Candidate $candidate)
+    {
+        $interviews = Interview::where('candidate_id', $candidate->id)->with(['slot','recruiter','recruiter.user','recruiter.company'])->get();
+
+        return $interviews;
+    }
 }
