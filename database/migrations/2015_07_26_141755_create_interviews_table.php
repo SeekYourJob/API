@@ -24,6 +24,7 @@ class CreateInterviewsTable extends Migration
             $table->foreign('candidate_id')->references('id')->on('candidates');
             $table->integer('location_id')->unsigned()->nullable();
             $table->foreign('location_id')->references('id')->on('locations');
+            $table->enum('status', ['IN_PROGRESS', 'COMPLETED']);
             $table->timestamps();
         });
     }
