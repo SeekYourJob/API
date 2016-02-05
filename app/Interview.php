@@ -133,7 +133,8 @@ class Interview extends Model
 							'ido' => $interview->candidate->ido,
 							'firstname' => $interview->candidate->user->firstname,
 							'lastname' => $interview->candidate->user->lastname,
-							'grade' => $interview->candidate->grade
+							'grade' => $interview->candidate->grade,
+                            'curriculum' => (count($interview->candidate->user->documents)==0)?'':$interview->candidate->user->documents[0]
 						];
 					}
 
