@@ -195,7 +195,7 @@ class Interview extends Model
 		return $interview;
 	}
 
-	public static function getByLocationsForCurrentAndNextSlot(Slot $currentSlot)
+	public static function getByLocationsForCurrentAndNextSlot(Slot $currentSlot, $sortBy = false)
 	{
 		$results = [
 			'currentSlot' => ['ido' => $currentSlot->ido, 'begins_at' => $currentSlot->begins_at_formatted, 'ends_at' => $currentSlot->ends_at_formatted],
@@ -216,12 +216,19 @@ class Interview extends Model
 		$interviewsCollection = collect($interviews)
 			->filter(function($interview) {
 				return $interview['current'] || $interview['next'];
-			})
-			->sortBy(function($interview, $key) {
-				if ($interview['current']) {
-					return $interview['current']['recruiter']['company']['name'];
-				}
 			});
+
+		if ($sortBy) {
+			if ($sortBy === 'COMPANY') {
+				$interviewsCollection = $interviewsCollection
+					->sortBy(function($interview, $key) {
+						if ($interview['current']) {
+							return $interview['current']['recruiter']['company']['name'];
+						}
+					});
+			}
+		}
+
 
 		$results['interviews'] = array_values($interviewsCollection->toArray());
 		$results['interviewsPaginated'] = array_values($interviewsCollection->chunk(12)->toArray());
@@ -233,8 +240,8 @@ class Interview extends Model
 	{
 		$interviewToReturn = false;
 
-		foreach ($slot->interviews as $interview)
-			if (isset($slot->id, $interview->slot_id, $interview->candidate_id, $interview->location_id) && $slot->id == $interview->slot_id && $interview->location_id == $location->id)
+		foreach ($slot->interviews as $interview) {
+			if (isset($slot->id, $interview->slot_id, $interview->location_id) && $slot->id == $interview->slot_id && $interview->location_id == $location->id) {
 				$interviewToReturn = [
 					'ido' => $interview->ido,
 					'status' => $interview->status,
@@ -247,13 +254,17 @@ class Interview extends Model
 							'name' => $interview->recruiter->company->name,
 						]
 					],
-					'candidate' => [
+					'candidate' => isset($interview->candidate_id) ? [
 						'ido' => $interview->candidate->ido,
 						'firstname' => $interview->candidate->user->firstname,
 						'lastname' => $interview->candidate->user->lastname,
 						'grade' => $interview->candidate->grade . $interview->candidate->education
-					]
+					] : false
 				];
+			}
+
+		}
+
 
 		return $interviewToReturn;
 	}

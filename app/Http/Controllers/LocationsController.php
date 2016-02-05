@@ -73,17 +73,17 @@ class LocationsController extends Controller
 		return response()->json($results, (count($results['errors'])) ? 409 : 200);
 	}
 
-	public function getAllWithInterviewsForSlot(Slot $slot)
+	public function getAllWithInterviewsForSlot(Request $request, Slot $slot)
 	{
-		return Interview::getByLocationsForCurrentAndNextSlot($slot);
+		return Interview::getByLocationsForCurrentAndNextSlot($slot, $request->get('sortBy'));
 	}
 
-	public function getAllWithInterviewsForCurrentSlot()
+	public function getAllWithInterviewsForCurrentSlot(Request $request)
 	{
 		$slot = Slot::whereRaw('begins_at < NOW() AND ends_at > NOW()')->first();
 		
 		if ($slot) {
-			return $this->getAllWithInterviewsForSlot($slot);
+			return $this->getAllWithInterviewsForSlot($request, $slot);
 		}
 
 		abort(404);
