@@ -216,7 +216,7 @@ class Interview extends Model
 
 		$interviewsCollection = collect($interviews)
 			->filter(function($interview) {
-				return $interview['current'] || $interview['next'];
+				return $interview['current'];
 			});
 
 		if ($sortBy) {
@@ -232,7 +232,7 @@ class Interview extends Model
 
 
 		$results['interviews'] = array_values($interviewsCollection->toArray());
-		$results['interviewsPaginated'] = array_values($interviewsCollection->chunk(12)->toArray());
+		$results['interviewsPaginated'] = array_values($interviewsCollection->chunk(16)->toArray());
 
 		return $results;
 	}
