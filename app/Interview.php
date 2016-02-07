@@ -88,9 +88,9 @@ class Interview extends Model
 			'recruiters' => []
 		];
 
-		foreach ($company->recruiters as $recruiter) {
-			$interviewByCompany['recruiters'][] = self::getAllForRecruiter($recruiter, $allSlots);
-		}
+		foreach ($company->recruiters as $recruiter)
+			if ($interviews = self::getAllForRecruiter($recruiter, $allSlots))
+				$interviewByCompany['recruiters'][] = $interviews;
 
 		return $interviewByCompany;
 	}
@@ -107,6 +107,9 @@ class Interview extends Model
 			'lastname' => $recruiter->user->lastname,
 			'interviews' => []
 		];
+
+		if (!count($recruiter->interviews))
+			return false;
 
 		foreach ($allSlots as $slot) {
 			// Creating a "default" UNAVAILABLE interview
