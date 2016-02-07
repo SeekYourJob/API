@@ -89,13 +89,13 @@ class Interview extends Model
 		];
 
 		foreach ($company->recruiters as $recruiter)
-			if ($interviews = self::getAllForRecruiter($recruiter, $allSlots))
+			if ($interviews = self::getAllForRecruiter($recruiter, $allSlots, true))
 				$interviewByCompany['recruiters'][] = $interviews;
 
 		return $interviewByCompany;
 	}
 
-	public static function getAllForRecruiter(Recruiter $recruiter, &$allSlots = false)
+	public static function getAllForRecruiter(Recruiter $recruiter, &$allSlots = false, $hideRecruiterWithoutInterviews = false)
 	{
 		if (!$allSlots) {
 			$allSlots = Slot::all();
@@ -108,7 +108,7 @@ class Interview extends Model
 			'interviews' => []
 		];
 
-		if (!count($recruiter->interviews))
+		if ($hideRecruiterWithoutInterviews && !count($recruiter->interviews))
 			return false;
 
 		foreach ($allSlots as $slot) {
