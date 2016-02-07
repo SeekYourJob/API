@@ -81,3 +81,5 @@ Route::get('locations/interviews-for-current-slot/', 'LocationsController@getAll
 Route::get('locations/missing', 'LocationsController@getMissingLocationsForInterviews');
 Route::put('locations/update-interview/{interviews}', 'LocationsController@updateInterview');
 Route::put('locations/update-recruiter/{recruiters}', 'LocationsController@updateRecruiter');
+
+Route::get('stats/interviews', 'StatsController@getInterviewsStats');
