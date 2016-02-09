@@ -26,13 +26,13 @@ class UserMailer extends Mailer
 		);
 	}
 
-    public function warnOrganizerPendingDocument()
-    {
-        $this->sendToEmail(env('MAIL_FROM_EMAIL'), 'Site SeekYourJob',
-            'Document en attente de validation',
-            'emails.organizer-pending-document',
-            []);
-    }
+	public function warnOrganizerPendingDocument()
+	{
+		$this->sendToEmail(env('MAIL_FROM_EMAIL'), 'Site SeekYourJob',
+		'Document en attente de validation',
+		'emails.organizer-pending-document',
+		[]);
+	}
 
 
 	public function welcomeInvitedRecruiter(Recruiter $referral, Recruiter $recruiter, $generatedPassword)
