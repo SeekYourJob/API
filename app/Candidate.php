@@ -113,8 +113,7 @@ class Candidate extends Model
 
     public static function getIsValidGrade($grade)
     {
-        $grades = ['M1', 'M2', 'L3'];
-        return in_array($grade,$grades);
+        return in_array($grade, ['M1', 'M2', 'L3', 'ISEN']);
     }
 
 	public static function getAvailableForSlotAndCompany(Slot $slot, Company $company)
