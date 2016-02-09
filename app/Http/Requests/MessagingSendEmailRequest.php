@@ -42,7 +42,9 @@ class MessagingSendEmailRequest extends Request
                 $groupsGrouped = [];
                 foreach($inputs['selection']['groups'] as $group)
                     $groupsGrouped = array_merge($groupsGrouped, $group);
+
                 $inputs['recipients'] = array_keys(array_flip($groupsGrouped));
+
             } else if ($inputs['sendingType'] == 'toUsers') {
                 $inputs['recipients'] = $inputs['selection']['users'];
             }

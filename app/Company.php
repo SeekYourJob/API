@@ -36,7 +36,8 @@ class Company extends Model
 		foreach($companies as $company) {
 			$companyUsers = [];
 			foreach($company->recruiters as $recruiter)
-				$companyUsers[] = $recruiter->ido;
+				$companyUsers[] = $recruiter->user->ido;
+
 			if (!empty($companyUsers))
 				$groups[$company->name] = $companyUsers;
 		}

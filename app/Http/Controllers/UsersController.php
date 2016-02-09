@@ -149,7 +149,6 @@ class UsersController extends Controller
 			$groups[] = ['name' => "Étudiants $gradeAndEducation", 'users' => $usersIdos];
 
 		// Specific companies
-		$companies = Company::with('recruiters.user')->get();
 		foreach(Company::getIdosGroupedByCompanies() as $company => $usersIdos)
 			$groups[] = ['name' => $company, 'users' => $usersIdos];
 

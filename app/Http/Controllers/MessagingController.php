@@ -32,14 +32,15 @@ class MessagingController extends Controller
 	    $this->authorize('messaging-send-email');
 
 	    $mailer = new Mailer();
-	    foreach($request->input('recipients') as $recipient)
-		   $mailer->sendToUser(User::whereId(app('Hashids')->decode($recipient)[0])->firstOrFail(),
+	    foreach($request->input('recipients') as $recipient) {
+		    $mailer->sendToUser(User::whereId(app('Hashids')->decode($recipient)[0])->firstOrFail(),
 			    $request->input('message.object'),
 			    'emails.skeleton',
 			    ['content' => nl2br($request->input('message.content'))],
-			   [],
-			   true
+			    [],
+			    true
 		    );
+	    }
 
 	    return response()->json('Mail sending queued');
     }

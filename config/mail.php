@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'pretend' => false,
+    'pretend' => true,
 
 //    'to' => [
 //        'address' => 'nducom@gmail.com',
