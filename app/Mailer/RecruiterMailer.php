@@ -43,9 +43,13 @@ class RecruiterMailer extends Mailer
                 $documents = Document::getCandidateDocumentsForRecruiter($recruiter);
 
                 if(count($documents)) {
+                    if (!file_exists(storage_path('tmp/'))) {
+                        mkdir(storage_path('tmp/'), 0777, true);
+                    }
                     $zipPath = str_replace('\\', '/',storage_path('tmp/') . $recruiter->user->firstname."_".$recruiter->user->lastname . ".zip");
 
                     if (Download::zipFiles($documents, $zipPath)) {
+                            $attachments = [];
                             $attachments[] = $zipPath;
                     } else {
                         \Log::alert("failure creating zip attachment for recruiter :".$recruiter->id);

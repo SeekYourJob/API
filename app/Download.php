@@ -25,7 +25,7 @@ class Download extends Model
 	}
 
     //Adds files to archive
-	public static function zipFiles($documents, $destination, $overwrite = false) {
+	public static function zipFiles($documents, $destination, $overwrite = true) {
 		if (file_exists($destination) && !$overwrite)
 			return false;
 		if (count($documents)) {
@@ -36,6 +36,8 @@ class Download extends Model
                 $zip->addFile(Document::getDocumentFullPath($document),Document::getResumeFormattedBaseName($document));
             }
 			$zip->close();
+
+            \Log::alert("file_exists :".file_exists($destination));
 
 			return file_exists($destination);
 		}
