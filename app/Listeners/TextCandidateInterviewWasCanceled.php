@@ -18,8 +18,7 @@ class TextCandidateInterviewWasCanceled implements shouldQueue
 
     public function handle(InterviewWasCanceled $event)
     {
-        if (Slot::isBigDay()) {
+        if (Slot::isBigDay())
             $this->candidateTexter->sendNoticeInterviewHasBeenCancelledToCandidate($event->interview, $event->previousCandidate);
-        }
     }
 }
