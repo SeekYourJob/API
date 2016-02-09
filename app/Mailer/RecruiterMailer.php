@@ -48,9 +48,12 @@ class RecruiterMailer extends Mailer
                     }
                     $zipPath = str_replace('\\', '/',storage_path('tmp/') . $recruiter->user->firstname."_".$recruiter->user->lastname . ".zip");
 
+                    \Log::alert("zipped file : ".$zipPath);
+
                     if (Download::zipFiles($documents, $zipPath)) {
                             $attachments = [];
                             $attachments[] = $zipPath;
+                            \Log::alert("file zipped and attached".$zipPath);
                     } else {
                         \Log::alert("failure creating zip attachment for recruiter :".$recruiter->id);
                         return false;

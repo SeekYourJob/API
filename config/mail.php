@@ -122,7 +122,7 @@ return [
     'pretend' => false,
 
 //    'to' => [
-//        'address' => 'me@valentinpolo.fr',
+//        'address' => 'me@.fr',
 //        'name' => 'valentin polo'
 //    ],
 
