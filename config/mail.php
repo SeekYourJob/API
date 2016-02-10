@@ -123,7 +123,7 @@ return [
 
 //    'to' => [
 //        'address' => 'nducom@gmail.com',
-//        'name' => 'Nicolas Ducom'
+//        'name' => 'Nicolas Ducom <3'
 //    ],
 
 ];

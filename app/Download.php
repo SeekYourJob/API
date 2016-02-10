@@ -25,26 +25,26 @@ class Download extends Model
 	}
 
     //Adds files to archive
-	public static function zipFiles($documents, $destination, $overwrite = true) {
-		if (file_exists($destination) && !$overwrite) {
-            \Log::alert("can't overwrite file");
+	public static function zipFiles($documents, $destination, $overwrite = true)
+	{
+		if (file_exists($destination) && !$overwrite)
             return false;
-        }
+
 		if (count($documents)) {
 			$zip = new ZipArchive();
-			if ($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE : ZIPARCHIVE::CREATE) !== true){
-                \Log::alert("problem opening zip file");
-                return false;
-            }
-			foreach ($documents as $document) {
-                $zip->addFile(Document::getDocumentFullPath($document),Document::getResumeFormattedBaseName($document));
-            }
-			$zip->close();
 
-            \Log::alert("file_exists :".file_exists($destination));
+			$opened = $zip->open($destination, ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE);
+			if ($opened !== true)
+				return false;
+
+			foreach ($documents as $document)
+                $zip->addFile(Document::getDocumentFullPath($document),Document::getResumeFormattedBaseName($document));
+
+			$zip->close();
 
 			return file_exists($destination);
 		}
+
 		return false;
 	}
 
