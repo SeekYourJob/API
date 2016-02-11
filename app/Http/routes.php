@@ -11,7 +11,9 @@ Route::get('/', function() {
 });
 
 Route::get('/test', function(Request $request) {
-
+    $pdf = app('dompdf.wrapper');
+    $pdf->loadView('pdfs.recruiters-planning');
+    return $pdf->stream();
 });
 
 Route::get('me', 'AuthenticateController@me');

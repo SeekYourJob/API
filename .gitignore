@@ -12,3 +12,4 @@ storage/waiting_s3
 storage/documents
 storage/zippings
 storage/tmp
+storage/fonts

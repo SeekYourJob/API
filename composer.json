@@ -18,7 +18,8 @@
         "pda/pheanstalk": "~3.0",
         "vinkla/hashids": "^2.1",
         "pusher/pusher-php-server": "^2.2",
-        "bugsnag/bugsnag-laravel": "1.*"
+        "bugsnag/bugsnag-laravel": "1.*",
+        "barryvdh/laravel-dompdf": "^0.6.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -154,6 +154,7 @@ return [
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
         Vinkla\Hashids\HashidsServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -207,7 +208,8 @@ return [
         'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
         'JWTFactory'=> Tymon\JWTAuth\Facades\JWTFactory::class,
         'Hashids'   => Vinkla\Hashids\Facades\Hashids::class,
-        'Bugsnag' => Bugsnag\BugsnagLaravel\BugsnagFacade::class,
+        'Bugsnag'   => Bugsnag\BugsnagLaravel\BugsnagFacade::class,
+        'PDF'       => Barryvdh\DomPDF\Facade::class,
 
     ],
 
