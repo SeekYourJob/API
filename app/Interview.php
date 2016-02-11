@@ -105,6 +105,7 @@ class Interview extends Model
 			'ido' => $recruiter->ido,
 			'firstname' => $recruiter->user->firstname,
 			'lastname' => $recruiter->user->lastname,
+			'company' => $recruiter->company->name,
 			'interviews' => []
 		];
 

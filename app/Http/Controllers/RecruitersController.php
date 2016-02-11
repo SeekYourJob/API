@@ -5,6 +5,7 @@ namespace CVS\Http\Controllers;
 use Auth;
 use CVS\Interview;
 use CVS\Recruiter;
+use Exception;
 use Illuminate\Http\Request;
 
 use CVS\Http\Requests;
@@ -13,7 +14,7 @@ class RecruitersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth', ['except' =>[]]);
         $this->middleware('organizer', ['except' => ['show']]);
     }
 
@@ -63,4 +64,18 @@ class RecruitersController extends Controller
         abort(401);
     }
 
+    public function getRecruitersSchedules()
+    {
+        $this->authorize('show-all-users');
+
+        $allInterviews = [];
+        foreach (Recruiter::all() as $recruiter)
+            $allInterviews[] = Interview::getAllForRecruiter($recruiter);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('pdfs.recruiters-planning', ['recruiters' => $allInterviews])
+            ->setPaper('a4');
+
+        return $pdf->stream();
+    }
 }

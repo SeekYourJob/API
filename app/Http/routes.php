@@ -4,17 +4,16 @@ use CVS\Company;
 use CVS\Download;
 use CVS\Interview;
 use CVS\Location;
+use CVS\Recruiter;
 use CVS\Slot;
 
-Route::get('/', function() {
-    return response()->json('Welcome to the SeekYourJob API!');
-});
-
-Route::get('/test', function(Request $request) {
-    $pdf = app('dompdf.wrapper');
-    $pdf->loadView('pdfs.recruiters-planning');
-    return $pdf->stream();
-});
+//Route::get('/', function() {
+//
+//});
+//
+//Route::get('/test', function(Request $request) {
+//
+//});
 
 Route::get('me', 'AuthenticateController@me');
 Route::get('logout', 'AuthenticateController@logout');
@@ -39,6 +38,7 @@ Route::get('companies/{companies}/recruiters', 'CompaniesController@showRecruite
 Route::get('companies/{companies}/offers', 'CompaniesController@showOffers');
 Route::resource('companies', 'CompaniesController');
 
+Route::get('recruiters/download-schedules', 'RecruitersController@getRecruitersSchedules');
 Route::resource('recruiters', 'RecruitersController');
 
 Route::get('candidates/{candidates}/summary', 'CandidatesController@showSummary');

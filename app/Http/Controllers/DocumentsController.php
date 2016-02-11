@@ -7,6 +7,7 @@ use CVS\Download;
 use CVS\Events\CandidateDocumentWasUploaded;
 use CVS\Events\ResumeWasAccepted;
 use CVS\Events\ResumeWasRefused;
+use CVS\Interview;
 use Input;
 use Response;
 use CVS\Document;
