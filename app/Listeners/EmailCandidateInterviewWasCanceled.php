@@ -19,7 +19,7 @@ class EmailCandidateInterviewWasCanceled implements shouldQueue
 
     public function handle(InterviewWasCanceled $event)
     {
-        if (Slot::isBigDay())
+//        if (Slot::isBigDay())
             $this->candidateMailer->sendNoticeInterviewHasBeenCancelledToCandidate($event->interview, $event->previousCandidate);
     }
 }
