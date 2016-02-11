@@ -7,7 +7,7 @@
 
     L'entrée du parking se situe au <a href="https://goo.gl/maps/hHe52kshLS92"><strong>5 rue Roland</strong></a> tandis que l'entrée de la Faculté au <a href="https://goo.gl/maps/HDdnBmcEesJ2"><strong>41 rue du Port</strong></a> à Lille.<br><br>
 
-    <strong>Aucun code n'est nécessaire</strong>, il vous suffira de vous présenter en tant que participant au Job Forum de la FGES à l'entrée pour accéder au parking.<br><br>
+    <strong>Aucun code n'est nécessaire</strong>, il vous suffira de vous présenter en tant que participant au Job Forum de la FGES à l'entrée pour accéder au parking. Un membre de l'équipe s'assurera néanmoins de votre bonne arrivée.<br><br>
 
     <img src="{{ $message->embed(public_path('img/gmaps.jpg')) }}" /><br><br>
 
