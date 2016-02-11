@@ -22,7 +22,7 @@ class CompaniesController extends Controller
     public function index(Request $request)
     {
         if ($request->has('short')) {
-            return Company::all();
+            return Company::orderBy('name', 'ASC')->get();
         }
 
         return Company::with('recruiters')->get();
