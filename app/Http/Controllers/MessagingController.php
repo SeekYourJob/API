@@ -2,12 +2,14 @@
 
 namespace CVS\Http\Controllers;
 
+use CVS\Candidate;
 use CVS\Http\Requests\MessagingSendEmailRequest;
 use CVS\Http\Requests;
 use CVS\Http\Requests\MessagingSendSMSRequest;
 use CVS\Mailer\CandidateMailer;
 use CVS\Mailer\Mailer;
 use CVS\Mailer\RecruiterMailer;
+use CVS\Texter\CandidateTexter;
 use CVS\Texter\RecruiterTexter;
 use CVS\Texter\Texter;
 use CVS\User;
@@ -90,6 +92,10 @@ class MessagingController extends Controller
 					'key' => 'PARKING',
 					'title' => 'Recruteurs : code d\'accès au parking'
 			],
+			[
+				'key' => 'REMINDER',
+				'title' => 'Candidats : rappel du premier entretien'
+			],
 		]);
 	}
 
@@ -127,6 +133,18 @@ class MessagingController extends Controller
 			switch($request->get('predefinedSMSKey')) {
 				case 'PARKING':
 					return (new RecruiterTexter())->sendParkingCodeToRecruiters()  ? response()->json('Predefined SMS sent') : abort(500);
+					break;
+				case 'REMINDER':
+					$candidates = Candidate::with(['user', 'interviews.slot', 'interviews.company'])->get();
+					$candidateTexter = new CandidateTexter();
+					foreach ($candidates as $candidate) {
+						if (isset($candidate->interviews, $candidate->interviews[0])) {
+							$interview = $candidate->interviews[0];
+							$candidateTexter->sendFirstInterviewReminderToCandidate($candidate, $interview);
+							unset($interview);
+						}
+					}
+					return response()->json('Predefined SMS sent');
 					break;
 				default:
 					abort(422, "Predefined SMS not found");

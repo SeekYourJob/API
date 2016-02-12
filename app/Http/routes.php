@@ -1,5 +1,6 @@
 <?php
 
+use CVS\Candidate;
 use CVS\Company;
 use CVS\Download;
 use CVS\Interview;

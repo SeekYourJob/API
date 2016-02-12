@@ -23,4 +23,12 @@ class CandidateTexter extends Texter
 				true
 			);
 	}
+
+	public function sendFirstInterviewReminderToCandidate(Candidate $candidate, Interview $interview)
+	{
+		$this->sendToUser($candidate->user,
+			"Bonjour " . $candidate->user->firstname . ",\r\nRappel: votre premier entretien Job Forum est prévu à " . $interview->slot->begins_at_formatted . " avec " . $interview->company->name . " !",
+			true
+		);
+	}
 }

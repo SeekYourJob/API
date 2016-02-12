@@ -26,7 +26,7 @@ class Candidate extends Model
 
 	public function interviews()
 	{
-		return $this->hasMany(Interview::class, 'candidate_id');
+		return $this->hasMany(Interview::class, 'candidate_id')->orderBy('slot_id');
 	}
 
 	public function getRegisteredSlotsAttribute()
